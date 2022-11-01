@@ -30,7 +30,7 @@ const messages = {
             loginMsg: 'ĐĂNG NHẬP',
             trungTamCongNgheMsg: 'Trung tâm hỗ trợ sinh viên - Đại học Quốc gia Hà Nội',
             headOffice: 'Địa chỉ: 144 đường Xuân Thuỷ, Cầu Giấy, Hà Nội',
-            tenDangNhap: 'Tên Đănng Nhập',
+            tenDangNhap: 'Tên Đăng Nhập',
             batBuocTenDangNhap: 'Tên đăng nhập là bắt buộc',
             matKhau: 'Mật Khẩu',
             batBuocMatKhau: 'Mật khẩu là bắt buộc',

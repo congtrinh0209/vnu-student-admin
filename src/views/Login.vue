@@ -8,15 +8,14 @@
     >
       <div class="container-wrap">
         <div class="wrap-title">
-          <div class="d-flex justify-end py-0 pb-0 my-0 px-5">
+          <!-- <div class="d-flex justify-end py-0 pb-0 my-0 px-5">
             <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
               <flag :iso="entry.flag" v-bind:squared=false />
               {{entry.title}}
             </button>
-          </div>
-          <v-flex style="text-align: center;">
-            <img class="img-login-logo" :src="`${publicPath}/images/image-logo.png?t=93111413`">
-            
+          </div> -->
+          <v-flex class="mb-3" style="text-align: center;">
+            <img class="img-login-logo" :src="`${publicPath}/images/logo.jpg?t=93111413`">
           </v-flex>
           
           <v-flex class="wrap-title pt-1 mb-2">
@@ -105,16 +104,16 @@
     <div class="wrap-contact-info">
       <div class="mb-1">{{ $t('login.trungTamCongNgheMsg') }}</div>
       <div class="mb-1">
-        <v-icon size="18" color="#fff">mdi-map-marker-outline</v-icon>&nbsp;
+        <v-icon size="18" color="#007F3E">mdi-map-marker-outline</v-icon>&nbsp;
         <span>{{ $t('login.headOffice') }}</span>
       </div>
       <div class="mb-1">
-        <v-icon size="18" color="#fff">mdi-phone-in-talk-outline</v-icon>&nbsp;
-        <span>1900 0318 - (024) 3.822.2979</span>
+        <v-icon size="18" color="#007F3E">mdi-phone-in-talk-outline</v-icon>&nbsp;
+        <span>(024) 3.754.7422</span>
       </div>
       <div class="mb-1">
-        <v-icon size="18" color="#fff">mdi-email-outline</v-icon>&nbsp;
-        <span>bophanhotro@mt.gov.vn</span>
+        <v-icon size="18" color="#007F3E">mdi-email-outline</v-icon>&nbsp;
+        <span>tthtsv@vnu.edu.vn</span>
       </div>
     </div>
     <div class="text-center">
@@ -316,7 +315,7 @@
 </script>
 
 <style lang="scss">
-  $image-login: $public-path + '/images/bg-login.png?t=3913123';
+  $image-login: $public-path + '/images/bg-login-2.png?t=3913123';
   #app {
     background: transparent !important
   }
@@ -348,23 +347,23 @@
     font-family: "Roboto Slab";
     font-style: normal;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 24px;
-    color: #ffffff;
+    color: #007F3E;
     margin-bottom: 10px;
   }
   #login-page .text-2 {
     font-family: "Roboto Slab";
     font-style: normal;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 24px;
-    color: #ffffff;
+    color: #007F3E;
   }
   .wrap-form {
     max-width: 450px;
     margin: 0 auto;
-    background: rgba(14, 42, 66, 0.8);
+    background: #21332a;
     border: 1px solid #BAB7B5;
     border-radius: 5px;
     margin-top: 45px;
@@ -417,22 +416,23 @@
     color: #ffffff !important;
   }
   .btn-login {
-    background: linear-gradient(90deg, #114078 0%, #3757AA 100%);
+    background: linear-gradient(90deg, #007F3E 0%, #007F3E 100%);
   }
   .wrap-title, .wrap-btn-login {
     text-align: center;
     text-transform: uppercase;
   }
   .wrap-contact-info {
+    display: none;
     max-width: 1366px !important;
     height: 120px;
     position: absolute;
     bottom: 0;
     left: 100px;
-    color: #ffffff !important;
+    color: #007F3E !important;
   }
   .img-login-logo {
-    width: 65px;
+    width: 90px;
   }
   .wrap-title {
     text-align: center;
