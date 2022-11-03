@@ -11,7 +11,7 @@
             </v-col>
             <v-col cols="12" sm="6">
                 <div style="float:right;">
-                    <button @click.stop="addChiTietTinTuc" class="btn btn-add">   
+                    <button @click.stop="addForm" class="btn btn-add">   
                         <v-icon left dark size="22">mdi-file-plus</v-icon>
                         Thêm mới
                     </button>
@@ -37,7 +37,7 @@
                     
                     <v-tooltip top v-if="isAdmin">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn @click.stop="editChiTietTinTuc" color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on">
+                            <v-btn @click.stop="editForm" color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on">
                                 <v-icon size="18">mdi-pencil</v-icon>
                             </v-btn>
                         </template>
@@ -61,20 +61,19 @@
         <!-- -->
         <v-dialog
             max-width="1200"
-            v-model="dialogThemThanhPhan"
+            v-model="dialogThemTinTuc"
             persistent
             fullscreen
         >
             <v-card>
-
                 <v-toolbar
                   dark
                   color="primary"
                   class="px-3"
                 >
-                  <v-toolbar-title v-if="readonlyForm && editThanhPhan === null">{{ $t('chiTietBaoCao.thongTinThanhPhanBaoCao')}}</v-toolbar-title>
-                  <v-toolbar-title v-if="editThanhPhan === true && !readonlyForm">Cập nhật tin tức</v-toolbar-title>
-                  <v-toolbar-title v-if="editThanhPhan === false && !readonlyForm">Thêm mới tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="readonlyForm && editTinTuc === null">{{ $t('chiTietBaoCao.thongTinTinTuc')}}</v-toolbar-title>
+                  <v-toolbar-title v-if="editTinTuc === true && !readonlyForm">Cập nhật tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="editTinTuc === false && !readonlyForm">Thêm mới tin tức</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -87,107 +86,7 @@
                   </v-toolbar-items>
                 </v-toolbar>
                 <!-- -->  
-                <div class="dialog-body" >
-
-                    <v-row style="margin-top: 8px;">
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Tiêu đề: <span style="color:red;">*</span></div>
-                        </v-col>
-                        <v-col cols="12" sm="10">
-                            <v-text-field
-                                class="flex input-form"
-                                solo
-                                label="Nhập tiêu đề..."
-                                dense
-                                hide-details="auto"
-                                required
-                                :rules="rules.text"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Nội dung: </div>
-                        </v-col>
-                        <v-col cols="12" sm="10"></v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Chuyên mục: </div>
-                        </v-col>
-                        <v-col cols="12" sm="4">
-                            <select name="wpCapNhatTinTuc$ddlChuyenMuc" id="wpCapNhatTinTuc_ddlChuyenMuc" class="form-control">
-                                <option value="0">-- Không --</option>
-                                <option value="1">Trung tâm hỗ trợ sinh viên</option>
-                                <option value="2">Thông tin nội trú</option>
-                                <option value="4">Cẩm nang Hòa Lạc</option>
-                                <option value="5">Chuyên mục 1</option>
-                                <option value="6">Chuyên mục 2</option>
-                                <option value="7">Chuyên mục 3</option>
-                                <option value="8">Tin tức chung</option>
-                            </select>
-                        </v-col>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Ngày xuất bản: </div>
-                        </v-col>
-                        <v-col cols="12" sm="4">
-                            <v-flex xs4>
-                                <v-datetime-picker v-model="datetime"></v-datetime-picker>
-                            </v-flex>
-                            <div>Datetime value: <span v-text="datetime"></span></div>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Ảnh đại diện: </div>
-                        </v-col>
-                        <v-col cols="12" sm="10">
-                            <v-file-input
-                              chips
-                              show-size
-                              label="Tải ảnh đại diện"
-                              small-chips
-                              truncate-length="25"
-                            ></v-file-input>
-                        </v-col>
-                    </v-row>
-                        
-                    <v-row>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Tải file: </div>
-                        </v-col>
-                        <v-col cols="12" sm="10">
-                            <v-file-input
-                              chips
-                              show-size
-                              label="Tải tài liệu"
-                              small-chips
-                              truncate-length="25"
-                              multiple
-                            ></v-file-input>
-                            <div class="note italic">
-                                Chỉ nhận file jpg, jpeg, png, pdf, doc, docx, xls, xlsx, rar, zip, pptx, ppt
-                            </div>  
-                        </v-col>
-                    </v-row>
-                    
-                    <v-row>
-                        <v-col cols="12" sm="2">
-                            <div class="titleText">Trạng thái: </div>
-                        </v-col>
-                        <v-col cols="12" sm="10" style="margin-top: -16px;">
-                            <v-switch
-                                v-model="switchTinhTrang"
-                                :label="textTinhTrang"
-                                flat
-                                @click="setTinhTrang"
-                            ></v-switch>
-                        </v-col>
-                    </v-row>               
-                </div>
+                <FormTinTuc></FormTinTuc>
                 <!-- -->
                 <v-card-text class="px-2 py-2">
                     <v-card-actions class="justify-center my-4">
@@ -197,16 +96,15 @@
                       </v-icon>
                       {{ $t('basic.thoat')}}
                     </v-btn>
-                    <v-btn v-if="!readonlyForm" small depressed class="mr-2" color="primary" :loading="loadingAction" :disabled="loadingAction" @click.native="submitThemThanhPhan">
+                    <v-btn v-if="!readonlyForm" small depressed class="mr-2" color="primary" :loading="loadingAction" :disabled="loadingAction" @click.native="submitThemTinTuc">
                       <v-icon left dark size="18">
                         mdi-file-document-plus-outline
                       </v-icon>
-                      <span v-if="editThanhPhan">Cập nhật</span>
+                      <span v-if="editTinTuc">Cập nhật</span>
                       <span v-else>Thêm vào</span>
                     </v-btn>
                   </v-card-actions>
                 </v-card-text>
-
             </v-card>
         </v-dialog>
     </div>
@@ -214,11 +112,11 @@
   
 <script>
 import Pagination from './Pagination.vue'
-import '@fortawesome/fontawesome-free/css/all.css'
+import FormTinTuc from './FormTinTuc.vue'
 
 export default {
     components: {
-      Pagination
+      Pagination, FormTinTuc
     },
     data() {
         return {
@@ -274,15 +172,19 @@ export default {
             loadingData: false,
             pageCount: 1,
             page: 0,
-            dialogThemThanhPhan: false,
+            dialogThemTinTuc: false,
             readonlyForm: false,
-            editThanhPhan: false,
+            editTinTuc: false,
             datetime: new Date(),
             switchTinhTrang: true,
             textTinhTrang: '',
             rules: {
               text: [val => (val || '').length > 0 || 'Đây là trường bắt buộc nhập'],
             },
+            activePicker: null,
+            datetime: null,
+            date: null,
+            menuDate: false,
         }
     },
     created() {
@@ -292,17 +194,22 @@ export default {
             this.textTinhTrang = "Không kích hoạt"
         }
     },
-    methods: {
-        editChiTietTinTuc() {
-            this.dialogThemThanhPhan = true
-            this.editThanhPhan = true
+    watch: {
+        menuDate (val) {
+            val && setTimeout(() => (this.activePicker = ''))
         },
-        addChiTietTinTuc() {
-            this.dialogThemThanhPhan = true
-            this.editThanhPhan = false
+    },
+    methods: {
+        editForm() {
+            this.dialogThemTinTuc = true
+            this.editTinTuc = true
+        },
+        addForm() {
+            this.dialogThemTinTuc = true
+            this.editTinTuc = false
         },
         exitForm() {
-            this.dialogThemThanhPhan = false
+            this.dialogThemTinTuc = false
         },
         setTinhTrang() {
             if (this.switchTinhTrang === true) {
@@ -310,7 +217,10 @@ export default {
             } else {
                 this.textTinhTrang = "Không kích hoạt"
             }
-        }
+        },
+        save (date) {
+            this.$refs.menu.save(date)
+        },
     }
 }
 </script>

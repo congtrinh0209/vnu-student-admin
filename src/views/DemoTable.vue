@@ -1,52 +1,50 @@
 <template>
 	<v-row class="my-0 mb-3">
-            <v-col cols="12" class="pt-0">
-              <v-data-table
-                :headers="headers"
-                :items="danhSachBaoCao"
-                :items-per-page="itemsPerPage"
-                item-key="primKey"
-                hide-default-footer
-                class="table-base mt-2"
-                no-data-text="Không có"
-                :loading="loadingData"
-                loading-text="Đang tải... "
-                item-text="name"
+    <v-col cols="12" class="pt-0">
+      <v-data-table
+        :headers="headers"
+        :items="danhSachBaoCao"
+        :items-per-page="itemsPerPage"
+        item-key="primKey"
+        hide-default-footer
+        class="table-base mt-2"
+        no-data-text="Không có"
+        :loading="loadingData"
+        loading-text="Đang tải... "
+        item-text="name"
+      >
+        <template v-slot:item.thaoTac="{ item }">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="primary" text icon class="" v-bind="attrs" v-on="on">
+                <v-icon size="20">mdi-arrow-right-bold-circle-outline</v-icon>
+              </v-btn>
+            </template>
+            <span>Chi Tiết</span>
+          </v-tooltip>
 
-              >
-              	<template v-slot:item.thaoTac="{ item }">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" text icon class="" v-bind="attrs" v-on="on">
-                          <v-icon size="20">mdi-arrow-right-bold-circle-outline</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Chi Tiết</span>
-                    </v-tooltip>
+          <v-tooltip top v-if="isAdmin">
+              <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on">
+                  <v-icon size="18">mdi-pencil</v-icon>
+                  </v-btn>
+              </template>
+              <span>Sửa</span>
+          </v-tooltip>
 
-                    <v-tooltip top v-if="isAdmin">
-                        <template v-slot:activator="{ on, attrs }">
-                          	<v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on">
-                        		<v-icon size="18">mdi-pencil</v-icon>
-                          	</v-btn>
-                        </template>
-                        <span>Sửa</span>
-                  	</v-tooltip>
-
-                    <v-tooltip top v-if="isAdmin">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on">
-                          <v-icon size="18">mdi-delete</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Xóa</span>
-                    </v-tooltip>
-                  </template> 
-
-              </v-data-table>
-              <pagination v-if="pageCount" :pageInput="page" :total="total" :pageCount="pageCount" @tiny:change-page=""></pagination>
-            </v-col>
-        </v-row>
+          <v-tooltip top v-if="isAdmin">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on">
+                <v-icon size="18">mdi-delete</v-icon>
+              </v-btn>
+            </template>
+            <span>Xóa</span>
+          </v-tooltip>
+        </template> 
+      </v-data-table>
+      <pagination v-if="pageCount" :pageInput="page" :total="total" :pageCount="pageCount" @tiny:change-page=""></pagination>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import Pagination from './Pagination.vue'
