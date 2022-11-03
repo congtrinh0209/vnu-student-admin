@@ -10,7 +10,6 @@ export default new Vuex.Store({
     indexTab: 0,
     apiSso: process.env.VUE_APP_PATH_API_SSO,
     secretLogin: 'f5gDd1JLB0vq6VVBvzEbltq6iVuaddvk',
-    // secretLogin: 'GCguqEMazevwOxEYPkhDH/ybLg/TuAWJ',
     drawer: false,
     breakpointName: 'lg',
     isShowConfirm: false,
@@ -557,31 +556,6 @@ export default new Vuex.Store({
         })
       })
     },
-    // getRefreshTokenKeyCloak ({commit, state}, filter) {
-    //   return new Promise((resolve, reject) => {
-    //     let settings = {
-    //       "url": state.apiSso + '/flex/oauth2/refreshtoken',
-    //       "method": "POST",
-    //       "headers": {
-    //         'Authorization': 'Basic ZmxleDpzc28=',
-    //         'secret': state.secretLogin,
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //       },
-    //       "data": {
-    //         "refresh_token": filter.code,
-    //         "redirect_uri": filter.redirect_uri
-    //       }
-    //     };
-        
-    //     $.ajax(settings).done(function (response) {
-    //       let serializable = response
-    //       resolve(serializable)
-    //     }).fail(function (response) {
-    //       reject(response)
-    //     })
-    //   })
-    // },
     loadDataSource ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let apiGet = filter.api

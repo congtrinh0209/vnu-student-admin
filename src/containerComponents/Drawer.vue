@@ -1,13 +1,4 @@
 <template>
-  <!-- <v-navigation-drawer
-    id="core-navigation-drawer"
-    v-model="drawer"
-    :right="$vuetify.rtl"
-    src=""
-    app
-    v-bind="$attrs"
-    :width="0"
-  > -->
   <v-navigation-drawer
     id="core-navigation-drawer"
     v-model="drawer"
@@ -41,194 +32,63 @@
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item v-if="isAdmin || checkRole('THEMMOIBAOCAO')" :class="menuName === 'TaoBaoCao' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/tao-bao-cao')">
+
+      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-tin-tuc')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-file-document-plus-outline</v-icon>
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-newspaper</v-icon>
             </template>
-            <span>{{ $t('drawer.taoBaoCao') }}</span>
+            <span>Quản Lý Tin Tức</span>
           </v-tooltip>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.taoBaoCao') }}</v-list-item-title>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Tin Tức</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyLoaiBanDo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-loai-ban-do')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-map-outline</v-icon>
+            </template>
+            <span>Quản Lý Loại Bản Đồ</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Loại Bản Đồ</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyDiaDiemBDS' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-dia-diem-ban-do-so')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-map-marker-path</v-icon>
+            </template>
+            <span>Quản Lý Địa Điểm Bản Đồ Số</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Địa Điểm Bản Đồ Số</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyDiaChuyenMuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-chuyen-muc')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-certificate</v-icon>
+            </template>
+            <span>Quản Lý Chuyên Mục</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Chuyên Mục</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <!--  -->
-      <!-- <v-list-item :class="menuName === 'BaoCaoMoi' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/bao-cao-moi')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-file-document-edit-outline</v-icon>
-            </template>
-            <span>Báo cáo tạo mới</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">Báo cáo tạo mới</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item> -->
-      <!--  -->
-      <v-list-item v-if="isAdmin || checkRole('XEMBAOCAODONVI') || checkRole('XEMTATCABAOCAO')" :class="menuName === 'BaoCaoChoXuLy' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/cho-xu-ly')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-file-arrow-left-right-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.baoCaoChoXuLy') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.baoCaoChoXuLy') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item v-if="isAdmin || checkRole('XEMBAOCAODONVI') || checkRole('XEMTATCABAOCAO')" :class="menuName === 'BaoCaoXuLyLai' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/xu-ly-lai')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-ballot-recount-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.baoCaoXuLyLai') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.baoCaoXuLyLai') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item v-if="isAdmin || checkRole('TRINHXETDUYET') || checkRole('XEMBAOCAODONVI') || checkRole('XEMTATCABAOCAO')" :class="menuName === 'BaoCaoChoDuyet' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/cho-duyet')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-file-clock-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.baoCaoChoDuyet') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-list-item-title v-bind="attrs" v-on="on" class="text-drawer text-list">{{ $t('drawer.baoCaoChoDuyet') }}</v-list-item-title>
-            </template>
-            <span>{{ $t('drawer.baoCaoChoDuyet') }}</span>
-          </v-tooltip>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item v-if="isAdmin || checkRole('KYDUYET') || checkRole('XEMBAOCAODONVI') || checkRole('XEMTATCABAOCAO')" :class="menuName === 'BaoCaoChoPheDuyet' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/cho-phe-duyet')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-file-sign</v-icon>
-            </template>
-            <span>{{ $t('drawer.baoCaoChoPheDuyet') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-list-item-title v-bind="attrs" v-on="on" class="text-drawer text-list">{{ $t('drawer.baoCaoChoPheDuyet') }}</v-list-item-title>
-            </template>
-            <span>{{ $t('drawer.baoCaoChoPheDuyet') }}</span>
-          </v-tooltip>
-        </v-list-item-content>
-      </v-list-item>
-      <!--  -->
-      <v-list-item v-if="isAdmin || checkRole('TONGHOPBAOCAO')" :class="menuName === 'ThongKe' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/thong-ke')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-chart-bar</v-icon>
-            </template>
-            <span>{{ $t('drawer.tongHopBaoCao') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.tongHopBaoCao') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <!--  -->
-      <v-list-item v-if="isAdmin || checkRole('XEMBAOCAODONVI') || checkRole('XEMTATCABAOCAO')" :class="menuName === 'TraCuu' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/bao-cao/tra-cuu')">
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-text-box-search-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.traCuu') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.traCuu') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <!-- <v-list-item :class="menuName === 'TongHopBaoCao' ? 'item-active' : ''" class="mb-3 list-menu" >
-        <v-list-item-icon >
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-table-multiple</v-icon>
-            </template>
-            <span>Tổng hợp báo cáo</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">Tổng hợp báo cáo</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item> -->
-      <!--  -->
-      <v-list-item v-if="isAdmin" :class="menuName === 'CoQuanDonVi' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/co-quan-don-vi')">
-        <v-list-item-icon>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-bank</v-icon>
-            </template>
-            <span>{{ $t('drawer.coQuanDonVi') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.coQuanDonVi') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <!--  -->
-      <v-list-item v-if="isAdmin" :class="menuName === 'CanBo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/can-bo')">
-        <v-list-item-icon>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-account-multiple-plus-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.canBo') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.canBo') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <!--  -->
-      <v-list-item v-if="isAdmin" :class="menuName === 'ViTriChucDanh' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/vi-tri-chuc-danh')">
-        <v-list-item-icon>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-badge-account-horizontal-outline</v-icon>
-            </template>
-            <span>{{ $t('drawer.chucVuCanBo') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.chucVuCanBo') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <!--  -->
-      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyDanhMuc' ? 'item-active' : ''" class="list-menu" @click.stop="goToPage('/quan-ly-danh-muc')">
-        <v-list-item-icon>
-          <v-tooltip top color="#0073C8">
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon class="icon-draw" v-bind="attrs" v-on="on">mdi-format-list-text</v-icon>
-            </template>
-            <span>{{ $t('drawer.quanLyDanhMuc') }}</span>
-          </v-tooltip>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">{{ $t('drawer.quanLyDanhMuc') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
     </v-list>
     <template v-slot:append>
       <div class="pa-2">

@@ -5,17 +5,16 @@
       <header id="banner" class="px-3">
         <div class="container layout wrap" style=""> 
           <a href="javascript:;" class="py-0 px-0"> 
-            <img class="logo-banner" :src="`${publicPath}/images/image-logo.png`">
+            <img class="logo-banner" :src="`${publicPath}/images/logo.jpg`">
           </a>
           <div class="title-banner">
             <span class="title-banner-vi">{{ $t('appbar.titlebanner') }}</span>
           </div>
-          <div class="lang-btn">
+          <!-- <div class="lang-btn">
             <button v-for="entry in languages" :key="entry.title" @click="changeLocale(entry.language)">
               <flag :iso="entry.flag" v-bind:squared=false />
-              <!-- {{entry.title}} -->
             </button>
-          </div>
+          </div> -->
         </div>
       </header>
     </div>
@@ -107,7 +106,7 @@ import i18n from '@/plugins/i18n'
   }
 </script>
 <style lang="scss">
-  $image-banner: $public-path + '/images/bg-banner-default.png';
+  $image-banner: $public-path + '/images/bg-header.png';
   header {
     height: 54px !important;
     box-shadow: rgb(0 0 0 / 10%) 0px 2px 4px !important;

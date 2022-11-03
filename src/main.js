@@ -9,6 +9,7 @@ import toastr from 'toastr'
 import 'toastr/build/toastr.css'
 import i18n from '@/plugins/i18n'
 import FlagIcon from 'vue-flag-icon'
+// import DatetimePicker from 'vuetify-datetime-picker'
 
 toastr.options = {
   'closeButton': true,
@@ -21,6 +22,7 @@ import jsondata from './jsondata.json'
 // Vue.use(VueConfirmDialog)
 // Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
+// Vue.use(DatetimePicker);
 Vue.use(FlagIcon);
 Vue.use(VueCookies)
 Vue.config.productionTip = false
