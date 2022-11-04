@@ -1,0 +1,49 @@
+{
+    "posts": [
+        {
+        "index": 1,
+        "tenLoaiBanDo": "Tòa Nhà",
+        "maIcon": "0xe089",
+        "trangThai": 1,
+        "thaoTac": ""
+        },
+        {
+        "index": 2,
+        "tenLoaiBanDo": "Ký Túc Xá",
+        "maIcon": "0xf879",
+        "trangThai": 1,
+        "thaoTac": ""
+        },
+        {
+        "index": 3,
+        "tenLoaiBanDo": "Ăn Uống",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+        },
+        {
+        "index": 4,
+        "tenLoaiBanDo": "Check In",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+        },
+        {
+        "index": 5,
+        "tenLoaiBanDo": "Bãi Đỗ Xe",
+        "maIcon": "0xe39e",
+        "trangThai": 1,
+        "thaoTac": ""
+        },
+        {
+        "index": 6,
+        "tenLoaiBanDo": "Hiệu Thuốc",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+        }
+    ],
+    "profile": {
+        "name": "QuanLyLoaiBanDo"
+    }
+}
