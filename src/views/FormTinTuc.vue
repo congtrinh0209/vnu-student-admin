@@ -1,7 +1,7 @@
 <template>
 <div class="dialog-body" >
 
-    <v-row style="margin-top: 8px;">
+    <v-row>
         <v-col cols="12" sm="2">
             <div class="titleText">Tiêu đề: <span style="color:red;">*</span></div>
         </v-col>

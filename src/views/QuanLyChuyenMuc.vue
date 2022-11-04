@@ -2,7 +2,7 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off"></input>
+                <input class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
                 <button class="btn btn-search">
@@ -32,6 +32,7 @@ export default {
     },
     data() {
         return {
+            
         }
     }
 }

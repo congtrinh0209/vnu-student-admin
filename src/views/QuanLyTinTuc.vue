@@ -2,7 +2,7 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off"></input>
+                <input class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
                 <button class="btn btn-search">
@@ -115,6 +115,12 @@ import Pagination from './Pagination.vue'
 import FormTinTuc from './FormTinTuc.vue'
 
 export default {
+    props: {
+      total: {
+          type: Number,
+          default: 1
+      },
+  },
     components: {
       Pagination, FormTinTuc
     },
@@ -185,6 +191,7 @@ export default {
             datetime: null,
             date: null,
             menuDate: false,
+            loadingAction: false,
         }
     },
     created() {

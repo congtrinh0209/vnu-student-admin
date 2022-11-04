@@ -2,12 +2,22 @@
     <div>
         <v-row>
             <v-col cols="12" sm="6" style="display: inline-table;">
-                <span>Tên loại bản đồ:</span>
-                <input type="text" class="form-control"></input>
+                <span class="font-weight-bold">Tên loại bản đồ:</span>
+                <v-text-field
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="3" style="display: inline-table;">
-                <span>Thứ tự:</span>
-                <input type="text" class="form-control"></input>
+                <span class="font-weight-bold">Thứ tự:</span>
+                <v-text-field
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="3" >
                 <v-row no-gutters style="justify-content: center; align-items: center;">
@@ -18,13 +28,13 @@
                 </v-row>
             </v-col>
         </v-row>
-
+        <!-- btn: thêm mới, tìm kiếm -->
         <v-row>
             <v-col cols="12" sm="6"></v-col>
             <v-col cols="12" sm="6">
                 <v-row no-gutters style="float: right;">
                     <div>
-                        <button class="btn btn-add" @click="addForm">
+                        <button class="btn btn-add" @click="showAddForm">
                             <v-icon left dark size="22">mdi-file-plus</v-icon>
                             Thêm mới
                         </button>
@@ -44,7 +54,7 @@
                 </v-row>
             </v-col>
         </v-row>
-
+        <!-- data table -->
         <v-row class="my-0 mb-3">
             <v-col cols="12" class="pt-0">
               <v-data-table
@@ -62,7 +72,7 @@
                 <template v-slot:item.thaoTac="{ item }">
                   <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn color="primary" text icon class="" v-bind="attrs" v-on="on">
+                      <v-btn color="primary" text icon class="" v-bind="attrs" v-on="on" @click.stop="showFormDetail(item)">
                         <v-icon size="20">mdi-arrow-right-bold-circle-outline</v-icon>
                       </v-btn>
                     </template>
@@ -71,7 +81,7 @@
         
                   <v-tooltip top v-if="isAdmin">
                       <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on" @click.stop="editForm">
+                          <v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on" @click.stop="showUpdateForm(item)">
                           <v-icon size="18">mdi-pencil</v-icon>
                           </v-btn>
                       </template>
@@ -80,7 +90,7 @@
         
                   <v-tooltip top v-if="isAdmin">
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on" @click.stop="deleteForm">
+                      <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on" @click.stop="deleteItem(item)">
                         <v-icon size="18">mdi-delete</v-icon>
                       </v-btn>
                     </template>
@@ -96,7 +106,6 @@
             max-width="1200"
             v-model="dialogForm"
             persistent
-            fullscreen
         >
             <v-card>
                 <v-toolbar
@@ -119,7 +128,12 @@
                   </v-toolbar-items>
                 </v-toolbar>
                 <!-- -->  
-                <FormTinTuc></FormTinTuc>
+                <form-loai-ban-do 
+                ref="formLoaiBanDoRef"
+                :editingContent="editContent"
+                :dataInput="dataInput"
+                :readonly="readonlyForm"
+                ></form-loai-ban-do>
                 <!-- -->
                 <v-card-text class="px-2 py-2">
                     <v-card-actions class="justify-center my-4">
@@ -140,130 +154,208 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-
-    </div>
+      </div>
 </template>
 <script>
 import Pagination from './Pagination.vue'
+import FormLoaiBanDo from './FormLoaiBanDo.vue'
+import toastr from 'toastr'
 
+toastr.options = {
+  'closeButton': true,
+  'timeOut': '5000',
+  "positionClass": "toast-top-center"
+}
 export default {
-    props: {
-        total: {
-            type: Number,
-            default: 6
-        },
-    },
-    components: {
-      Pagination
-    },
-    data() {
-        return {
-            headers: [
-              {
-                  sortable: false,
-                  text: 'Thứ tự',
-                  align: 'center',
-                  value: 'index',
-                  width: 60
+  components: {
+    Pagination, 
+    'form-loai-ban-do': FormLoaiBanDo
+  },
+  data() {
+      return {
+          headers: [
+            {
+                sortable: false,
+                text: 'Thứ tự',
+                align: 'center',
+                value: 'index',
+                width: 60
+            },
+            {
+                sortable: false,
+                text:  'Tên loại bản đồ' ,
+                align: 'left',
+                value: 'tenLoaiBanDo',
+                class: 'th-center'
+                
+            },
+            {
+                sortable: false,
+                text: 'Mã icon' ,
+                align: 'left',
+                value: 'maIcon',
+                class: 'th-center',
+                width: 80
+            },
+            {
+                sortable: false,
+                text: 'Trạng thái' ,
+                align: 'center',
+                value: 'trangThai',
+                class: 'th-center',
+                width: 130
+            },
+            {
+                sortable: false,
+                text: 'Thao tác' ,
+                align: 'center',
+                value: 'thaoTac',
+                class: 'th-center',
+                width: 150
+            }
+          ],
+          danhSachLoaiBanDo: [
+            {
+              index: 1, 
+              tenLoaiBanDo: 'Tòa Nhà', 
+              maIcon: '0xe089', 
+              trangThai: 1,
+              thaoTac: ''
               },
               {
-                  sortable: false,
-                  text:  'Tên loại bản đồ' ,
-                  align: 'left',
-                  value: 'tenLoaiBanDo',
-                  class: 'th-center'
-                  
+              index: 2, 
+              tenLoaiBanDo: 'Ký Túc Xá', 
+              maIcon: '0xf879', 
+              trangThai: 1,
+              thaoTac: ''
               },
               {
-                  sortable: false,
-                  text: 'Mã icon' ,
-                  align: 'left',
-                  value: 'maIcon',
-                  class: 'th-center',
-                  width: 80
+              index: 3, 
+              tenLoaiBanDo: 'Ăn Uống', 
+              maIcon: '0xe131', 
+              trangThai: 1,
+              thaoTac: ''
               },
               {
-                  sortable: false,
-                  text: 'Trạng thái' ,
-                  align: 'center',
-                  value: 'trangThai',
-                  class: 'th-center',
-                  width: 130
+              index: 4, 
+              tenLoaiBanDo: 'Check In', 
+              maIcon: '0xe131', 
+              trangThai: 1,
+              thaoTac: ''
               },
               {
-                  sortable: false,
-                  text: 'Thao tác' ,
-                  align: 'center',
-                  value: 'thaoTac',
-                  class: 'th-center',
-                  width: 150
+              index: 5, 
+              tenLoaiBanDo: 'Bãi Đỗ Xe', 
+              maIcon: '0xe39e', 
+              trangThai: 1,
+              thaoTac: ''
+              },
+              {
+              index: 6, 
+              tenLoaiBanDo: 'Hiệu Thuốc', 
+              maIcon: '0xe131', 
+              trangThai: 1,
+              thaoTac: ''
               }
-            ],
-            danhSachLoaiBanDo: [
-            	{
-            		index: 1, 
-            		tenLoaiBanDo: 'Tòa Nhà', 
-            		maIcon: '0xe089', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                },
-                {
-            		index: 2, 
-            		tenLoaiBanDo: 'Ký Túc Xá', 
-            		maIcon: '0xf879', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                },
-                {
-            		index: 3, 
-            		tenLoaiBanDo: 'Ăn Uống', 
-            		maIcon: '0xe131', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                },
-                {
-            		index: 4, 
-            		tenLoaiBanDo: 'Check In', 
-            		maIcon: '0xe131', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                },
-                {
-            		index: 5, 
-            		tenLoaiBanDo: 'Bãi Đỗ Xe', 
-            		maIcon: '0xe39e', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                },
-                {
-            		index: 6, 
-            		tenLoaiBanDo: 'Hiệu Thuốc', 
-            		maIcon: '0xe131', 
-            		trangThai: '1', 
-            		thaoTac: ''
-                }
-            ],
-            itemsPerPage: 10,
-            loadingData: false,
-            pageCount: 1,
-            page: 0,
-            edittingForm: false,
-            dialogForm: false,
-        }
+          ],
+          itemsPerPage: 10,
+          loadingData: false,
+          pageCount: 1,
+          page: 0,
+          edittingForm: false,
+          dialogForm: false,
+          readonlyForm: false,
+          loadingAction: false,
+          editContent: '',
+          dataInput: '',
+          total: 6,
+      }
+  },
+  methods: {
+    showUpdateForm(item) {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = true
+      vm.readonlyForm = false
+      vm.editContent = item
+      try {
+        vm.dataInput = Object.assign({}, item)
+      } catch (error) {
+        vm.dataInput = {}
+      }
+      setTimeout(function () {
+        vm.$refs.formLoaiBanDoRef.initForm('update')
+      }, 200)
     },
-    methods: {
-        editForm() {
-            this.dialogForm = true
-            this.edittingForm = true
+    showAddForm() {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = false
+      vm.readonlyForm = false
+      setTimeout(function () {
+        vm.$refs.formLoaiBanDoRef.resetForm()
+      }, 200)
+    },
+    showFormDetail(item) {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = false
+      vm.readonlyForm = true
+      vm.dataInput = Object.assign({}, item)
+      setTimeout(function () {
+        vm.$refs.formLoaiBanDoRef.initForm('update')
+      }, 200)
+    },
+    submitForm() {
+      let vm = this
+      if (vm.$refs.formLoaiBanDoRef.validateForm()) {
+        vm.$refs.formLoaiBanDoRef.submitForm()
+        let formData = vm.$store.getters.getFormData
+        vm.loadingAction = true
+        if (!vm.edittingForm) { 
+          vm.danhSachLoaiBanDo.push(formData)
+          vm.loadingAction = false
+          vm.dialogForm = false
+          toastr.remove()
+          toastr.success('Thêm mới thành công') 
+        } else {
+          let editedContent = (vm.danhSachLoaiBanDo.filter(item => item.index !== vm.editContent.index))
+          editedContent.push(formData)
+          vm.danhSachLoaiBanDo = editedContent
+          vm.loadingAction = false
+          vm.dialogForm = false
+          toastr.remove()
+          toastr.success('Cập nhật thành công') 
+        }
+      }
+    },
+    exitForm() {
+      let vm = this
+      vm.dialogForm = false
+      vm.$refs.formLoaiBanDoRef.resetForm()
+    },
+    deleteItem(item) {
+      let vm = this
+      vm.$store.commit('SET_SHOWCONFIRM', true)
+      let confirm = {
+        auth: false,
+        title: 'Xoá loại bản đồ',
+        message: 'Bạn có chắc xóa loại bản đồ này?',
+        button: {
+          yes: 'Có',
+          no: 'Không',
         },
-        addForm() {
-            this.dialogForm = true
-            this.edittingForm = false
-        },
-        exitForm() {
-            this.dialogForm = false
-        },
-    }
+        callback: () => {
+          vm.loading = true
+          vm.danhSachLoaiBanDo = vm.danhSachLoaiBanDo.filter(i => i.index !== item.index)
+          vm.loading = false
+          toastr.remove()
+          toastr.success('Xóa loại bản đồ thành công')
+        }
+      }
+      vm.$store.commit('SET_CONFIG_CONFIRM_DIALOG', confirm)
+    },
+  }
 }
 </script>
 <style>

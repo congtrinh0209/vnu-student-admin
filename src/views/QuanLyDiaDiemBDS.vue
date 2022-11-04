@@ -2,15 +2,25 @@
     <div>
         <v-row>
             <v-col cols="12" sm="6" style="display: inline-grid;">
-                <span>Tên địa điểm:</span>
-                <input type="text" class="form-control"></input>
+                <span class="font-weight-bold">Tên địa điểm:</span>
+                <v-text-field
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="3" style="display: inline-grid;">
-                <span>Tọa độ:</span>
-                <input type="text" class="form-control"></input>
+                <span class="font-weight-bold">Tọa độ:</span>
+                <v-text-field
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="3" style="display: inline-grid;">
-                <span for="pet-select">Loại bản đồ:</span>
+                <span class="font-weight-bold">Loại bản đồ:</span>
                 <select class="form-control" name="pets" id="pet-select">
                     <option value="">Chọn địa điểm</option>
                     <option value="1">Tòa nhà</option>
@@ -25,12 +35,17 @@
         
         <v-row>
             <v-col cols="12" sm="6" style="display: inline-table;">
-                <span>Mô tả:</span>
-                <input type="text" class="form-control"></input>
+                <span class="font-weight-bold">Mô tả:</span>
+                <v-text-field
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="3" >
                 <v-row no-gutters style="justify-content: center; align-items: center;">
-                    <v-col cols='12' sm='4'><span style="font-weight: 500;">Trạng thái:</span></v-col>
+                    <v-col cols='12' sm='4'><span class="font-weight-bold">Trạng thái:</span></v-col>
                     <v-col cols='12' sm='5'>
                         <v-checkbox label=" Xuất bản"></v-checkbox>
                     </v-col>
@@ -39,7 +54,7 @@
             <v-col cols="12" sm="3" style="display: inline-table;">
                 <v-row no-gutters>
                     <v-col cols="12" sm="3" style="display: flex">
-                        <span style="font-weight: 500;">Focus:</span>
+                        <span class="font-weight-bold">Focus:</span>
                         <v-checkbox style="display: contents;"></v-checkbox>
                     </v-col>
                     <v-col cols="12" sm="9" style="display: contents;">
@@ -105,7 +120,7 @@ export default {
                 {name: 'Check in', value: 4},
                 {name: 'Ăn uống', value: 5},
                 {name: 'Hiệu thuốc', value: 6}
-            ]
+            ],
         }
     }
 }

@@ -107,6 +107,7 @@ export default {
             loadingData: false,
             pageCount: 1,
             page: 0,
+            total: 1,
         }
     }
 }
