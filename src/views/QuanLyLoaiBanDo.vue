@@ -4,6 +4,7 @@
             <v-col cols="12" sm="6" style="display: inline-table;">
                 <span class="font-weight-bold">Tên loại bản đồ:</span>
                 <v-text-field
+                    v-model="tenLoaiBanDoSearch"
                     class="flex input-form"
                     solo
                     dense
@@ -13,6 +14,7 @@
             <v-col cols="12" sm="3" style="display: inline-table;">
                 <span class="font-weight-bold">Thứ tự:</span>
                 <v-text-field
+                    v-model="thuTuSearch"
                     class="flex input-form"
                     solo
                     dense
@@ -23,7 +25,10 @@
                 <v-row no-gutters style="justify-content: center; align-items: center;">
                     <v-col cols='12' sm='4'><span style="font-weight: 500;">Trạng thái:</span></v-col>
                     <v-col cols='12' sm='5'>
-                        <v-checkbox label=" Xuất bản"></v-checkbox>
+                        <v-checkbox 
+                          label=" Xuất bản"
+                          v-model="trangThaiSearch1"
+                        ></v-checkbox>
                     </v-col>
                 </v-row>
             </v-col>
@@ -46,7 +51,7 @@
                         </button>
                     </div> -->
                     <div>
-                        <button class="btn btn-add">
+                        <button class="btn btn-add" @click="getDanhSachLoaiBanDo">
                             <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                             Tìm kiếm
                         </button>
@@ -160,7 +165,7 @@
 import Pagination from './Pagination.vue'
 import FormLoaiBanDo from './FormLoaiBanDo.vue'
 import toastr from 'toastr'
-
+import axios from 'axios'
 toastr.options = {
   'closeButton': true,
   'timeOut': '5000',
@@ -269,7 +274,26 @@ export default {
           editContent: '',
           dataInput: '',
           total: 6,
+          thuTuSearch: '',
+          tenLoaiBanDoSearch: '',
+          trangThaiSearch1: false,
+          trangThaiSearch: '',
       }
+  },
+  created() {
+    let vm = this
+    vm.getDanhSachLoaiBanDo()
+  },
+  watch: {
+    setTrangThaiSearch () {
+      let vm = this
+      setTimeout( function () {
+        if (vm.trangThaiSearch1 === true) {
+          vm.trangThaiSearch = 1
+        } else { vm.trangThaiSearch = 0 }
+      }, 200)
+
+    }
   },
   methods: {
     showUpdateForm(item) {
@@ -355,6 +379,25 @@ export default {
       }
       vm.$store.commit('SET_CONFIG_CONFIRM_DIALOG', confirm)
     },
+    getDanhSachLoaiBanDo () {
+      let vm = this
+      vm.loadingData = true
+      console.log(vm.tenLoaiBanDoSearch,vm.thuTuSearch,vm.setTrangThaiSearch)
+      let filter = {
+        collectionName: 'quanlyloaibando',
+        data: {
+          tenLoaiBanDo: vm.tenLoaiBanDoSearch ? vm.tenLoaiBanDoSearch : '',
+          thuTu: vm.thuTuSearch ? vm.thuTuSearch : '',
+          trangThai: vm.setTrangThaiSearch ? vm.setTrangThaiSearch : '',
+        }
+      }
+      vm.$store.dispatch('collectionFilter', filter).then(function (response) {
+        console.log(response)
+        vm.loadingData = false
+      }).catch(function () {
+        vm.loadingData = false
+      })
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
     "quanlyloaibando": [
         {
             "id" : 0,
-            "index": 1,
+            "thuTu": 1,
             "tenLoaiBanDo": "Tòa Nhà",
             "maIcon": "0xe089",
             "trangThai": 1,
@@ -10,7 +10,7 @@
         },
         {
             "id" : 1,
-            "index": 2,
+            "thuTu": 2,
             "tenLoaiBanDo": "Ký Túc Xá",
             "maIcon": "0xf879",
             "trangThai": 1,
@@ -18,7 +18,7 @@
         },
         {
             "id" : 2, 
-            "index": 3,
+            "thuTu": 3,
             "tenLoaiBanDo": "Ăn Uống",
             "maIcon": "0xe131",
             "trangThai": 1,
@@ -26,7 +26,7 @@
         },
         {
             "id" : 3,
-            "index": 4,
+            "thuTu": 4,
             "tenLoaiBanDo": "Check In",
             "maIcon": "0xe131",
             "trangThai": 1,
@@ -34,7 +34,7 @@
         },
         {
             "id" : 4,
-            "index": 5,
+            "thuTu": 5,
             "tenLoaiBanDo": "Bãi Đỗ Xe",
             "maIcon": "0xe39e",
             "trangThai": 1,
@@ -42,7 +42,7 @@
         },
         {
             "id" : 5,
-            "index": 6,
+            "thuTu": 6,
             "tenLoaiBanDo": "Hiệu Thuốc",
             "maIcon": "0xe131",
             "trangThai": 1,
