@@ -32,16 +32,23 @@
             <div class="titleText">Chuyên mục: </div>
         </v-col>
         <v-col cols="12" sm="4" style="display: table;">
-            <select class="form-control">
-                <option value="0">-- Không --</option>
-                <option value="1">Trung tâm hỗ trợ sinh viên</option>
-                <option value="2">Thông tin nội trú</option>
-                <option value="4">Cẩm nang Hòa Lạc</option>
-                <option value="5">Chuyên mục 1</option>
-                <option value="6">Chuyên mục 2</option>
-                <option value="7">Chuyên mục 3</option>
-                <option value="8">Tin tức chung</option>
-            </select>
+            <v-autocomplete
+                class="flex input-form"
+                hide-no-data
+                v-model="chuyenMuc"
+                :items="chuyenMucItems"
+                item-text="name"
+                item-value="value"
+                :rules="required"
+                placeholder="Chọn loại chuyên mục"
+                required
+                dense
+                solo
+                hide-details="auto"
+                return-object
+                clearable
+                >
+            </v-autocomplete>
         </v-col>
         
         <v-col cols="12" sm="2">
@@ -173,6 +180,15 @@ export default {
             datetime: null,
             date: null,
             menuDate: false,
+            chuyenMucItems: [
+                { name: 'Trung tâm hỗ trợ sinh viên', value: 1 },
+                { name: 'Thông tin nội trú', value: 2 },
+                { name: 'Cẩm nang Hòa Lạc', value: 3 },
+                { name: 'Chuyên mục 1', value: 4 },
+                { name: 'Chuyên mục 2', value: 5 },
+                { name: 'Chuyên mục 3', value: 6 },
+                { name: 'Tin tức chung', value: 7 }
+            ],
         }
     },
     created() {

@@ -173,7 +173,8 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         let config = {
           method: 'get',
-          url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName ,
+          url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
+          // url : '/v1/datasharing/' + filter.collectionName + '/',
           headers: { 
             'Accept': 'application/json', 
             'Content-Type': 'application/json'

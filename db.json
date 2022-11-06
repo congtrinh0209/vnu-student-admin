@@ -49,7 +49,23 @@
             "thaoTac": ""
         }
     ],
-    "profile": {
-        "name": "QuanLyLoaiBanDo"
-    }
+    "quanlytintuc" : [
+        {
+            "id" : 0,
+            "stt" : 1,
+            "tieuDe" : "Đời sống học đường",
+            "noiDung" : "noidung...",
+            "chuyenMuc" : {
+                "value" : 7,
+                "name" : "Tin tức chung"
+            },
+            "ngayXuatBan" : "20/5/2020 14:55",
+            "anhDaiDien" : "",
+            "taiFile" : "",
+            "trangThai" : {
+                "value" : true,
+                "name" : "Hoạt động"
+            }
+        }
+    ]
 }

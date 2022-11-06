@@ -131,7 +131,7 @@ export default {
                   sortable: false,
                   text: 'STT',
                   align: 'center',
-                  value: 'index',
+                  value: 'stt',
                   width: 15
               },
               {
@@ -166,14 +166,15 @@ export default {
                   width: 150
               }
             ],
-            danhSachTinTuc: [
-                {
-                    index: 1, 
-                    chuyenMuc: 'Tin tức chung', 
-                    tieuDe: 'Trường Quốc tế - ĐHQGHN tặng học bổng tài năng cho TOP 15% sinh viên học tập tại Hòa Lạc', 
-                    trangThai: 'Hoạt động', 
-                    thaoTac: ''}
-            ],
+            // danhSachTinTuc: [
+            //     {
+            //         index: 1, 
+            //         chuyenMuc: 'Tin tức chung', 
+            //         tieuDe: 'Trường Quốc tế - ĐHQGHN tặng học bổng tài năng cho TOP 15% sinh viên học tập tại Hòa Lạc', 
+            //         trangThai: 'Hoạt động', 
+            //         thaoTac: ''}
+            // ],
+            danhSachTinTuc: [],
             itemsPerPage: 10,
             loadingData: false,
             pageCount: 1,
@@ -195,6 +196,8 @@ export default {
         }
     },
     created() {
+        let vm = this
+        vm.getDanhSachTinTuc()
         if (this.switchTinhTrang === true) {
             this.textTinhTrang = "Kích hoạt"
         } else {
@@ -207,6 +210,22 @@ export default {
         },
     },
     methods: {
+        getDanhSachTinTuc () {
+            let vm = this
+            vm.loadingData = true
+            let filter = {
+                collectionName: 'quanlytintuc',
+                data: {
+                }
+            }
+            vm.$store.dispatch('collectionFilter', filter).then(function (response) {
+                vm.danhSachTinTuc = response
+                console.log(vm.danhSachTinTuc)
+                vm.loadingData = false
+            }).catch(function () {
+                vm.loadingData = false
+            })
+        },
         editForm() {
             this.dialogThemTinTuc = true
             this.editTinTuc = true

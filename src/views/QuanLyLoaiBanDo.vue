@@ -2,36 +2,52 @@
     <div>
         <v-row>
             <v-col cols="12" sm="6" style="display: inline-table;">
-                <span class="font-weight-bold">Tên loại bản đồ:</span>
-                <v-text-field
+                <v-row no-gutters>
+                  <v-col cols="12" sm="3" style="display: flex">
+                    <span class="font-weight-bold">Tên loại bản đồ:</span>
+                  </v-col>
+                  <v-col cols="12" sm="9">
+                    <v-text-field
                     v-model="tenLoaiBanDoSearch"
                     class="flex input-form"
                     solo
                     dense
                     hide-details="auto"
-                ></v-text-field>
+                    ></v-text-field>
+                  </v-col>
+                </v-row>     
             </v-col>
             <v-col cols="12" sm="3" style="display: inline-table;">
-                <span class="font-weight-bold">Thứ tự:</span>
-                <v-text-field
+                <v-row no-gutters>
+                  <v-col cols="12" sm="3" style="display: flex">
+                    <span class="font-weight-bold">Thứ tự:</span>
+                  </v-col>
+                  <v-col cols="12" sm="9">
+                    <v-text-field
                     v-model="thuTuSearch"
                     class="flex input-form"
                     solo
                     dense
                     hide-details="auto"
-                ></v-text-field>
+                    ></v-text-field>
+                  </v-col>
+                </v-row> 
             </v-col>
             <v-col cols="12" sm="3" >
-                <v-row no-gutters style="justify-content: center; align-items: center;">
-                    <v-col cols='12' sm='4'><span style="font-weight: 500;">Trạng thái:</span></v-col>
-                    <v-col cols='12' sm='5'>
-                        <v-checkbox 
-                          label=" Xuất bản"
-                          v-model="trangThaiSearch1"
-                        ></v-checkbox>
-                    </v-col>
-                </v-row>
-            </v-col>
+              <v-row no-gutters>
+                  <v-col cols="12" sm="4" style="display: flex">
+                      <span class="font-weight-bold">Trạng thái:</span>
+                  </v-col>
+                  <v-col cols="12" sm="8">
+                      <v-checkbox 
+                        style="display: contents;" 
+                        label=" Xuất bản"
+                        v-model="trangThaiSearch1"
+                        @change="onChangeTrangThaiSearch"
+                      ></v-checkbox>
+                  </v-col>
+              </v-row>
+          </v-col>
         </v-row>
         <!-- btn: thêm mới, tìm kiếm -->
         <v-row>
@@ -180,10 +196,10 @@ export default {
       return {
           headers: [
             {
-                sortable: false,
+                sortable: true,
                 text: 'Thứ tự',
                 align: 'center',
-                value: 'index',
+                value: 'thuTu',
                 width: 60
             },
             {
@@ -219,50 +235,7 @@ export default {
                 width: 150
             }
           ],
-          danhSachLoaiBanDo: [
-            {
-              index: 1, 
-              tenLoaiBanDo: 'Tòa Nhà', 
-              maIcon: '0xe089', 
-              trangThai: 1,
-              thaoTac: ''
-              },
-              {
-              index: 2, 
-              tenLoaiBanDo: 'Ký Túc Xá', 
-              maIcon: '0xf879', 
-              trangThai: 1,
-              thaoTac: ''
-              },
-              {
-              index: 3, 
-              tenLoaiBanDo: 'Ăn Uống', 
-              maIcon: '0xe131', 
-              trangThai: 1,
-              thaoTac: ''
-              },
-              {
-              index: 4, 
-              tenLoaiBanDo: 'Check In', 
-              maIcon: '0xe131', 
-              trangThai: 1,
-              thaoTac: ''
-              },
-              {
-              index: 5, 
-              tenLoaiBanDo: 'Bãi Đỗ Xe', 
-              maIcon: '0xe39e', 
-              trangThai: 1,
-              thaoTac: ''
-              },
-              {
-              index: 6, 
-              tenLoaiBanDo: 'Hiệu Thuốc', 
-              maIcon: '0xe131', 
-              trangThai: 1,
-              thaoTac: ''
-              }
-          ],
+          danhSachLoaiBanDo: [],
           itemsPerPage: 10,
           loadingData: false,
           pageCount: 1,
@@ -277,7 +250,7 @@ export default {
           thuTuSearch: '',
           tenLoaiBanDoSearch: '',
           trangThaiSearch1: false,
-          trangThaiSearch: '',
+          trangThaiSearch: 0,
       }
   },
   created() {
@@ -285,15 +258,9 @@ export default {
     vm.getDanhSachLoaiBanDo()
   },
   watch: {
-    setTrangThaiSearch () {
-      let vm = this
-      setTimeout( function () {
-        if (vm.trangThaiSearch1 === true) {
-          vm.trangThaiSearch = 1
-        } else { vm.trangThaiSearch = 0 }
-      }, 200)
+  },
+  computed: {
 
-    }
   },
   methods: {
     showUpdateForm(item) {
@@ -340,10 +307,11 @@ export default {
           vm.danhSachLoaiBanDo.push(formData)
           vm.loadingAction = false
           vm.dialogForm = false
+          vm.total += 1
           toastr.remove()
           toastr.success('Thêm mới thành công') 
         } else {
-          let editedContent = (vm.danhSachLoaiBanDo.filter(item => item.index !== vm.editContent.index))
+          let editedContent = (vm.danhSachLoaiBanDo.filter(item => item.id !== vm.editContent.id))
           editedContent.push(formData)
           vm.danhSachLoaiBanDo = editedContent
           vm.loadingAction = false
@@ -371,8 +339,9 @@ export default {
         },
         callback: () => {
           vm.loading = true
-          vm.danhSachLoaiBanDo = vm.danhSachLoaiBanDo.filter(i => i.index !== item.index)
+          vm.danhSachLoaiBanDo = vm.danhSachLoaiBanDo.filter(i => i.id !== item.id)
           vm.loading = false
+          vm.total -= 1
           toastr.remove()
           toastr.success('Xóa loại bản đồ thành công')
         }
@@ -382,21 +351,29 @@ export default {
     getDanhSachLoaiBanDo () {
       let vm = this
       vm.loadingData = true
-      console.log(vm.tenLoaiBanDoSearch,vm.thuTuSearch,vm.setTrangThaiSearch)
       let filter = {
         collectionName: 'quanlyloaibando',
         data: {
-          tenLoaiBanDo: vm.tenLoaiBanDoSearch ? vm.tenLoaiBanDoSearch : '',
-          thuTu: vm.thuTuSearch ? vm.thuTuSearch : '',
-          trangThai: vm.setTrangThaiSearch ? vm.setTrangThaiSearch : '',
+          // tenLoaiBanDo: vm.tenLoaiBanDoSearch,
+          // thuTu: vm.thuTuSearch,
+          // trangThai: vm.trangThaiSearch,
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
-        console.log(response)
+        vm.danhSachLoaiBanDo = response
+        console.log(vm.danhSachLoaiBanDo)
         vm.loadingData = false
       }).catch(function () {
         vm.loadingData = false
       })
+    },
+    onChangeTrangThaiSearch () {
+      let vm = this
+      setTimeout( function () {
+        if (vm.trangThaiSearch1 == false) {
+          vm.trangThaiSearch = 0
+        } else { vm.trangThaiSearch = 1 }
+      }, 200)
     }
   }
 }

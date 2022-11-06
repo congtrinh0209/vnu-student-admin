@@ -11,7 +11,7 @@
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="data.index"
+                    v-model="data.thuTu"
                     class="flex input-form"
                     solo
                     dense

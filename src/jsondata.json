@@ -498,5 +498,55 @@
       ],
       "itemsPerPage": 15
     }
-  }
+  },
+  "quanlyloaibando": [
+    {
+        "id" : 0,
+        "thuTu": 1,
+        "tenLoaiBanDo": "Tòa Nhà",
+        "maIcon": "0xe089",
+        "trangThai": 1,
+        "thaoTac": ""
+    },
+    {
+        "id" : 1,
+        "thuTu": 2,
+        "tenLoaiBanDo": "Ký Túc Xá",
+        "maIcon": "0xf879",
+        "trangThai": 1,
+        "thaoTac": ""
+    },
+    {
+        "id" : 2, 
+        "thuTu": 3,
+        "tenLoaiBanDo": "Ăn Uống",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+    },
+    {
+        "id" : 3,
+        "thuTu": 4,
+        "tenLoaiBanDo": "Check In",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+    },
+    {
+        "id" : 4,
+        "thuTu": 5,
+        "tenLoaiBanDo": "Bãi Đỗ Xe",
+        "maIcon": "0xe39e",
+        "trangThai": 1,
+        "thaoTac": ""
+    },
+    {
+        "id" : 5,
+        "thuTu": 6,
+        "tenLoaiBanDo": "Hiệu Thuốc",
+        "maIcon": "0xe131",
+        "trangThai": 1,
+        "thaoTac": ""
+    }
+  ]
 }
