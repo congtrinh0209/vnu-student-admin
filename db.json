@@ -63,7 +63,7 @@
             "anhDaiDien" : "",
             "taiFile" : "",
             "trangThaiValue" : true,
-            "trangThaiText" : "Hoạt động"
+            "trangThaiName" : "Hoạt động"
         }
     ],
     "quanlychuyenmuc" : [
