@@ -68,5 +68,25 @@
                 "text" : "Kích hoạt"
             }
         }
+    ],
+    "quanlychuyenmuc" : [
+        {
+            "id" : 0,
+            "stt" : 1,
+            "tenChuyenMuc" : "Cẩm nang Hòa Lạc",
+            "chuyenMucCha" : {
+                "name" : "Cẩm nang Hòa Lạc",
+                "value" : 3
+            }
+        },
+        {
+            "id" : 1,
+            "stt" : 2,
+            "tenChuyenMuc" : "Chuyên mục 1",
+            "chuyenMucCha" : {
+                "name" : "Cẩm nang Hòa Lạc",
+                "value" : 3
+            }
+        }
     ]
 }
