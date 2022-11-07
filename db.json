@@ -101,5 +101,24 @@
                 "value" : 3
             }
         }
+    ],
+    "quanlydiadiembandoso" : [
+        {
+            "id" : 0,
+            "tenDiaDiem" : "Hương Việt Quán Hòa Lạc",
+            "moTa" : "Nhận hàng ở lề đường, Giao hàng gián tiếp, Giao hàng, Mua hàng ngay trên xe, Đồ ăn mang đi, Ăn tại chỗ",
+            "loaiBanDo" : {
+                "value" : 5,
+                "name" : "Ăn uống"
+            },
+            "khuVuc" : {
+                "value" : 1,
+                "name" : "Hòa Lạc"
+            },
+            "focus" : true,
+            "trangThai" : true,
+            "toaDo" : "20.990848893118226, 105.51926310222845",
+            "thaoTac" : ""
+        }
     ]
 }
