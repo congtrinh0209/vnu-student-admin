@@ -11,13 +11,14 @@
             </v-col>
             <v-col cols="12" sm="6">
                 <div style="float:right;">
-                    <button @click.stop="addForm" class="btn btn-add">   
+                    <button @click.stop="showAddForm" class="btn btn-add">   
                         <v-icon left dark size="22">mdi-file-plus</v-icon>
                         Thêm mới
                     </button>
                 </div>
             </v-col>
         </v-row>
+        <!-- data table -->
         <v-row class="my-0 mb-3">
             <v-col cols="12" class="pt-0">
               <v-data-table
@@ -31,29 +32,35 @@
                 :loading="loadingData"
                 loading-text="Đang tải... "
                 item-text="name"
-
               >
                 <template v-slot:item.thaoTac="{ item }">
-                    
-                    <v-tooltip top v-if="isAdmin">
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn @click.stop="editForm" color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on">
-                                <v-icon size="18">mdi-pencil</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Sửa</span>
-                    </v-tooltip>
-
-                    <v-tooltip top v-if="isAdmin">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="primary" text icon class="" v-bind="attrs" v-on="on" @click.stop="showFormDetail(item)">
+                        <v-icon size="20">mdi-arrow-right-bold-circle-outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Chi Tiết</span>
+                  </v-tooltip>
+        
+                  <v-tooltip top v-if="isAdmin">
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on">
-                          <v-icon size="18">mdi-delete</v-icon>
-                        </v-btn>
+                          <v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on" @click.stop="showUpdateForm(item)">
+                          <v-icon size="18">mdi-pencil</v-icon>
+                          </v-btn>
                       </template>
-                      <span>Xóa</span>
-                    </v-tooltip>
-                  </template> 
-
+                      <span>Sửa</span>
+                  </v-tooltip>
+        
+                  <v-tooltip top v-if="isAdmin">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on" @click.stop="deleteItem(item)">
+                        <v-icon size="18">mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Xóa</span>
+                  </v-tooltip>
+                </template> 
               </v-data-table>
               <pagination v-if="pageCount" :pageInput="page" :total="total" :pageCount="pageCount" @tiny:change-page=""></pagination>
             </v-col>
@@ -61,7 +68,7 @@
         <!-- -->
         <v-dialog
             max-width="1200"
-            v-model="dialogThemTinTuc"
+            v-model="dialogForm"
             persistent
             fullscreen
         >
@@ -71,9 +78,9 @@
                   color="primary"
                   class="px-3"
                 >
-                  <v-toolbar-title v-if="readonlyForm && editTinTuc === null">{{ $t('chiTietBaoCao.thongTinTinTuc')}}</v-toolbar-title>
-                  <v-toolbar-title v-if="editTinTuc === true && !readonlyForm">Cập nhật tin tức</v-toolbar-title>
-                  <v-toolbar-title v-if="editTinTuc === false && !readonlyForm">Thêm mới tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="readonlyForm && edittingForm === null">Thông tin tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="edittingForm === true && !readonlyForm">Cập nhật tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="edittingForm === false && !readonlyForm">Thêm mới tin tức</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -86,7 +93,12 @@
                   </v-toolbar-items>
                 </v-toolbar>
                 <!-- -->  
-                <FormTinTuc></FormTinTuc>
+                <form-tin-tuc 
+                ref="formTinTucRef"
+                :editingContent="editContent"
+                :dataInput="dataInput"
+                :readonly="readonlyForm"
+                ></form-tin-tuc>
                 <!-- -->
                 <v-card-text class="px-2 py-2">
                     <v-card-actions class="justify-center my-4">
@@ -96,37 +108,37 @@
                       </v-icon>
                       {{ $t('basic.thoat')}}
                     </v-btn>
-                    <v-btn v-if="!readonlyForm" small depressed class="mr-2" color="primary" :loading="loadingAction" :disabled="loadingAction" @click.native="submitThemTinTuc">
+                    <v-btn v-if="!readonlyForm" small depressed class="mr-2" color="primary" :loading="loadingAction" :disabled="loadingAction" @click.native="submitForm">
                       <v-icon left dark size="18">
                         mdi-file-document-plus-outline
                       </v-icon>
-                      <span v-if="editTinTuc">Cập nhật</span>
+                      <span v-if="edittingForm">Cập nhật</span>
                       <span v-else>Thêm vào</span>
                     </v-btn>
                   </v-card-actions>
                 </v-card-text>
             </v-card>
         </v-dialog>
-    </div>
+      </div>
 </template>
-  
 <script>
 import Pagination from './Pagination.vue'
 import FormTinTuc from './FormTinTuc.vue'
-
+import toastr from 'toastr'
+import axios from 'axios'
+toastr.options = {
+  'closeButton': true,
+  'timeOut': '5000',
+  "positionClass": "toast-top-center"
+}
 export default {
-    props: {
-      total: {
-          type: Number,
-          default: 1
-      },
+  components: {
+    Pagination, 
+    'form-tin-tuc': FormTinTuc
   },
-    components: {
-      Pagination, FormTinTuc
-    },
-    data() {
-        return {
-            headers: [
+  data() {
+      return {
+          headers: [
               {
                   sortable: false,
                   text: 'STT',
@@ -138,7 +150,7 @@ export default {
                   sortable: false,
                   text:  'Chuyên mục' ,
                   align: 'left',
-                  value: 'chuyenMuc',
+                  value: 'chuyenMuc.name',
                   class: 'th-center',
                   width: 120
               },
@@ -153,7 +165,7 @@ export default {
                   sortable: false,
                   text: 'Trạng thái' ,
                   align: 'center',
-                  value: 'trangThai',
+                  value: 'trangThai.name',
                   class: 'th-center',
                   width: 130
               },
@@ -165,91 +177,143 @@ export default {
                   class: 'th-center',
                   width: 150
               }
-            ],
-            // danhSachTinTuc: [
-            //     {
-            //         index: 1, 
-            //         chuyenMuc: 'Tin tức chung', 
-            //         tieuDe: 'Trường Quốc tế - ĐHQGHN tặng học bổng tài năng cho TOP 15% sinh viên học tập tại Hòa Lạc', 
-            //         trangThai: 'Hoạt động', 
-            //         thaoTac: ''}
-            // ],
-            danhSachTinTuc: [],
-            itemsPerPage: 10,
-            loadingData: false,
-            pageCount: 1,
-            page: 0,
-            dialogThemTinTuc: false,
-            readonlyForm: false,
-            editTinTuc: false,
-            datetime: new Date(),
-            switchTinhTrang: true,
-            textTinhTrang: '',
-            rules: {
-              text: [val => (val || '').length > 0 || 'Đây là trường bắt buộc nhập'],
-            },
-            activePicker: null,
-            datetime: null,
-            date: null,
-            menuDate: false,
-            loadingAction: false,
-        }
+          ],
+          danhSachTinTuc: [],
+          itemsPerPage: 10,
+          loadingData: false,
+          pageCount: 1,
+          page: 0,
+          edittingForm: false,
+          dialogForm: false,
+          readonlyForm: false,
+          loadingAction: false,
+          editContent: '',
+          dataInput: '',
+          total: 1,
+      }
+  },
+  created() {
+    let vm = this
+    vm.getDanhSachTinTuc()
+  },
+  watch: {
+  },
+  computed: {
+
+  },
+  methods: {
+    showUpdateForm(item) {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = true
+      vm.readonlyForm = false
+      vm.editContent = item
+      try {
+        vm.dataInput = Object.assign({}, item)
+      } catch (error) {
+        vm.dataInput = {}
+      }
+      setTimeout(function () {
+        vm.$refs.formTinTucRef.initForm('update')
+      }, 200)
     },
-    created() {
-        let vm = this
-        vm.getDanhSachTinTuc()
-        if (this.switchTinhTrang === true) {
-            this.textTinhTrang = "Kích hoạt"
+    showAddForm() {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = false
+      vm.readonlyForm = false
+      setTimeout(function () {
+        vm.$refs.formTinTucRef.resetForm()
+      }, 200)
+    },
+    showFormDetail(item) {
+      let vm = this
+      vm.dialogForm = true
+      vm.edittingForm = null
+      vm.readonlyForm = true
+      vm.dataInput = Object.assign({}, item)
+      setTimeout(function () {
+        vm.$refs.formTinTucRef.initForm('update')
+      }, 200)
+    },
+    submitForm() {
+      let vm = this
+      if (vm.$refs.formTinTucRef.validateForm()) {
+        vm.$refs.formTinTucRef.submitForm()
+        let formData = vm.$store.getters.getFormData
+        vm.loadingAction = true
+        if (!vm.edittingForm) { 
+          vm.danhSachTinTuc.push(formData)
+          vm.loadingAction = false
+          vm.dialogForm = false
+          vm.total += 1
+          toastr.remove()
+          toastr.success('Thêm mới thành công') 
+          console.log(formData)
         } else {
-            this.textTinhTrang = "Không kích hoạt"
+          let editedContent = (vm.danhSachTinTuc.filter(item => item.id !== vm.editContent.id))
+          editedContent.push(formData)
+          vm.danhSachTinTuc = editedContent
+          vm.loadingAction = false
+          vm.dialogForm = false
+          toastr.remove()
+          toastr.success('Cập nhật thành công') 
         }
+      }
     },
-    watch: {
-        menuDate (val) {
-            val && setTimeout(() => (this.activePicker = ''))
-        },
+    exitForm() {
+      let vm = this
+      vm.dialogForm = false
+      vm.$refs.formTinTucRef.resetForm()
     },
-    methods: {
-        getDanhSachTinTuc () {
-            let vm = this
-            vm.loadingData = true
-            let filter = {
-                collectionName: 'quanlytintuc',
-                data: {
-                }
-            }
-            vm.$store.dispatch('collectionFilter', filter).then(function (response) {
-                vm.danhSachTinTuc = response
-                console.log(vm.danhSachTinTuc)
-                vm.loadingData = false
-            }).catch(function () {
-                vm.loadingData = false
-            })
+    deleteItem(item) {
+      let vm = this
+      vm.$store.commit('SET_SHOWCONFIRM', true)
+      let confirm = {
+        auth: false,
+        title: 'Xoá loại bản đồ',
+        message: 'Bạn có chắc xóa loại bản đồ này?',
+        button: {
+          yes: 'Có',
+          no: 'Không',
         },
-        editForm() {
-            this.dialogThemTinTuc = true
-            this.editTinTuc = true
-        },
-        addForm() {
-            this.dialogThemTinTuc = true
-            this.editTinTuc = false
-        },
-        exitForm() {
-            this.dialogThemTinTuc = false
-        },
-        setTinhTrang() {
-            if (this.switchTinhTrang === true) {
-                this.textTinhTrang = "Kích hoạt"
-            } else {
-                this.textTinhTrang = "Không kích hoạt"
-            }
-        },
-        save (date) {
-            this.$refs.menu.save(date)
-        },
+        callback: () => {
+          vm.loading = true
+          vm.danhSachTinTuc = vm.danhSachTinTuc.filter(i => i.id !== item.id)
+          vm.loading = false
+          vm.total -= 1
+          toastr.remove()
+          toastr.success('Xóa loại bản đồ thành công')
+        }
+      }
+      vm.$store.commit('SET_CONFIG_CONFIRM_DIALOG', confirm)
+    },
+    getDanhSachTinTuc () {
+      let vm = this
+      vm.loadingData = true
+      let filter = {
+        collectionName: 'quanlytintuc',
+        data: {
+        }
+      }
+      vm.$store.dispatch('collectionFilter', filter).then(function (response) {
+        vm.danhSachTinTuc = response
+        console.log(vm.danhSachTinTuc)
+        vm.loadingData = false
+      }).catch(function () {
+        vm.loadingData = false
+      })
+    },
+    onChangeTrangThaiSearch () {
+      let vm = this
+      setTimeout( function () {
+        if (vm.trangThaiSearch1 == false) {
+          vm.trangThaiSearch = 0
+        } else { vm.trangThaiSearch = 1 }
+      }, 200)
     }
+  }
 }
 </script>
 <style>
-
 </style>

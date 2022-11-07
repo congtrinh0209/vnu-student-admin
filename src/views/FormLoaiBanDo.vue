@@ -11,7 +11,7 @@
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="data.thuTu"
+                    v-model="formData.thuTu"
                     class="flex input-form"
                     solo
                     dense
@@ -26,7 +26,7 @@
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="data.tenLoaiBanDo"
+                    v-model="formData.tenLoaiBanDo"
                     class="flex input-form"
                     solo
                     label="Nhập tên loại bản đồ..."
@@ -45,7 +45,7 @@
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="data.maIcon"
+                    v-model="formData.maIcon"
                     class="flex input-form"
                     solo
                     dense
@@ -95,7 +95,7 @@
                 datetime: null,
                 date: null,
                 menuDate: false,
-                data: {},
+                formData: {},
                 trangThai: false,
                 dataOutput: '',
             }
@@ -127,8 +127,8 @@
             // },
             initForm (type) {
                 if (type === 'update' && this.dataInput) {
-                    this.data = this.dataInput
-                    if (this.data.trangThai == 1) {
+                    this.formData = this.dataInput
+                    if (this.formData.trangThai == 1) {
                         this.trangThai = true
                     } else {
                         this.trangThai = false
@@ -146,15 +146,15 @@
             },
             submitForm () {
                 let vm = this
-                let dataOutput = Object.assign({}, vm.data)
+                let dataOutput = Object.assign({}, vm.formData)
                 vm.$store.commit('SET_FORM_DATA', dataOutput)
             },
             setTrangThai() {
                 let vm = this
                 if (vm.trangThai == true) {
-                    vm.data.trangThai = 1
+                    vm.formData.trangThai = 1
                 } else {
-                    vm.data.trangThai = 0
+                    vm.formData.trangThai = 0
                 }
             }
         }

@@ -64,7 +64,8 @@
             "taiFile" : "",
             "trangThai" : {
                 "value" : true,
-                "name" : "Hoạt động"
+                "name" : "Hoạt động",
+                "text" : "Kích hoạt"
             }
         }
     ]

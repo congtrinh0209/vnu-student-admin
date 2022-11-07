@@ -134,9 +134,9 @@
                   color="primary"
                   class="px-3"
                 >
-                  <v-toolbar-title v-if="readonlyForm && edittingForm === null">{{ $t('chiTietBaoCao.thongTinTinTuc')}}</v-toolbar-title>
-                  <v-toolbar-title v-if="edittingForm === true && !readonlyForm">Cập nhật tin tức</v-toolbar-title>
-                  <v-toolbar-title v-if="edittingForm === false && !readonlyForm">Thêm mới tin tức</v-toolbar-title>
+                  <v-toolbar-title v-if="readonlyForm && edittingForm === null">Thông tin loại bản đồ</v-toolbar-title>
+                  <v-toolbar-title v-if="edittingForm === true && !readonlyForm">Cập nhật loại bản đồ</v-toolbar-title>
+                  <v-toolbar-title v-if="edittingForm === false && !readonlyForm">Thêm mới loại bản đồ</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                     <v-btn
@@ -290,7 +290,7 @@ export default {
     showFormDetail(item) {
       let vm = this
       vm.dialogForm = true
-      vm.edittingForm = false
+      vm.edittingForm = null
       vm.readonlyForm = true
       vm.dataInput = Object.assign({}, item)
       setTimeout(function () {

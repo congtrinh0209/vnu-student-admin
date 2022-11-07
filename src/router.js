@@ -41,12 +41,6 @@ export default new Router({
           component: () => import('@/views/QuanLyChuyenMuc'),
           props: true
         },
-        {
-          path: '/test',
-          name: 'FormTinymce',
-          component: () => import('@/views/FormTinymce'),
-          props: true
-        },
 
       ],
     },
