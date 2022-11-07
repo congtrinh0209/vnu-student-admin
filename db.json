@@ -62,7 +62,8 @@
             "ngayXuatBan" : "20/5/2020 14:55",
             "anhDaiDien" : "",
             "taiFile" : "",
-            "trangThai" : true
+            "trangThaiValue" : true,
+            "trangThaiText" : "Hoạt động"
         }
     ],
     "quanlychuyenmuc" : [
