@@ -61,6 +61,22 @@
             },
             "ngayXuatBan" : "20/5/2020 14:55",
             "anhDaiDien" : "",
+            
+            "taiFile" : "",
+            "trangThaiValue" : true,
+            "trangThaiName" : "Hoạt động"
+        },
+        {
+            "id" : 1,
+            "stt" : 2,
+            "tieuDe" : "Tạp chí U.S News & World Report: Thêm lĩnh vực Kỹ thuật của ĐHQGHN lần đầu tiên được xếp hạng",
+            "noiDung" : "",
+            "chuyenMuc" : {
+                "value" : 7,
+                "name" : "Tin tức chung"
+            },
+            "ngayXuatBan" : "20/5/2020 14:55",
+            "anhDaiDien" : "",
             "taiFile" : "",
             "trangThaiValue" : true,
             "trangThaiName" : "Hoạt động"
