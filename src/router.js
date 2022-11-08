@@ -40,9 +40,8 @@ export default new Router({
           name: 'QuanLyChuyenMuc',
           component: () => import('@/views/QuanLyChuyenMuc'),
           props: true
-        },
-
-      ],
+        }
+      ]
     },
     {
       name: 'Login',

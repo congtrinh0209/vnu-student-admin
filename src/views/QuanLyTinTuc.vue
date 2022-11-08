@@ -2,10 +2,10 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off">
+                <input id="tieuDeSearch" class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
-                <button class="btn btn-search">
+                <button class="btn btn-search" @click.stop="handleSearchButton">
                     <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                 </button>
             </v-col>
@@ -165,7 +165,7 @@ export default {
                   sortable: false,
                   text: 'Trạng thái' ,
                   align: 'center',
-                  value: 'trangThai.name',
+                  value: 'trangThaiName',
                   class: 'th-center',
                   width: 130
               },
@@ -190,6 +190,7 @@ export default {
           editContent: '',
           dataInput: '',
           total: 1,
+          tieuDeSearch: null,
       }
   },
   created() {
@@ -204,8 +205,6 @@ export default {
   methods: {
     showUpdateForm(item) {
       let vm = this
-      vm.dialogForm = true
-      vm.edittingForm = true
       vm.readonlyForm = false
       vm.editContent = item
       try {
@@ -213,6 +212,8 @@ export default {
       } catch (error) {
         vm.dataInput = {}
       }
+      vm.dialogForm = true
+      vm.edittingForm = true
       setTimeout(function () {
         vm.$refs.formTinTucRef.initForm('update')
       }, 200)
@@ -243,13 +244,14 @@ export default {
         let formData = vm.$store.getters.getFormData
         vm.loadingAction = true
         if (!vm.edittingForm) { 
+          formData.id = vm.getMaxNumber('id')
+          formData.stt = vm.getMaxNumber('stt')
           vm.danhSachTinTuc.push(formData)
           vm.loadingAction = false
           vm.dialogForm = false
           vm.total += 1
           toastr.remove()
           toastr.success('Thêm mới thành công') 
-          console.log(formData)
         } else {
           let editedContent = (vm.danhSachTinTuc.filter(item => item.id !== vm.editContent.id))
           editedContent.push(formData)
@@ -294,24 +296,33 @@ export default {
       let filter = {
         collectionName: 'quanlytintuc',
         data: {
+          tieuDe : vm.tieuDeSearch
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
         vm.danhSachTinTuc = response
-        console.log(vm.danhSachTinTuc)
+        vm.total = vm.danhSachTinTuc.length
         vm.loadingData = false
       }).catch(function () {
         vm.loadingData = false
       })
     },
-    onChangeTrangThaiSearch () {
+    getMaxNumber(typenumber) {
       let vm = this
-      setTimeout( function () {
-        if (vm.trangThaiSearch1 == false) {
-          vm.trangThaiSearch = 0
-        } else { vm.trangThaiSearch = 1 }
-      }, 200)
+      let max = 0
+      max = Math.max(...vm.danhSachTinTuc.map(item => item[typenumber]))
+      return (max+1)
+    },
+    handleSearchButton() {
+      let vm = this
+      vm.tieuDeSearch = document.getElementById("tieuDeSearch").value
+      console.log(vm.tieuDeSearch)
+      if (vm.tieuDeSearch == '') {
+        vm.tieuDeSearch = null
+      } 
+      vm.getDanhSachTinTuc()
     }
+
   }
 }
 </script>

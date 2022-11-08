@@ -1,33 +1,17 @@
 <template>
     <v-form
         class="dialog-body"
-        ref="formLoaiBanDo"
+        ref="formDiaDiemBds"
         v-model="validForm"
         lazy-validation
         > 
         <v-row>
             <v-col cols="12" sm="2">
-                <div class="titleText">Thứ tự:</div>
+                <div class="titleText">Tên địa điểm: <span style="color:red;">*</span></div>
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="formData.thuTu"
-                    type="number"
-                    class="flex input-form"
-                    solo
-                    dense
-                    hide-details="auto"
-                    :clearable="!readonly"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col cols="12" sm="2">
-                <div class="titleText">Tên loại bản đồ: <span style="color:red;">*</span></div>
-            </v-col>
-            <v-col cols="12" sm="10">
-                <v-text-field
-                    v-model="formData.tenLoaiBanDo"
+                    v-model="formData.tenDiaDiem"
                     class="flex input-form"
                     solo
                     label="Nhập tên loại bản đồ..."
@@ -39,14 +23,31 @@
                 ></v-text-field>
             </v-col>
         </v-row>  
-          
         <v-row>
             <v-col cols="12" sm="2">
-                <div class="titleText">Mã icon:</div>
+                <div class="titleText">Mô tả:</div>
             </v-col>
             <v-col cols="12" sm="10">
                 <v-text-field
-                    v-model="formData.maIcon"
+                    v-model="formData.moTa"
+                    class="flex input-form"
+                    solo
+                    dense
+                    hide-details="auto"
+                    :clearable="!readonly"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+        
+          
+        <v-row>
+            <v-col cols="12" sm="2">
+                <div class="titleText">Tọa độ:</div>
+            </v-col>
+            <v-col cols="12" sm="10">
+                <v-text-field
+                    v-model="formData.toaDo"
+                    type="number"
                     class="flex input-form"
                     solo
                     dense
@@ -57,16 +58,76 @@
         </v-row> 
         <v-row>
             <v-col cols="12" sm="2">
+                <div class="titleText">Loại bản đồ: </div>
+            </v-col>
+            <v-col cols="12" sm="10" style="display: table;">
+                <v-autocomplete
+                    class="flex input-form"
+                    hide-no-data
+                    v-model="formData.loaiBanDo"
+                    :items="loaiBanDoItems"
+                    item-text="name"
+                    item-value="value"
+                    placeholder="Chọn loại bản đồ"
+                    dense
+                    solo
+                    hide-details="auto"
+                    return-object
+                    clearable
+                    >
+                </v-autocomplete>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12" sm="2">
                 <div class="titleText">Trạng thái:</div>
             </v-col>
             <v-col cols="12" sm="10">
                 <v-checkbox 
-                v-model="trangThai"
+                style="display: contents"
+                v-model="formData.trangThaiValue"
                 label=" Xuất bản"
                 @change="setTrangThai()"
                 ></v-checkbox>
             </v-col>
         </v-row> 
+        
+        <v-row>
+            <v-col cols="12" sm="2">
+                <div class="titleText">Khu vực:</div>
+            </v-col>
+            <v-col cols="12" sm="10">
+                <v-row>
+                    <v-col cols="12" sm="2">
+                        <v-checkbox 
+                        style="display: contents;"
+                        v-model="formData.focusValue" 
+                        label="Focus"
+                        ></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="10">
+                        <v-autocomplete
+                            class="flex input-form"
+                            hide-no-data
+                            v-model="formData.khuVuc"
+                            :items="khuVucItems"
+                            item-text="name"
+                            item-value="value"
+                            placeholder="Chọn khu vực"
+                            dense
+                            solo
+                            hide-details="auto"
+                            return-object
+                            clearable
+                            >
+                        </v-autocomplete>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row> 
+
+        
+
     </v-form>   
     </template>
       
@@ -99,33 +160,42 @@
                 formData: {},
                 trangThai: false,
                 dataOutput: '',
+                focusText: '',
+                khuVuc: '',
+                khuVucItems: [
+                    { value: 1, name: "Hòa Lạc" },
+                    { value: 2, name: "Xuân Thủy" },
+                    { value: 3, name: "Khu vực khác" }
+                ],
+                loaiBanDo: '',
+                loaiBanDoItems: [
+                    { value: 1, name: "Tòa nhà" },
+                    { value: 2, name: "Bãi đỗ xe" },
+                    { value: 3, name: "Ký túc xá" },
+                    { value: 4, name: "Check in" },
+                    { value: 5, name: "Ăn uống" },
+                    { value: 6, name: "Hiệu thuốc" }
+                ],
             }
         },
         created() {
+            let vm = this
             if (this.switchTinhTrang === true) {
                 this.textTinhTrang = "Kích hoạt"
             } else {
                 this.textTinhTrang = "Không kích hoạt"
             }
+            setTimeout( function () {
+                if (vm.formData.focusValue == true) {
+
+                } else {
+
+                }
+            }, 200)
         },
         watch: {
         },
         methods: {
-            // edittingForm() {
-            //     this.dialogTinTuc = true
-            //     this.editTinTuc = true
-            // },
-            // addChiTietTinTuc() {
-            //     this.dialogTinTuc = true
-            //     this.editTinTuc = false
-            // },
-            // exitForm() {
-            //     this.dialogTinTuc = false
-            // },
-            
-            // save (date) {
-            //     this.$refs.menu.save(date)
-            // },
             initForm (type) {
                 if (type === 'update' && this.dataInput) {
                     this.formData = this.dataInput
@@ -138,12 +208,12 @@
             },
             resetForm () {
                 let vm = this
-                vm.$refs.formLoaiBanDo.reset()
-                vm.$refs.formLoaiBanDo.resetValidation()
+                vm.$refs.formDiaDiemBds.reset()
+                vm.$refs.formDiaDiemBds.resetValidation()
             },
             validateForm () {
                 let vm = this
-                return vm.$refs.formLoaiBanDo.validate()
+                return vm.$refs.formDiaDiemBds.validate()
             },
             submitForm () {
                 let vm = this

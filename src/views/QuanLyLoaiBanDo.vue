@@ -6,7 +6,7 @@
                   <v-col cols="12" sm="3" style="display: flex">
                     <span class="font-weight-bold">Tên loại bản đồ:</span>
                   </v-col>
-                  <v-col cols="12" sm="9">
+                  <v-col cols="12" sm="8">
                     <v-text-field
                     v-model="tenLoaiBanDoSearch"
                     class="flex input-form"
@@ -22,7 +22,7 @@
                   <v-col cols="12" sm="3" style="display: flex">
                     <span class="font-weight-bold">Thứ tự:</span>
                   </v-col>
-                  <v-col cols="12" sm="9">
+                  <v-col cols="12" sm="8">
                     <v-text-field
                     v-model="thuTuSearch"
                     class="flex input-form"
@@ -181,7 +181,6 @@
 import Pagination from './Pagination.vue'
 import FormLoaiBanDo from './FormLoaiBanDo.vue'
 import toastr from 'toastr'
-import axios from 'axios'
 toastr.options = {
   'closeButton': true,
   'timeOut': '5000',
@@ -304,6 +303,7 @@ export default {
         let formData = vm.$store.getters.getFormData
         vm.loadingAction = true
         if (!vm.edittingForm) { 
+          formData.id = vm.getMaxNumber('id')
           vm.danhSachLoaiBanDo.push(formData)
           vm.loadingAction = false
           vm.dialogForm = false
@@ -354,14 +354,14 @@ export default {
       let filter = {
         collectionName: 'quanlyloaibando',
         data: {
-          // tenLoaiBanDo: vm.tenLoaiBanDoSearch,
-          // thuTu: vm.thuTuSearch,
-          // trangThai: vm.trangThaiSearch,
+          tenLoaiBanDo: vm.tenLoaiBanDoSearch ? vm.tenLoaiBanDoSearch : null,
+          thuTu: vm.thuTuSearch ? vm.thuTuSearch : null,
+          trangThai: vm.trangThaiSearch ? vm.trangThaiSearch : null,
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
         vm.danhSachLoaiBanDo = response
-        console.log(vm.danhSachLoaiBanDo)
+        vm.total = vm.danhSachLoaiBanDo.length
         vm.loadingData = false
       }).catch(function () {
         vm.loadingData = false
@@ -374,7 +374,13 @@ export default {
           vm.trangThaiSearch = 0
         } else { vm.trangThaiSearch = 1 }
       }, 200)
-    }
+    },
+    getMaxNumber(typenumber) {
+      let vm = this
+      let max = 0
+      max = Math.max(...vm.danhSachLoaiBanDo.map(item => item[typenumber]))
+      return (max+1)
+    },
   }
 }
 </script>
