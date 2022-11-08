@@ -115,8 +115,10 @@
                 "value" : 1,
                 "name" : "Hòa Lạc"
             },
-            "focus" : true,
-            "trangThai" : true,
+            "focusValue" : true,
+            "focusName" : "Có",
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "toaDo" : "20.990848893118226, 105.51926310222845",
             "thaoTac" : ""
         }
