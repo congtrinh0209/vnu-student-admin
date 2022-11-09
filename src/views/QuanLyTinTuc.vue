@@ -196,6 +196,10 @@ export default {
   created() {
     let vm = this
     vm.getDanhSachTinTuc()
+    if (!vm.isAdmin && !vm.checkRole('XEMBAOCAODONVI') && !vm.checkRole('XEMTATCABAOCAO')) {
+      vm.$router.push({ path: '/login'})
+      return
+    }
   },
   watch: {
   },
@@ -313,15 +317,14 @@ export default {
       max = Math.max(...vm.danhSachTinTuc.map(item => item[typenumber]))
       return (max+1)
     },
-    handleSearchButton() {
-      let vm = this
-      vm.tieuDeSearch = document.getElementById("tieuDeSearch").value
-      console.log(vm.tieuDeSearch)
-      if (vm.tieuDeSearch == '') {
-        vm.tieuDeSearch = null
-      } 
-      vm.getDanhSachTinTuc()
-    }
+    // handleSearchButton() {
+    //   let vm = this
+    //   vm.tieuDeSearch = document.getElementById("tieuDeSearch").value
+    //   if (vm.tieuDeSearch == '') {
+    //     vm.tieuDeSearch = null
+    //   } 
+    //   vm.getDanhSachTinTuc()
+    // }
 
   }
 }

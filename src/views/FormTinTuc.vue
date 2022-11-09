@@ -202,6 +202,7 @@ export default {
         },
         resetForm () {
             let vm = this
+            vm.formData.noiDung = ''
             vm.$refs.formTinTuc.reset()
             vm.$refs.formTinTuc.resetValidation()            
         },
@@ -212,7 +213,6 @@ export default {
         submitForm () {
             let vm = this
             if (vm.formData.trangThaiValue === null) { vm.formData.trangThaiValue = false }
-            console.log(vm.formData)
             let dataOutput = Object.assign({}, vm.formData)
             vm.$store.commit('SET_FORM_DATA', dataOutput)
         },

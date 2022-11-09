@@ -13,6 +13,7 @@
                 <v-text-field
                     v-model="formData.thuTu"
                     type="number"
+                    min="0"
                     class="flex input-form"
                     solo
                     dense
@@ -61,7 +62,7 @@
             </v-col>
             <v-col cols="12" sm="10">
                 <v-checkbox 
-                v-model="trangThai"
+                v-model="formData.trangThaiValue"
                 label=" Xuất bản"
                 @change="setTrangThai()"
                 ></v-checkbox>
@@ -152,10 +153,10 @@
             },
             setTrangThai() {
                 let vm = this
-                if (vm.trangThai == true) {
-                    vm.formData.trangThai = 1
+                if (vm.trangThaiValue == true) {
+                    vm.formData.trangThaiName = "Xuất bản"
                 } else {
-                    vm.formData.trangThai = 0
+                    vm.formData.trangThaiName = "Không xuất bản"
                 }
             }
         }

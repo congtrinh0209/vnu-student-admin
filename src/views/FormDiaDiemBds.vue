@@ -47,7 +47,7 @@
             <v-col cols="12" sm="10">
                 <v-text-field
                     v-model="formData.toaDo"
-                    type="number"
+                    min='0'
                     class="flex input-form"
                     solo
                     dense

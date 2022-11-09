@@ -42,8 +42,7 @@
                       <v-checkbox 
                         style="display: contents;" 
                         label=" Xuất bản"
-                        v-model="trangThaiSearch1"
-                        @change="onChangeTrangThaiSearch"
+                        v-model="trangThaiSearch"
                       ></v-checkbox>
                   </v-col>
               </v-row>
@@ -221,7 +220,7 @@ export default {
                 sortable: false,
                 text: 'Trạng thái' ,
                 align: 'center',
-                value: 'trangThai',
+                value: 'trangThaiName',
                 class: 'th-center',
                 width: 130
             },
@@ -246,15 +245,18 @@ export default {
           editContent: '',
           dataInput: '',
           total: 6,
-          thuTuSearch: '',
-          tenLoaiBanDoSearch: '',
-          trangThaiSearch1: false,
-          trangThaiSearch: 0,
+          thuTuSearch: null,
+          tenLoaiBanDoSearch: null,
+          trangThaiSearch: null,
       }
   },
   created() {
     let vm = this
     vm.getDanhSachLoaiBanDo()
+    if (!vm.isAdmin && !vm.checkRole('XEMBAOCAODONVI') && !vm.checkRole('XEMTATCABAOCAO')) {
+      vm.$router.push({ path: '/login'})
+      return
+    }
   },
   watch: {
   },
@@ -302,6 +304,7 @@ export default {
         vm.$refs.formLoaiBanDoRef.submitForm()
         let formData = vm.$store.getters.getFormData
         vm.loadingAction = true
+
         if (!vm.edittingForm) { 
           formData.id = vm.getMaxNumber('id')
           vm.danhSachLoaiBanDo.push(formData)
@@ -314,6 +317,13 @@ export default {
           let editedContent = (vm.danhSachLoaiBanDo.filter(item => item.id !== vm.editContent.id))
           editedContent.push(formData)
           vm.danhSachLoaiBanDo = editedContent
+
+          // Object.keys(vm.danhSachLoaiBanDo).forEach(i => {
+          //   if (vm.danhSachLoaiBanDo[i].id === formData.id) {
+          //     vm.danhSachLoaiBanDo[i] = formData
+          //   }
+          // })
+
           vm.loadingAction = false
           vm.dialogForm = false
           toastr.remove()
@@ -356,7 +366,7 @@ export default {
         data: {
           tenLoaiBanDo: vm.tenLoaiBanDoSearch ? vm.tenLoaiBanDoSearch : null,
           thuTu: vm.thuTuSearch ? vm.thuTuSearch : null,
-          trangThai: vm.trangThaiSearch ? vm.trangThaiSearch : null,
+          trangThaiValue: ((vm.trangThaiSearch==true) || (vm.trangThaiSearch==false)) ? vm.trangThaiSearch : null,
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {

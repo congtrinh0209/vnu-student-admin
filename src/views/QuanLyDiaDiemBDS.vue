@@ -8,6 +8,7 @@
                     </v-col>
                     <v-col cols="12" sm="9">
                         <v-text-field
+                            v-model="tenDiaDiemSearch"
                             class="flex input-form"
                             solo
                             dense
@@ -23,6 +24,7 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <v-text-field
+                            v-model="toaDoSearch"
                             class="flex input-form"
                             solo
                             dense
@@ -38,18 +40,18 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <v-autocomplete
-                        class="flex input-form"
-                        hide-no-data
-                        v-model="loaiBanDo"
-                        :items="loaiBanDoItems"
-                        item-text="name"
-                        item-value="value"
-                        placeholder="Chọn loại bản đồ"
-                        dense
-                        solo
-                        hide-details="auto"
-                        return-object
-                        clearable
+                            v-model="loaiBanDoSearch"
+                            class="flex input-form"
+                            hide-no-data
+                            :items="loaiBanDoItems"
+                            item-text="name"
+                            item-value="value"
+                            placeholder="Chọn loại bản đồ"
+                            dense
+                            solo
+                            hide-details="auto"
+                            return-object
+                            clearable
                         >
                         </v-autocomplete>
                     </v-col>
@@ -65,6 +67,7 @@
                     </v-col>
                     <v-col cols="12" sm="9">
                         <v-text-field
+                            v-model="moTaSearch"
                             class="flex input-form"
                             solo
                             dense
@@ -80,10 +83,9 @@
                     </v-col>
                     <v-col cols="12" sm="8">
                         <v-checkbox 
+                        v-model="trangThaiSearch"
                         style="display: contents;" 
                         label='Xuất bản'
-                        v-model="trangThai"
-                        @change="showBtnXuatBan"
                         >
                         </v-checkbox>
                     </v-col>
@@ -93,13 +95,13 @@
                 <v-row no-gutters>
                     <v-col cols="12" sm="4" style="display: flex">
                         <span class="font-weight-bold">Focus:  </span>
-                        <v-checkbox style="display: contents;"></v-checkbox>
+                        <v-checkbox v-model="focusSearch" style="display: contents;"></v-checkbox>
                     </v-col>
                     <v-col cols="12" sm="8">
                         <v-autocomplete
+                          v-model="khuVucSearch"
                           class="flex input-form"
                           hide-no-data
-                          v-model="khuVuc"
                           :items="khuVucItems"
                           item-text="name"
                           item-value="value"
@@ -332,16 +334,24 @@ export default {
           dataInput: '',
           total: 1,
           focusName: '',
-          testradio: null,
-          testradio2: {
-            value: true,
-            name: "yes"
-          }
+          trangThai: '',
+          tenDiaDiemSearch: null,
+          moTaSearch: null,
+          toaDoSearch: null,
+          trangThaiSearch: null,
+          loaiBanDoSearch: {value: null, name: null},
+          loaiVanBanSearch: null,
+          focusSearch: null,
+          khuVucSearch: {value: null, name: null}
       }
   },
   created() {
     let vm = this
     vm.getDanhSachDiaDiemBds()
+    if (!vm.isAdmin && !vm.checkRole('XEMBAOCAODONVI') && !vm.checkRole('XEMTATCABAOCAO')) {
+      vm.$router.push({ path: '/login'})
+      return
+    }
   },
   watch: {
   },
@@ -390,8 +400,9 @@ export default {
         let formData = vm.$store.getters.getFormData
         vm.loadingAction = true
         if (!vm.edittingForm) { 
-          console.log(formData)
           formData.id = vm.getMaxNumber('id')
+          formData.focusName = (formData.focusValue == true) ? "Có" : "Không"
+          formData.trangThaiName = (formData.trangThaiValue == true) ? "Xuất bản" : "Không xuất bản"
           vm.danhSachDiaDiemBds.push(formData)
           vm.loadingAction = false
           vm.dialogForm = false
@@ -400,6 +411,8 @@ export default {
           toastr.success('Thêm mới thành công') 
         } else {
           let editedContent = (vm.danhSachDiaDiemBds.filter(item => item.id !== vm.editContent.id))
+          formData.focusName = (formData.focusValue == true) ? "Có" : "Không"
+          formData.trangThaiName = (formData.trangThaiValue == true) ? "Xuất bản" : "Không xuất bản"
           editedContent.push(formData)
           vm.danhSachDiaDiemBds = editedContent
           vm.loadingAction = false
@@ -442,6 +455,13 @@ export default {
       let filter = {
         collectionName: 'quanlydiadiembandoso',
         data: {
+            "tenDiaDiem": vm.tenDiaDiemSearch ? vm.tenDiaDiemSearch : null,
+            "moTa": vm.moTaSearch ? vm.moTaSearch : null,
+            "toaDo": vm.toaDoSearch ? vm.toaDoSearch : null,
+            "loaiBanDo.value": vm.loaiBanDoSearch.value ? vm.loaiBanDoSearch.value : null ,
+            "trangThaiValue": vm.trangThaiSearch,
+            "focusValue": vm.focusSearch,
+            "khuVuc.value": vm.khuVucSearch.value ? vm.khuVucSearch.value : null 
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
@@ -452,18 +472,14 @@ export default {
         vm.loadingData = false
       })
     },
-    onChangeTrangThaiSearch () {
-      let vm = this
-      setTimeout( function () {
-        if (vm.trangThaiSearch1 == false) {
-          vm.trangThaiSearch = 0
-        } else { vm.trangThaiSearch = 1 }
-      }, 200)
-    },
-    showBtnXuatBan() {
-        let vm = this
-        console.log('show',vm.testradio)
-    },
+    // onChangeTrangThaiSearch () {
+    //   let vm = this
+    //   setTimeout( function () {
+    //     if (vm.trangThaiSearch1 == false) {
+    //       vm.trangThaiSearch = 0
+    //     } else { vm.trangThaiSearch = 1 }
+    //   }, 200)
+    // },
     getMaxNumber(typenumber) {
       let vm = this
       let max = 0

@@ -2,10 +2,10 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off">
+                <input id="chuyenMucSearch" class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
-                <button class="btn btn-search">
+                <button class="btn btn-search" @click.stop="handleSearchButton">
                     <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                 </button>
             </v-col>
@@ -183,11 +183,16 @@ export default {
           editContent: '',
           dataInput: '',
           total: 2,
+          chuyenMucSearch: null
       }
   },
   created() {
     let vm = this
     vm.getDanhSachChuyenMuc()
+    if (!vm.isAdmin && !vm.checkRole('XEMBAOCAODONVI') && !vm.checkRole('XEMTATCABAOCAO')) {
+      vm.$router.push({ path: '/login'})
+      return
+    }
   },
   watch: {
   },
@@ -288,6 +293,7 @@ export default {
       let filter = {
         collectionName: 'quanlychuyenmuc',
         data: {
+          tenChuyenMuc: vm.chuyenMucSearch
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
@@ -311,6 +317,14 @@ export default {
       let max = 0
       max = Math.max(...vm.danhSachChuyenMuc.map(item => item[typenumber]))
       return (max+1)
+    },
+    handleSearchButton() {
+      let vm = this
+      vm.chuyenMucSearch = document.getElementById("chuyenMucSearch").value
+      if (vm.chuyenMucSearch == '') {
+        vm.chuyenMucSearch = null
+      } 
+      vm.getDanhSachChuyenMuc()
     }
   }
 }
