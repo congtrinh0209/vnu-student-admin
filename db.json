@@ -136,6 +136,25 @@
             "trangThaiName" : "Xuất bản",
             "toaDo" : "20.990848893118226, 105.51926310222845",
             "thaoTac" : ""
+        },
+        {
+            "id" : 2,
+            "tenDiaDiem" : "LeeBeer Hòa Lạc",
+            "moTa" : "Nhận hàng ở lề đường,Giao hàng gián tiếp",
+            "loaiBanDo" : {
+                "value" : 5,
+                "name" : "Ăn uống"
+            },
+            "khuVuc" : {
+                "value" : 1,
+                "name" : "Hòa Lạc"
+            },
+            "focusValue" : true,
+            "focusName" : "Có",
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
+            "toaDo" : "20.990447674495048, 105.51612639509997",
+            "thaoTac" : ""
         }
     ]
 }
