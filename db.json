@@ -5,7 +5,8 @@
             "thuTu": 1,
             "tenLoaiBanDo": "Tòa Nhà",
             "maIcon": "0xe089",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "thaoTac": ""
         },
         {
@@ -13,7 +14,8 @@
             "thuTu": 2,
             "tenLoaiBanDo": "Ký Túc Xá",
             "maIcon": "0xf879",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "thaoTac": ""
         },
         {
@@ -21,7 +23,8 @@
             "thuTu": 3,
             "tenLoaiBanDo": "Ăn Uống",
             "maIcon": "0xe131",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "thaoTac": ""
         },
         {
@@ -29,7 +32,8 @@
             "thuTu": 4,
             "tenLoaiBanDo": "Check In",
             "maIcon": "0xe131",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "thaoTac": ""
         },
         {
@@ -37,7 +41,8 @@
             "thuTu": 5,
             "tenLoaiBanDo": "Bãi Đỗ Xe",
             "maIcon": "0xe39e",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
             "thaoTac": ""
         },
         {
@@ -45,7 +50,17 @@
             "thuTu": 6,
             "tenLoaiBanDo": "Hiệu Thuốc",
             "maIcon": "0xe131",
-            "trangThai": 1,
+            "trangThaiValue" : true,
+            "trangThaiName" : "Xuất bản",
+            "thaoTac": ""
+        },
+        {
+            "id" : 6,
+            "thuTu": 7,
+            "tenLoaiBanDo": "test",
+            "maIcon": "0xe131",
+            "trangThaiValue" : false,
+            "trangThaiName" : "Không xuất bản",
             "thaoTac": ""
         }
     ],
