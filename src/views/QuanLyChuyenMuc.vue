@@ -2,10 +2,10 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input id="chuyenMucSearch" class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off">
+                <input v-model="chuyenMucSearch" class="form-control" type="text" placeholder="Nhập tiêu đề chuyên đề..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
-                <button class="btn btn-search" @click.stop="handleSearchButton">
+                <button class="btn btn-search" @click.stop="getDanhSachChuyenMuc">
                     <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                 </button>
             </v-col>
@@ -293,7 +293,7 @@ export default {
       let filter = {
         collectionName: 'quanlychuyenmuc',
         data: {
-          tenChuyenMuc: vm.chuyenMucSearch
+          tenChuyenMuc: (vm.chuyenMucSearch!=='') ? vm.chuyenMucSearch : null
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
@@ -318,14 +318,6 @@ export default {
       max = Math.max(...vm.danhSachChuyenMuc.map(item => item[typenumber]))
       return (max+1)
     },
-    handleSearchButton() {
-      let vm = this
-      vm.chuyenMucSearch = document.getElementById("chuyenMucSearch").value
-      if (vm.chuyenMucSearch == '') {
-        vm.chuyenMucSearch = null
-      } 
-      vm.getDanhSachChuyenMuc()
-    }
   }
 }
 </script>

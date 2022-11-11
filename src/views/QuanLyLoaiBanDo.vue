@@ -244,7 +244,7 @@ export default {
           loadingAction: false,
           editContent: '',
           dataInput: '',
-          total: 6,
+          total: 0,
           thuTuSearch: null,
           tenLoaiBanDoSearch: null,
           trangThaiSearch: null,

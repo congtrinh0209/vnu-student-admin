@@ -2,10 +2,10 @@
     <div>
         <v-row no-gutters>
             <v-col cols="12" sm="5">
-                <input id="tieuDeSearch" class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off">
+                <input v-model=tieuDeSearch class="form-control" type="text" placeholder="Nhập tiêu đề tin tức..." autocomplete="off">
             </v-col>
             <v-col cols="12" sm="1">
-                <button class="btn btn-search" @click.stop="handleSearchButton">
+                <button class="btn btn-search" @click.stop="getDanhSachTinTuc">
                     <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                 </button>
             </v-col>
@@ -124,8 +124,8 @@
 <script>
 import Pagination from './Pagination.vue'
 import FormTinTuc from './FormTinTuc.vue'
-import toastr from 'toastr'
 import axios from 'axios'
+import toastr from 'toastr'
 toastr.options = {
   'closeButton': true,
   'timeOut': '5000',
@@ -190,7 +190,7 @@ export default {
           editContent: '',
           dataInput: '',
           total: 1,
-          tieuDeSearch: null,
+          tieuDeSearch: ''
       }
   },
   created() {
@@ -300,7 +300,7 @@ export default {
       let filter = {
         collectionName: 'quanlytintuc',
         data: {
-          tieuDe : vm.tieuDeSearch
+          tieuDe : (vm.tieuDeSearch!=='') ? vm.tieuDeSearch : null
         }
       }
       vm.$store.dispatch('collectionFilter', filter).then(function (response) {
