@@ -53,7 +53,10 @@
 					["Core Network 2"],
 					["Core Network 2"],
 					["Row title 1"],
-					["CMCC", "CTCC", "CUCC"]
+					[	
+						["Line Chart"],
+						["CMCC", "CTCC", "CUCC"]
+					]
 				],
 				"radialChartColor": {
 					"outsideChart": 
