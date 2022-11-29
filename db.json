@@ -1,160 +1,222 @@
 {
-    "quanlyloaibando": [
-        {
-            "id" : 0,
-            "thuTu": 1,
-            "tenLoaiBanDo": "Tòa Nhà",
-            "maIcon": "0xe089",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 1,
-            "thuTu": 2,
-            "tenLoaiBanDo": "Ký Túc Xá",
-            "maIcon": "0xf879",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 2, 
-            "thuTu": 3,
-            "tenLoaiBanDo": "Ăn Uống",
-            "maIcon": "0xe131",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 3,
-            "thuTu": 4,
-            "tenLoaiBanDo": "Check In",
-            "maIcon": "0xe131",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 4,
-            "thuTu": 5,
-            "tenLoaiBanDo": "Bãi Đỗ Xe",
-            "maIcon": "0xe39e",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 5,
-            "thuTu": 6,
-            "tenLoaiBanDo": "Hiệu Thuốc",
-            "maIcon": "0xe131",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "thaoTac": ""
-        },
-        {
-            "id" : 6,
-            "thuTu": 7,
-            "tenLoaiBanDo": "test",
-            "maIcon": "0xe131",
-            "trangThaiValue" : false,
-            "trangThaiName" : "Không xuất bản",
-            "thaoTac": ""
-        }
-    ],
-    "quanlytintuc" : [
-        {
-            "id" : 0,
-            "stt" : 1,
-            "tieuDe" : "Đời sống học đường",
-            "noiDung" : "noidung...",
-            "chuyenMuc" : {
-                "value" : 7,
-                "name" : "Tin tức chung"
-            },
-            "ngayXuatBan" : "20/5/2020 14:55",
-            "anhDaiDien" : "",
-            
-            "taiFile" : "",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Hoạt động"
-        },
-        {
-            "id" : 1,
-            "stt" : 2,
-            "tieuDe" : "Tạp chí U.S News & World Report: Thêm lĩnh vực Kỹ thuật của ĐHQGHN lần đầu tiên được xếp hạng",
-            "noiDung" : "",
-            "chuyenMuc" : {
-                "value" : 7,
-                "name" : "Tin tức chung"
-            },
-            "ngayXuatBan" : "20/5/2020 14:55",
-            "anhDaiDien" : "",
-            "taiFile" : "",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Hoạt động"
-        }
-    ],
-    "quanlychuyenmuc" : [
-        {
-            "id" : 0,
-            "stt" : 1,
-            "tenChuyenMuc" : "Cẩm nang Hòa Lạc",
-            "chuyenMucCha" : {
-                "name" : "Cẩm nang Hòa Lạc",
-                "value" : 3
-            }
-        },
-        {
-            "id" : 1,
-            "stt" : 2,
-            "tenChuyenMuc" : "Chuyên mục 1",
-            "chuyenMucCha" : {
-                "name" : "Cẩm nang Hòa Lạc",
-                "value" : 3
-            }
-        }
-    ],
-    "quanlydiadiembandoso" : [
-        {
-            "id" : 0,
-            "tenDiaDiem" : "Hương Việt Quán Hòa Lạc",
-            "moTa" : "Nhận hàng ở lề đường, Giao hàng gián tiếp, Giao hàng, Mua hàng ngay trên xe, Đồ ăn mang đi, Ăn tại chỗ",
-            "loaiBanDo" : {
-                "value" : 5,
-                "name" : "Ăn uống"
-            },
-            "khuVuc" : {
-                "value" : 1,
-                "name" : "Hòa Lạc"
-            },
-            "focusValue" : true,
-            "focusName" : "Có",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "toaDo" : "20.990848893118226, 105.51926310222845",
-            "thaoTac" : ""
-        },
-        {
-            "id" : 2,
-            "tenDiaDiem" : "LeeBeer Hòa Lạc",
-            "moTa" : "Nhận hàng ở lề đường,Giao hàng gián tiếp",
-            "loaiBanDo" : {
-                "value" : 5,
-                "name" : "Ăn uống"
-            },
-            "khuVuc" : {
-                "value" : 1,
-                "name" : "Hòa Lạc"
-            },
-            "focusValue" : true,
-            "focusName" : "Có",
-            "trangThaiValue" : true,
-            "trangThaiName" : "Xuất bản",
-            "toaDo" : "20.990447674495048, 105.51612639509997",
-            "thaoTac" : ""
-        }
-    ]
+	"firstLayout": [
+		{
+			"form": {
+				"gridPos": {  
+					"x": 0, 
+					"y": 0, 
+					"w": 2, 
+					"h": 3, 
+					"i": 0 
+				},
+				"type": "radialBar",
+				"title": ["Core Network 1"],
+				"outsideChart": { 
+					"color1": "green", 
+					"color2": "orange", 
+					"color3": "red", 
+					"value1": 80, 
+					"value2": 90 
+				},
+				"insideChart": { 
+					"color1": "green", 
+					"color2": "red"
+				}
+			},
+			"data": {
+				"value": [ 
+					[ 
+						1669666731889,
+						1669666851889
+					], 
+					[ 10, 20]
+				],
+				"resizable": true, 
+				"draggable": true
+			}
+		},
+		{
+			"form": {
+				"gridPos": {  
+					"x": 2, 
+					"y": 0, 
+					"w": 2, 
+					"h": 3, 
+					"i": 1 
+				},
+				"type": "radialBar",
+				"title": ["Core Network 2"],
+				"outsideChart": { 
+					"color1": "green", 
+					"color2": "orange", 
+					"color3": "red", 
+					"value1": 80, 
+					"value2": 90 
+				},
+				"insideChart": { 
+					"color1": "green", 
+					"color2": "red"
+				}
+			},
+			"data": {
+				"value": [ 
+					[ 
+						1669666731889,
+						1669666851889
+					], 
+					[ 20, 30]
+				],
+				"resizable": true, 
+				"draggable": true
+			}
+		},
+		{
+			"form": {
+				"gridPos": {  
+					"x": 7, 
+					"y": 0, 
+					"w": 5, 
+					"h": 6, 
+					"i": 2 
+				},
+				"type": "radialBar",
+				"title": ["Core Network 3"],
+				"outsideChart": { 
+					"color1": "green", 
+					"color2": "orange", 
+					"color3": "red", 
+					"value1": 80, 
+					"value2": 90 
+				},
+				"insideChart": { 
+					"color1": "green", 
+					"color2": "red"
+				}
+			},
+			"data": {
+				"value": [ 
+					[ 
+						1669666731889,
+						1669666851889
+					], 
+					[ 30, 40]
+				],
+				"resizable": true, 
+				"draggable": true
+			}
+		},
+		{
+			"form": {
+				"gridPos": {  
+					"x": 0, 
+					"y": 6, 
+					"w": 12, 
+					"h": 1, 
+					"i": 3 
+				},
+				"type": "title",
+				"title": ["Row title 1"],
+				"outsideChart": { 
+					"color1": "green", 
+					"color2": "orange", 
+					"color3": "red", 
+					"value1": 80, 
+					"value2": 90 
+				},
+				"insideChart": { 
+					"color1": "green", 
+					"color2": "red"
+				}
+			},
+			"data": {
+				"value": [ 
+				],
+				"resizable": false, 
+				"draggable": false
+			}
+		},
+		{
+			"form": {
+				"gridPos": {  
+					"x": 0, 
+					"y": 7, 
+					"w": 5, 
+					"h": 6, 
+					"i": 4 
+				},
+				"type": "lineChart",
+				"title": ["CMCC", "CTCC", "CUCC"],
+				"outsideChart": { 
+					"color1": "green", 
+					"color2": "orange", 
+					"color3": "red", 
+					"value1": 80, 
+					"value2": 90 
+				},
+				"insideChart": { 
+					"color1": "green", 
+					"color2": "red"
+				}
+			},
+			"data": {
+				"value": [ 
+					[
+						1669666731889,
+						1669666851889,
+						1669666971889,
+						1669667091889,
+						1669667211889,
+						1669667331889,
+						1669667451889,
+						1669667571889,
+						1669667691889,
+						1669667811889,
+						1669667931889,
+						1669668051889,
+						1669668171889,
+						1669668291889,
+						1669668411889,
+						1669668531889,
+						1669668651889,
+						1669668771889,
+						1669668891889,
+						1669669011889,
+						1669669131889,
+						1669669251889,
+						1669669371889,
+						1669669491889,
+						1669669611889,
+						1669669731889,
+						1669669851889,
+						1669669971889,
+						1669670091889,
+						1669670211889,
+						1669670331889,
+						1669670451889,
+						1669670571889,
+						1669670691889,
+						1669670811889,
+						1669670931889
+					],
+					[	
+						220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122,
+						220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122,
+						220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122
+					],
+					[	
+						120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150,
+						120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150,
+						120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150
+					],
+					[	
+						220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122,
+						220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122,
+						220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122
+					]
+				],
+				"resizable": true, 
+				"draggable": true
+			}
+		}
+	]
 }
