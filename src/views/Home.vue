@@ -4,7 +4,12 @@
     <AppBar></AppBar>
     <v-main>
       <div class="container wrap-content-page">
-        <router-view></router-view>
+        <v-card
+          class="mx-auto pa-5" style="padding-bottom: 40px !important;"
+          flat
+        >
+          <router-view></router-view>
+        </v-card>
       </div>
       <Footer></Footer>
     </v-main>

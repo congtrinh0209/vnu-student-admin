@@ -10,7 +10,6 @@ export default new Vuex.Store({
     indexTab: 0,
     apiSso: process.env.VUE_APP_PATH_API_SSO,
     secretLogin: 'f5gDd1JLB0vq6VVBvzEbltq6iVuaddvk',
-    // secretLogin: 'GCguqEMazevwOxEYPkhDH/ybLg/TuAWJ',
     drawer: false,
     breakpointName: 'lg',
     isShowConfirm: false,
@@ -91,90 +90,91 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getThongKeHoSo ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let config = {
-          method: 'get',
-          url: state.apiSso + '/o/rest/v2/statistics/dossiers/todo',
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          },
-          data: {},
-          params: filter.data
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error)
-        })
-      })
-    },
-    collectionCreate ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let dataPost = JSON.stringify(filter.data)
-        let config = {
-          method: 'post',
-          url: '/v1/datasharing/' + filter.collectionName,
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          },
-          data : dataPost
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error.response)
-        })
-      })
-    },
-    collectionUpdate ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let dataPost = JSON.stringify(filter.data)
-        let config = {
-          method: 'post',
-          url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          },
-          data : dataPost
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error)
-        })
-      })
-    },
-    collectionDelete ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let config = {
-          method: 'delete',
-          url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          },
-          data: {}
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error)
-        })
-      })
-    },
+    // getThongKeHoSo ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let config = {
+    //       method: 'get',
+    //       url: state.apiSso + '/o/rest/v2/statistics/dossiers/todo',
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       },
+    //       data: {},
+    //       params: filter.data
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error)
+    //     })
+    //   })
+    // },
+    // collectionCreate ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let dataPost = JSON.stringify(filter.data)
+    //     let config = {
+    //       method: 'post',
+    //       url: '/v1/datasharing/' + filter.collectionName,
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       },
+    //       data : dataPost
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error.response)
+    //     })
+    //   })
+    // },
+    // collectionUpdate ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let dataPost = JSON.stringify(filter.data)
+    //     let config = {
+    //       method: 'post',
+    //       url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       },
+    //       data : dataPost
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error)
+    //     })
+    //   })
+    // },
+    // collectionDelete ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let config = {
+    //       method: 'delete',
+    //       url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       },
+    //       data: {}
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error)
+    //     })
+    //   })
+    // },
     collectionFilter ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let config = {
           method: 'get',
-          url: '/v1/datasharing/' + filter.collectionName + '/filter',
+          url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
+          // url : '/v1/datasharing/' + filter.collectionName + '/',
           headers: { 
             'Accept': 'application/json', 
             'Content-Type': 'application/json'
@@ -190,44 +190,44 @@ export default new Vuex.Store({
         })
       })
     },
-    collectionDetail ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let config = {
-          method: 'get',
-          url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
-          data: {},
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          }
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error)
-        })
-      })
-    },
-    collectionDetailSearch ({commit, state}, filter) {
-      return new Promise((resolve, reject) => {
-        let config = {
-          method: 'get',
-          url: '/v1/datasharing/' + filter.collectionName + '/' + filter.keySearch + '/' + filter.id,
-          data: {},
-          headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          }
-        }
-        axios(config).then(function (response) {
-          let serializable = response.data
-          resolve(serializable)
-        }).catch(function (error) {
-          reject(error)
-        })
-      })
-    },
+    // collectionDetail ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let config = {
+    //       method: 'get',
+    //       url: '/v1/datasharing/' + filter.collectionName + '/' + filter.id,
+    //       data: {},
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       }
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error)
+    //     })
+    //   })
+    // },
+    // collectionDetailSearch ({commit, state}, filter) {
+    //   return new Promise((resolve, reject) => {
+    //     let config = {
+    //       method: 'get',
+    //       url: '/v1/datasharing/' + filter.collectionName + '/' + filter.keySearch + '/' + filter.id,
+    //       data: {},
+    //       headers: { 
+    //         'Accept': 'application/json', 
+    //         'Content-Type': 'application/json'
+    //       }
+    //     }
+    //     axios(config).then(function (response) {
+    //       let serializable = response.data
+    //       resolve(serializable)
+    //     }).catch(function (error) {
+    //       reject(error)
+    //     })
+    //   })
+    // },
     getThongKe ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let dataPost = JSON.stringify(filter.data)
@@ -557,31 +557,6 @@ export default new Vuex.Store({
         })
       })
     },
-    // getRefreshTokenKeyCloak ({commit, state}, filter) {
-    //   return new Promise((resolve, reject) => {
-    //     let settings = {
-    //       "url": state.apiSso + '/flex/oauth2/refreshtoken',
-    //       "method": "POST",
-    //       "headers": {
-    //         'Authorization': 'Basic ZmxleDpzc28=',
-    //         'secret': state.secretLogin,
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //       },
-    //       "data": {
-    //         "refresh_token": filter.code,
-    //         "redirect_uri": filter.redirect_uri
-    //       }
-    //     };
-        
-    //     $.ajax(settings).done(function (response) {
-    //       let serializable = response
-    //       resolve(serializable)
-    //     }).fail(function (response) {
-    //       reject(response)
-    //     })
-    //   })
-    // },
     loadDataSource ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let apiGet = filter.api
@@ -686,5 +661,8 @@ export default new Vuex.Store({
         })
       })
     },
+    
+
+
   }
 })

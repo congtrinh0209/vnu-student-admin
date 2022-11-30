@@ -11,79 +11,37 @@ export default new Router({
       path: '/',
       component: () => import('@/views/Home'),
       children: [
-        // {
-        //   path: '/',
-        //   name: 'DashBoard',
-        //   component: () => import('@/views/Dashboard'),
-        //   props: true
-        // },
         {
           path: '/',
-          name: 'TaoBaoCao',
-          component: () => import('@/views/FormTaoBaoCao'),
+          name: 'QuanLyTinTuc',
+          component: () => import('@/views/QuanLyTinTuc'),
           props: true
         },
         {
-          path: '/tao-bao-cao',
-          name: 'TaoBaoCao',
-          component: () => import('@/views/FormTaoBaoCao'),
+          path: '/quan-ly-tin-tuc',
+          name: 'QuanLyTinTuc',
+          component: () => import('@/views/QuanLyTinTuc'),
           props: true
         },
         {
-          path: '/bao-cao/:type',
-          name: 'BaoCao',
-          component: () => import('@/views/BaoCaoTongHop'),
+          path: '/quan-ly-loai-ban-do',
+          name: 'QuanLyLoaiBanDo',
+          component: () => import('@/views/QuanLyLoaiBanDo'),
           props: true
         },
         {
-          path: '/thong-ke',
-          name: 'ThongKe',
-          component: () => import('@/views/ThongKe'),
+          path: '/quan-ly-dia-diem-ban-do-so',
+          name: 'QuanLyDiaDiemBDS',
+          component: () => import('@/views/QuanLyDiaDiemBDS'),
           props: true
         },
         {
-          path: '/bao-cao/:type/:id',
-          name: 'BaoCao',
-          component: () => import('@/views/ChiTietBaoCao'),
-          props: true
-        },
-        {
-          path: '/co-quan-don-vi',
-          name: 'CoQuanDonVi',
-          component: () => import('@/views/CoQuanDonVi'),
-          props: true
-        },
-        {
-          path: '/co-quan-don-vi/:id',
-          name: 'ThongTinDonVi',
-          component: () => import('@/views/ThongTinCoQuanDonVi'),
-          props: true
-        },
-        {
-          path: '/can-bo',
-          name: 'CanBo',
-          component: () => import('@/views/CanBo'),
-          props: true
-        },
-        {
-          path: '/can-bo/:id',
-          name: 'ThongTinCanBo',
-          component: () => import('@/views/ThongTinCanBo'),
-          props: true
-        },
-        {
-          path: '/vi-tri-chuc-danh',
-          name: 'ViTriChucDanh',
-          component: () => import('@/views/ViTriChucDanh'),
-          props: true
-        },
-        {
-          path: '/quan-ly-danh-muc',
-          name: 'QuanLyDanhMuc',
-          component: () => import('@/views/QuanLyDanhMuc'),
+          path: '/quan-ly-chuyen-muc',
+          name: 'QuanLyChuyenMuc',
+          component: () => import('@/views/QuanLyChuyenMuc'),
           props: true
         }
-      ],
+      ]
     },
     {
       name: 'Login',
