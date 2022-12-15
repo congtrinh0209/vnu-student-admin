@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import $ from 'jquery'
 import i18n from '@/plugins/i18n'
+import {baseUrl} from './constant/baseURL'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -24,6 +25,14 @@ export default new Vuex.Store({
     formThongKe: '',
     activeChangeLang: false,
     fileUploadYet: false,
+  //  Start Hien's code
+  listGender: [],
+  listProvince: [],
+  listAgencies: [],
+  listPosition : [], 
+  listWork: [],
+  listOffice: []
+  // End Hien's code
   },
   getters: {
     getIndexTab: (state) => state.indexTab,
@@ -54,6 +63,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    // Start Hien's code
+    SET_LIST_STATE_IN_STORE: (state, {payload, nameState}) => (state[nameState] = [...payload.content]),
+    // End Hien's code
     SET_INDEXTAB(state, indexTab) {
       state.indexTab = indexTab
     },
@@ -169,12 +181,118 @@ export default new Vuex.Store({
     //     })
     //   })
     // },
+    createItemData ({commit, state}, {payload, type}){
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'post',
+         url : baseUrl + type,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: payload,
+          params: {}
+        }
+        axios(config).then(function (response) {
+          console.log("response post: ", response)
+          resolve(response)
+        }).catch(function (error) {
+          reject( error.response)
+        })
+      })
+    },
+    deleteItemData ({commit, state}, {payload, type}){
+      console.log("delete payload: ", payload)
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'delete',
+         url : baseUrl + type + `/${payload}`,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: {},
+          params: {}
+        }
+        axios(config).then(function (response) {
+         console.log("response delete: ", response)
+          resolve(response)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    editItemData ({commit, state}, {payload, type, id}){
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'post',
+         url : baseUrl + type + `/${id}`,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: payload,
+          params: {}
+        }
+        axios(config).then(function (response) {
+          resolve(response)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    collectionFilterInstore ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'get',
+         url :baseUrl + filter.collectionName + '/' + 'filter',
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: {},
+          params: filter.data
+        }
+        axios(config).then(function (response) {
+          let serializable = response.data
+          const payload = {
+            payload: serializable,
+            nameState: filter.state
+          }
+          commit('SET_LIST_STATE_IN_STORE', payload)
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    uploadFile ({commit, state}, {payload, type}) {
+      console.log("res: ", payload)
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'post',
+         url : baseUrl + type,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: payload,
+          params: {}
+        }
+        axios(config).then(function (response) {
+          console.log("response post: ", response)
+          resolve(response)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
     collectionFilter ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let config = {
           method: 'get',
-          url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
-          // url : '/v1/datasharing/' + filter.collectionName + '/',
+          // url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
+         url : '/v1/datasharing/' + filter.collectionName + '/' + 'filter',
           headers: { 
             'Accept': 'application/json', 
             'Content-Type': 'application/json'
@@ -185,6 +303,46 @@ export default new Vuex.Store({
         axios(config).then(function (response) {
           let serializable = response.data
           resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    getDetailsItemData ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'get',
+          // url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
+         url : '/v1/datasharing/' + filter.collectionName,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: {},
+          params: filter.data
+        }
+        axios(config).then(function (response) {
+          let serializable = response.data
+          resolve(serializable)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    convertUrlNews ({commit, state}, {payload, type, id}){
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'post',
+         url : baseUrl + type + `/${id}`,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: payload,
+          params: {}
+        }
+        axios(config).then(function (response) {
+          resolve(response)
         }).catch(function (error) {
           reject(error)
         })
@@ -661,8 +819,5 @@ export default new Vuex.Store({
         })
       })
     },
-    
-
-
   }
 })

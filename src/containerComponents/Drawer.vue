@@ -33,7 +33,110 @@
 
     <v-list dense>
 
-      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-tin-tuc')">
+
+     <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyCanBo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-can-bo')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-account-plus </v-icon>
+            </template>
+            <span>Quản Lý Cán Bộ</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Cán Bộ</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+
+
+       <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyNhomQuyen' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-nhom-quyen')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-account-multiple-plus</v-icon>
+            </template>
+            <span>Quản Lý Nhóm Quyền</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Nhóm Quyền</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+
+          <v-list-item v-if="isAdmin" :class="menuName === 'QuanLySinhVien' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-hoc-sinh')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-account-school </v-icon>
+            </template>
+            <span>Quản Lý Sinh Viên</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Sinh Viên</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+             <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyMenu' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-menu')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-menu </v-icon>
+            </template>
+            <span>Quản Lý menu</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý menu</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+       <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyChuyenMucTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-chuyen-muc-tin-tuc')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-newspaper </v-icon>
+            </template>
+            <span>Quản Lý Chuyên Mục Tin Tức</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Chuyên Mục Tin Tức</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+             <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-bai-viet-tin-tuc')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-newspaper </v-icon>
+            </template>
+            <span>Quản Lý Bài Viết Tin Tức</span>
+          </v-tooltip>  
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Bài Viết Tin Tức</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+
+        <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyGopY' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-gop-y')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-comment-multiple </v-icon>
+            </template>
+            <span>Quản Lý Góp Ý</span>
+          </v-tooltip>  
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Góp Ý</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <!-- <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-tin-tuc')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -45,9 +148,9 @@
         <v-list-item-content>
           <v-list-item-title class="text-drawer text-list">Quản Lý Tin Tức</v-list-item-title>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
 
-      <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyLoaiBanDo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-loai-ban-do')">
+      <!-- <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyLoaiBanDo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-loai-ban-do')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -87,7 +190,7 @@
         <v-list-item-content>
           <v-list-item-title class="text-drawer text-list">Quản Lý Chuyên Mục</v-list-item-title>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
       <!--  -->
     </v-list>
     <template v-slot:append>
@@ -130,6 +233,28 @@
       if (currentQuery.name == 'ThongTinDonVi') {
         vm.menuName = 'CoQuanDonVi'
       }
+       if (currentQuery.name === 'ManageCadres') {
+        vm.menuName = 'QuanLyCanBo'
+      }
+       if (currentQuery.name === 'MangeRightsGroup') {
+        vm.menuName = 'QuanLyNhomQuyen'
+      }
+        if (currentQuery.name === 'ManageStudents') {
+        vm.menuName = 'QuanLySinhVien'
+      }
+         if (currentQuery.name === 'ManageMenu') {
+        vm.menuName = 'QuanLyMenu'
+      }
+        if (currentQuery.name === 'ManageCategoryNews') {
+        vm.menuName = 'QuanLyChuyenMucTinTuc'
+      }
+       if (currentQuery.name === 'ManageNews') {
+        vm.menuName = 'QuanLyTinTuc'
+      }
+        if (currentQuery.name === 'ManageFeedback') {
+        vm.menuName = 'QuanLyGopY'
+      }
+      
       if (currentQuery.name == 'ThongTinCanBo') {
         vm.menuName = 'CanBo'
       }
@@ -153,6 +278,7 @@
       }
       vm.$store.commit('SET_DRAWER', !vm.isMobile)
       vm.userInfo = vm.$cookies.get('UserInfo', '')
+      console.log("infor: ", vm.userInfo)
     },
     mounted () {
       let vm = this
@@ -166,7 +292,7 @@
         set (val) {
           this.$store.commit('SET_DRAWER', val)
         },
-      }
+      },
     },
     watch: {
       '$route': function (newRoute, oldRoute) {

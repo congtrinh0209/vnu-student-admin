@@ -38,6 +38,9 @@ export default {
     // if (router.path === '/') {
     //   this.$router.push({ path: '/login' })
     // }
+  },
+  methods: {
+   
   }
 };
 </script>

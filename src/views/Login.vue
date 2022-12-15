@@ -148,8 +148,8 @@
       overlay: false,
       loading: false,
       valid: true,
-      userName: '',
-      password: '',
+      userName: 'tuanmmm@fds.vn',
+      password: 'Fds@2022',
       client_secret: '',
       code: '',
       signed: false,
@@ -202,7 +202,8 @@
                 vm.$cookies.set('RefreshToken', result.refresh_token, result.refresh_expires_in)
                 axios.defaults.headers['Authorization'] = 'Bearer ' + result.access_token
                 vm.$store.commit('SET_ISSIGNED', true)
-                if (admin) {
+                // if (admin) {
+                    if (true) {
                   vm.$cookies.set('admin', true, result.expires_in)
                   let dataUser1 = {
                     hoVaTen: 'Quản trị',
@@ -305,7 +306,8 @@
       goToPage () {
         let vm = this
         if (vm.isAdmin || vm.checkRole('THEMMOIBAOCAO')) {
-          vm.$router.push({ path: '/' })
+          // vm.$router.push({ path: '/' })
+          vm.$router.push({ path: '/quan-li-can-bo' })
         } else if (vm.checkRole('XEMBAOCAODONVI') || vm.checkRole('XEMTATCABAOCAO')) {
           vm.$router.push({ path: '/bao-cao/cho-xu-ly' })
         }

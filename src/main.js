@@ -10,13 +10,15 @@ import 'toastr/build/toastr.css'
 import i18n from '@/plugins/i18n'
 import FlagIcon from 'vue-flag-icon'
 import DatetimePicker from 'vuetify-datetime-picker'
+import jsondata from './jsondata.json'
 
 toastr.options = {
   'closeButton': true,
   'timeOut': '5000',
-  "positionClass": "toast-top-center"
+  'positionClass': "toast-top-center",
+  'showMethod': 'fadeIn'
 }
-import jsondata from './jsondata.json'
+
 // import VueConfirmDialog from 'vue-confirm-dialog'
 
 // Vue.use(VueConfirmDialog)
@@ -54,7 +56,7 @@ axios.interceptors.response.use((response) => {
       router.push({ path: '/login' })
     }
   }
-  if (error.response) {
+  if (error.response && error.response.status === 200) {
       return parseError(error.response.data)
   } else {
       return Promise.reject(error)

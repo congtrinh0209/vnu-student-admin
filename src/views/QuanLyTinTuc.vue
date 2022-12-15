@@ -298,7 +298,7 @@ export default {
       let vm = this
       vm.loadingData = true
       let filter = {
-        collectionName: 'quanlytintuc',
+        collectionName: 'canbo',
         data: {
           tieuDe : (vm.tieuDeSearch!=='') ? vm.tieuDeSearch : null
         }
