@@ -61,7 +61,7 @@ axios.interceptors.response.use((response) => {
       return parseError(error.response.data)
   } else {
       return Promise.reject(error)
-  }
+  }  
 })
 
 if (Vue.$cookies.get('Token')) {
