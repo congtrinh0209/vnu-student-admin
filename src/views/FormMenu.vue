@@ -13,8 +13,8 @@
         <v-text-field
           :rules="[rules.required]"
           v-model="formData.MaMenu"
-          solo
           :disabled="dataEdit.MaMenu ? true : false"
+          solo
           label="Nhập mã menu..."
           dense
           hide-details="auto"
@@ -114,7 +114,7 @@
       </v-col>
     </v-row>
  <v-row>
-      <v-col cols="12" sm="12">
+      <v-col cols="12" sm="6">
         <div class="titleText mb-2">Nhóm quyền:</div>
         <v-select
           class="custom-height-select"
@@ -124,6 +124,17 @@
           dense
           solo
           multiple
+        ></v-select>
+      </v-col>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Loại menu:</div>
+        <v-select
+          class="custom-height-select"
+          v-model="formData.LoaiMenu"
+          :items="optionType"
+          label="Chọn"
+          dense
+          solo
         ></v-select>
       </v-col>
     </v-row>
@@ -140,7 +151,7 @@ export default {
         MaMenuCha: this.dataEdit.MaMenuCha || "",
         MaMenu: this.dataEdit.MaMenu || "",
         TinhTrang: this.dataEdit.TinhTrang || "2",
-        LoaiMenu: "0",
+        LoaiMenu: this.dataEdit.LoaiMenu || "",
         TenMenu: this.dataEdit.TenMenu || "",
         DuongDan: this.dataEdit.DuongDan || "",
         TenTiengAnh: this.dataEdit.TenTiengAnh || "",
@@ -153,6 +164,7 @@ export default {
       validForm: false,
       optionStatus: [{text: 'Hoạt động', value: "2"}, {text: 'Không hoạt động', value: "1"}],
       optionGroups: [],
+      optionType: [{text: 'Web', value: '0'}, {text: 'Mobile', value: '1'}],
       rules: {
         required: (value) => !!value || "Không được để trống.",
         birthday: (value) => {

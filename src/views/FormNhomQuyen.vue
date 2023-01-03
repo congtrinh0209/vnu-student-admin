@@ -92,7 +92,7 @@ export default {
       let vm = this;
       const dataPayload = {
         page: 0,
-        size: 20,
+        size: 100,
         keyword: "",
         orderFields: "",
         orderTypes: "",

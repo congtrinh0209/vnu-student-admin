@@ -58,7 +58,7 @@
             <td>{{ index + 1 }}</td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -75,7 +75,7 @@
               <span>Sửa</span>
             </v-tooltip>
 
-            <v-tooltip top v-if="isAdmin">
+            <!-- <v-tooltip top v-if="isAdmin">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="red"
@@ -90,7 +90,7 @@
                 </v-btn>
               </template>
               <span>Xóa</span>
-            </v-tooltip>
+            </v-tooltip> -->
           </template>
         </v-data-table>
         <pagination
@@ -531,7 +531,7 @@ export default {
         const dataPayload = {
           ...formData,
           MaSoCanBo: formData.MaSoCanBo.replace(/ +/g, ""),
-          NgaySinh: moment.utc(formData.NgaySinh, "DD/MM/YYYY").format(),
+          // NgaySinh: formData.NgaySinh ? moment(formData.NgaySinh, "DD/MM/YYYY").valueOf() : "",
           PhanQuyenCanBo: [],
           CoQuanDonVi: formData.CoQuanDonVi,
           GioiTinh: formData.GioiTinh,
@@ -547,7 +547,7 @@ export default {
             ],
           },
         };
-
+        delete dataPayload.NgaySinh;
         delete dataPayload.TinhThanh;
         delete dataPayload.QuanHuyen;
         delete dataPayload.PhuongXa;
@@ -636,9 +636,7 @@ export default {
             })
             .catch(function () {
               vm.loadingData = false;
-               toastr.error(
-                  "Vui lòng kiểm tra lại dữ liệu nhập vào các trường"
-                );
+              toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
             });
         }
 

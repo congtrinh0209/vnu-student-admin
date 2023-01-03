@@ -52,9 +52,9 @@
 
     <v-row>
       <v-col cols="12" sm="6">
-        <div class="titleText mb-2">Số thứ tự:</div>
+        <div class="titleText mb-2">Số thứ tự: <span style="color: red">*</span></div>
         <v-text-field
-          :rules="[rules.number]"
+          :rules="[rules.number, rules.required]"
           v-model="formData.SoThuTu"
           solo
           label="Nhập số thứ tự..."

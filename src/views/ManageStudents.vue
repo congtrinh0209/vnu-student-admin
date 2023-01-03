@@ -1,25 +1,64 @@
 <template>
   <div>
-    <v-row no-gutters>
+    <v-row>
       <v-col cols="12" sm="5">
-        <input
-          v-model="textSearch"
-          class="form-control"
-          type="text"
-          placeholder="Nhập tiêu đề..."
-          autocomplete="off"
-        />
+        <div class="d-flex align-center" style="padding-top: 1.6px">
+          <input
+            style="height: 32px; outline: none"
+            v-model="textSearch"
+            class="form-control"
+            type="text"
+            placeholder="Nhập tiêu đề..."
+            autocomplete="off"
+          />
+          <button
+            class="btn btn-search primary"
+            @click.stop="getListstudentFilter"
+          >
+            <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
+          </button>
+        </div>
       </v-col>
-      <v-col cols="12" sm="1">
-        <button
-          class="btn btn-search primary"
-          @click.stop="getListstudentFilter"
-        >
-          <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
-        </button>
+      <v-col cols="12" sm="2">
+        <div>
+          <v-select
+            class="custom-height-select-filter"
+            v-model="statusUpoadFile"
+            :items="optionStatusUpoadFile"
+            label="Trạng thái tải ảnh"
+            @change="handlechangeSelectedCheckFile"
+            dense
+            solo
+          ></v-select>
+        </div>
       </v-col>
-      <v-col cols="12" sm="6">
-        <div style="float: right">
+
+      <v-col cols="12" sm="2">
+        <div>
+          <v-select
+            class="custom-height-select-filter"
+            :items="optionAgencies"
+            v-model="agenciesValue"
+             @change="handlechangeSelectedAgencies"
+            label="Cơ quan đơn vị"
+            dense
+            solo
+          ></v-select>
+        </div>
+      </v-col>
+
+      <v-col cols="12" sm="3">
+        <div style="float: right" class="d-flex">
+          <button
+            :disabled="checkDisable"
+            @click.stop="repuestAddImage"
+            :class="
+              checkDisable ? 'btn-disable btn-add' : 'btn btn-add primary'
+            "
+          >
+            <v-icon left dark size="22">mdi-file-plus</v-icon>
+            Yêu cầu thêm ảnh
+          </button>
           <button @click.stop="showModalForm" class="btn btn-add primary">
             <v-icon left dark size="22">mdi-file-plus</v-icon>
             Thêm mới
@@ -31,22 +70,36 @@
     <v-row class="my-0 mb-3">
       <v-col cols="12" class="pt-0">
         <v-data-table
+          v-model="selected"
+          :show-select="!checkDisable ? true : false"
           :headers="headers"
           :items="listStudent"
           :items-per-page="itemsPerPage"
-          item-key="primKey"
+          item-key="PrimKey"
           hide-default-footer
           class="table-base mt-2"
           no-data-text="Không có dữ liệu"
           :loading="loadingData"
           loading-text="Đang tải... "
           item-text="name"
+          @toggle-select-all="selectAllToggle"
         >
+          <template
+            v-slot:item.data-table-select="{ item, isSelected, select }"
+          >
+            <v-simple-checkbox
+              v-if="!item.MainImage.FileUrl"
+              :value="isSelected"
+              :ripple="false"
+              @input="select($event)"
+            ></v-simple-checkbox>
+          </template>
+
           <template v-slot:item.stt="{ index }">
             <td>{{ index + 1 }}</td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -55,15 +108,15 @@
                   class="mr-2"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="editStudent(item)"
+                  @click.stop="viewDetailStudent(item)"
                 >
-                  <v-icon size="18">mdi-pencil</v-icon>
+                  <v-icon size="18">mdi-clipboard-text</v-icon>
                 </v-btn>
               </template>
-              <span>Sửa</span>
+              <span>Thông tin chi tiết sinh viên</span>
             </v-tooltip>
 
-            <v-tooltip top v-if="isAdmin">
+            <!-- <v-tooltip top v-if="isAdmin">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="red"
@@ -78,7 +131,7 @@
                 </v-btn>
               </template>
               <span>Xóa</span>
-            </v-tooltip>
+            </v-tooltip> -->
           </template>
         </v-data-table>
         <pagination
@@ -90,6 +143,7 @@
         ></pagination>
       </v-col>
     </v-row>
+
     <div v-if="dialogForm">
       <v-dialog max-width="800px" v-model="dialogForm" persistent fullscreen>
         <v-card>
@@ -146,20 +200,72 @@
       </v-dialog>
     </div>
 
-    <v-dialog v-model="dialogDelete" persistent max-width="290">
+    <div v-if="dialogFormDetails">
+      <v-dialog max-width="1400px" v-model="dialogFormDetails" persistent>
+        <v-card>
+          <v-toolbar dark color="primary" class="px-3">
+            <v-toolbar-title>Thông tin chi tiết sinh viên</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark @click="closeModalFormDetail">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <DetailStudent :dataStudent="dataEdit" />
+          <v-card-text class="px-2 py-2" style="background: #eee">
+            <v-card-actions class="justify-center my-4">
+              <v-btn
+                small
+                depressed
+                color="red"
+                class="white--text mr-2"
+                :loading="loadingAction"
+                :disabled="loadingAction"
+                @click="closeModalFormDetail"
+              >
+                <v-icon left> mdi-close </v-icon>
+                {{ $t("basic.thoat") }}
+              </v-btn>
+              <v-btn
+                v-if="!readonlyForm"
+                small
+                depressed
+                class="mr-2"
+                color="primary"
+                :loading="loadingAction"
+                :disabled="loadingAction"
+                @click.native="editStudent"
+              >
+                <v-icon left dark size="18">
+                  mdi-file-document-plus-outline
+                </v-icon>
+                <span>Sửa thông tin sinh viên</span>
+              </v-btn>
+            </v-card-actions>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
+
+    <!-- <v-dialog v-model="dialogDelete" persistent max-width="286">
       <v-card>
-        <v-card-title class="text-h5"> Bạn có muốn xóa không? </v-card-title>
-        <v-card-actions>
+        <v-toolbar dark color="primary">
+          <v-card-title class="text-h7 text-center">
+            Bạn có muốn xóa không?
+          </v-card-title>
+        </v-toolbar>
+       <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialogDelete = false">
+          <v-btn color="primary darken-1" text @click="dialogDelete = false">
             Từ chối
           </v-btn>
-          <v-btn color="green darken-1" text @click="deleteStudent">
+          <v-btn color="primary darken-1" text @click="deleteStudent">
             Xác nhận
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
   </div>
 </template>
 
@@ -168,15 +274,19 @@ import Pagination from "./Pagination.vue";
 import toastr from "toastr";
 import FormSinhVien from "@/views/FormSinhVien";
 import moment from "moment";
+import DetailStudent from "@/views/DetailStudent";
+import { mapState } from "vuex";
 
 export default {
   components: {
     Pagination,
     FormSinhVien,
+    DetailStudent,
   },
 
   data() {
     return {
+      selected: [],
       textSearch: "",
       headers: [
         {
@@ -240,6 +350,13 @@ export default {
       dataEdit: {},
       dialogDelete: false,
       idStudent: "",
+      dialogFormDetails: false,
+      statusUpoadFile: "",
+      optionStatusUpoadFile: [
+        { text: "Sinh viên đã có ảnh", value: true },
+        { text: "Sinh viên chưa có ảnh", value: false },
+      ],
+      agenciesValue: "",
     };
   },
   created() {
@@ -258,6 +375,7 @@ export default {
       console.log("tim kiếm");
       vm.getListStudent({ keyword: vm.textSearch });
       vm.textSearch = "";
+      vm.statusUpoadFile = "";
     },
     getList(state, collectionName, dataParam) {
       let vm = this;
@@ -313,6 +431,18 @@ export default {
           vm.loadingData = false;
         });
     },
+    handlechangeSelectedCheckFile(value) {
+      const vm = this;
+      vm.getListStudent({ HasImageAttach: value });
+      vm.textSearch = "";
+      vm.agenciesValue = "";
+    },
+    handlechangeSelectedAgencies(value) {
+      const vm = this;
+      vm.getListStudent({ CoQuanDonVi_MaHanhChinh: value });
+      vm.textSearch = "";
+      vm.statusUpoadFile = "";
+    },
     openDialogDeleteItem(item) {
       const vm = this;
       console.log("id delete: ", item.PrimKey);
@@ -341,7 +471,12 @@ export default {
           vm.loadingData = false;
         });
     },
-    editStudent(item) {
+    editStudent() {
+      const vm = this;
+      vm.edittingForm = true;
+      vm.dialogForm = true;
+    },
+    viewDetailStudent(item) {
       const vm = this;
       const data = {
         ...item,
@@ -349,27 +484,25 @@ export default {
           MaMuc: item.GioiTinh.MaMuc,
           TenMuc: item.GioiTinh.TenMuc,
         },
-        TinhThanh: {
-          MaMuc: item.DiaChiThuongTru.TinhThanh.MaMuc,
-          TenMuc: item.DiaChiThuongTru.TinhThanh.TenMuc,
-        },
-        QuanHuyen: {
-          MaMuc: item.DiaChiThuongTru.QuanHuyen.MaMuc,
-          TenMuc: item.DiaChiThuongTru.QuanHuyen.TenMuc,
-        },
-        PhuongXa: {
-          MaMuc: item.DiaChiThuongTru.PhuongXa.MaMuc,
-          TenMuc: item.DiaChiThuongTru.PhuongXa.TenMuc,
-        },
-        CoQuanDonVi: {
-          MaHanhChinh: item.CoQuanDonVi.MaHanhChinh,
-          TenGoi: item.CoQuanDonVi.TenGoi,
-        },
+        // TinhThanh: {
+        //   MaMuc: item?.DiaChiThuongTru.TinhThanh.MaMuc,
+        //   TenMuc: item?.DiaChiThuongTru.TinhThanh.TenMuc,
+        // },
+        // QuanHuyen: {
+        //   MaMuc: item?.DiaChiThuongTru.QuanHuyen.MaMuc,
+        //   TenMuc: item?.DiaChiThuongTru.QuanHuyen.TenMuc,
+        // },
+        // PhuongXa: {
+        //   MaMuc: item?.DiaChiThuongTru.PhuongXa.MaMuc,
+        //   TenMuc: item?.DiaChiThuongTru.PhuongXa.TenMuc,
+        // },
+        // CoQuanDonVi: {
+        //   MaHanhChinh: item?.CoQuanDonVi.MaHanhChinh,
+        //   TenGoi: item?.CoQuanDonVi.TenGoi,
+        // },
       };
-      vm.edittingForm = true;
-      vm.dataEdit = data;
-      console.log("item edit: ", item);
-      vm.dialogForm = true;
+      vm.dialogFormDetails = true;
+      vm.dataEdit = { ...data };
     },
     handlechangePage(pageCurent) {
       const vm = this;
@@ -385,6 +518,41 @@ export default {
       vm.dialogForm = false;
       vm.dataEdit = {};
     },
+    closeModalFormDetail() {
+      const vm = this;
+      vm.dataEdit = {};
+      vm.dialogFormDetails = false;
+    },
+    selectAllToggle(props) {
+      const vm = this;
+      const result = props.items.filter((item) => !item.MainImage.FileUrl);
+      vm.selected = result;
+      console.log(vm.selected, props, result);
+    },
+    repuestAddImage() {
+      const vm = this;
+      if (vm.selected.length) {
+        const listIdStudent = vm.selected.map((item) => item.PrimKey).join(",");
+        const dataPayload = {
+          listNguoiDung: listIdStudent,
+        };
+
+        const filter = {
+          type: "album/requireImage",
+          payload: dataPayload,
+        };
+        vm.$store
+          .dispatch("notificationUploadFileImage", filter)
+          .then(function (response) {
+            toastr.success("Gửi yêu cầu thành công");
+          })
+          .catch(function () {});
+
+        console.log("requite: ", vm.selected);
+      } else {
+        toastr.error("Vui lòng chọn sinh viên để thực hiện thao tác");
+      }
+    },
     submitForm() {
       const vm = this;
       if (vm.$refs.formSinhVienBoRef.validateForm()) {
@@ -393,19 +561,26 @@ export default {
         const dataPayload = {
           ...formData,
           MaSinhVien: formData.MaSinhVien.replace(/ +/g, ""),
-          NgaySinh: moment.utc(formData.NgaySinh, "DD/MM/YYYY").format(),
+          NgaySinh: formData.NgaySinh
+            ? moment(formData.NgaySinh, "DD/MM/YYYY").valueOf()
+            : "",
           DiaChiThuongTru: {
             SoNhaChiTiet: formData.DiaChiThuongTru,
             TinhThanh: formData.TinhThanh,
             QuanHuyen: formData.QuanHuyen,
             PhuongXa: formData.PhuongXa,
           },
-          CoQuanDonVi: {...formData.CoQuanDonVi},
+          CoQuanDonVi: { ...formData.CoQuanDonVi },
+          DanhBaLienLac: {
+            SoDienThoai: formData.SoDienThoai,
+          },
         };
-
+        delete dataPayload.MainImageUrl;
         delete dataPayload.TinhThanh;
         delete dataPayload.QuanHuyen;
         delete dataPayload.PhuongXa;
+        delete dataPayload.DiaChiThuongTru;
+        delete dataPayload.DanhBaLienLac;
 
         if (!vm.edittingForm) {
           const payload = {
@@ -432,9 +607,7 @@ export default {
             })
             .catch(function () {
               vm.loadingData = false;
-              toastr.error(
-                  "Vui lòng kiểm tra lại dữ liệu nhập vào các trường"
-                );
+              toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
             });
         } else {
           const payload = {
@@ -451,27 +624,60 @@ export default {
                 if (vm.dataEdit.PrimKey === cur.PrimKey) {
                   return [
                     ...res,
-                    { ...dataPayload, PrimKey: vm.dataEdit.PrimKey },
+                    {
+                      ...dataPayload,
+                      PrimKey: vm.dataEdit.PrimKey,
+                      MainImage: response.data.resp.MainImage,
+                    },
                   ];
                 } else {
                   return [...res, cur];
                 }
               }, []);
               console.log("res edit: ", response, dataPayload, vm.listStudent);
-               vm.dataEdit = {}
+              vm.dataEdit = {};
+              vm.dialogFormDetails = false;
             })
             .catch(function () {
               vm.loadingData = false;
-              toastr.error(
-                  "Vui lòng kiểm tra lại dữ liệu nhập vào các trường"
-                );
+              toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
             });
         }
         console.log("submit", formData, dataPayload);
       }
     },
   },
+  computed: {
+    ...mapState(["listAgencies"]),
+    checkDisable() {
+      const vm = this;
+      const result = vm.listStudent.filter((item) => !item.MainImage.FileUrl);
+      if (result.length) return false;
+      return true;
+    },
+    optionAgencies() {
+      const vm = this;
+      const result = vm.listAgencies.map((item) => ({
+        text: item.tenGoi,
+        value: item.maHanhChinh,
+      }));
+      if (vm.listAgencies.length) return result;
+      return [];
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+.custom-height-select-filter > .v-input__control {
+  min-height: 32px !important;
+}
+.btn-disable {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+  color: #b1b1b1;
+  padding: 5px 10px;
+  height: 32px;
+  font-size: 14px;
+  border-radius: 2px;
+}
+</style>

@@ -8,6 +8,176 @@
     <v-row>
       <v-col cols="12" sm="6">
         <div class="titleText mb-2">
+          Họ và tên: <span style="color: red">*</span>
+        </div>
+        <v-text-field
+          :rules="[rules.required]"
+          v-model="formData.HoVaTen"
+          solo
+          label="Nhập tên đầy đủ..."
+          dense
+          hide-details="auto"
+          required
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">
+          Số CCCD: <span style="color: red">*</span>
+        </div>
+        <v-text-field
+          :rules="[rules.required, rules.idCard]"
+          v-model="formData.ChungMinhThu"
+          solo
+          label="Nhập CCCD..."
+          dense
+          hide-details="auto"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Số điện thoại:</div>
+        <v-text-field
+          :rules="[rules.phone]"
+          v-model="formData.SoDienThoai"
+          solo
+          label="Nhập số điện thoại..."
+          dense
+          hide-details="auto"
+          required
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Email VNU:</div>
+        <v-text-field
+          :rules="[rules.email]"
+          v-model="formData.EmailVNU"
+          solo
+          label="Nhập email..."
+          dense
+          hide-details="auto"
+          :disabled="dataEdit.EmailVNU ? true : false"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">
+          Ngày sinh: <span style="color: red">*</span>
+        </div>
+        <v-text-field
+          :rules="[rules.birthday]"
+          v-model="formData.NgaySinh"
+          solo
+          label="Nhập ngày sinh..."
+          dense
+          hide-details="auto"
+          required
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Giới tính:</div>
+        <v-select
+          class="style-selected"
+          v-model="formData.GioiTinh"
+          :items="optionGender"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
+    </v-row>
+
+    <v-row v-if="dataEdit.PrimKey">
+      <v-col cols="12" sm="12">
+        <div class="titleText mb-2">Tải ảnh lên:</div>
+        <v-file-input
+          v-model="filename"
+          accept="image/png, image/jpeg, image/bmp"
+          prepend-icon=""
+          @change="handleChangeFile"
+          label="Chọn ảnh đại diện"
+          solo
+          dense
+        ></v-file-input>
+
+        <v-btn
+          depressed
+          x-small
+          color="primary"
+          v-if="checkFile"
+          @click="handleViewFile"
+          >Nhấn để xem tệp</v-btn
+        >
+
+        <v-btn
+          v-if="checkFile"
+          class="mx-2"
+          depressed
+          x-small
+          color="error"
+          @click="handleDeleteFile"
+          >Xóa tệp đính kèm
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="12">
+        <div class="titleText mb-2">Địa chỉ:</div>
+        <v-text-field
+          v-model="formData.DiaChiThuongTru"
+          solo
+          label="Nhập địa chỉ..."
+          dense
+          hide-details="auto"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="4">
+        <div class="titleText mb-2">Tỉnh/thành:</div>
+        <v-select
+          @change="handleChangeProvince"
+          v-model="formData.TinhThanh"
+          :items="optionProvince"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
+
+      <v-col cols="12" sm="4">
+        <div class="titleText mb-2">Quận/huyện:</div>
+        <v-select
+          @change="hanldeChangeDistrict"
+          v-model="formData.QuanHuyen"
+          :items="optionDistrict"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
+
+      <v-col cols="12" sm="4">
+        <div class="titleText mb-2">Phường/xã:</div>
+        <v-select
+          v-model="formData.PhuongXa"
+          :items="optionWard"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">
           Mã sinh viên: <span style="color: red">*</span>
         </div>
         <v-text-field
@@ -71,119 +241,12 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" sm="6">
-        <div class="titleText mb-2">
-          Họ và tên: <span style="color: red">*</span>
-        </div>
-        <v-text-field
-          :rules="[rules.required]"
-          v-model="formData.HoVaTen"
-          solo
-          label="Nhập tên đầy đủ..."
-          dense
-          hide-details="auto"
-          required
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6">
-        <div class="titleText mb-2">Email VNU:</div>
-        <v-text-field
-          :rules="[rules.email]"
-          v-model="formData.EmailVNU"
-          solo
-          label="Nhập email..."
-          dense
-          hide-details="auto"
-          :disabled="dataEdit.EmailVNU ? true : false"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="6">
-        <div class="titleText mb-2">
-          Ngày sinh: <span style="color: red">*</span>
-        </div>
-        <v-text-field
-          :rules="[rules.required, rules.birthday]"
-          v-model="formData.NgaySinh"
-          solo
-          label="Nhập ngày sinh..."
-          dense
-          hide-details="auto"
-          required
-        ></v-text-field>
-      </v-col>
-
-      <v-col cols="12" sm="6">
-        <div class="titleText mb-2">
-          Giới tính: <span style="color: red">*</span>
-        </div>
-        <v-select
-          v-model="formData.GioiTinh"
-          :rules="[rules.required]"
-          :items="optionGender"
-          label="Chọn"
-          dense
-          solo
-        ></v-select>
-      </v-col>
-    </v-row>
-
-    <v-row>
       <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Địa chỉ:</div>
-        <v-text-field
-          v-model="formData.DiaChiThuongTru"
-          solo
-          label="Nhập địa chỉ..."
-          dense
-          hide-details="auto"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="4">
-        <div class="titleText mb-2">Tỉnh/thành:</div>
+        <div class="titleText mb-2">
+          Cơ quan, đơn vị: <span style="color: red">*</span>
+        </div>
         <v-select
-          @change="handleChangeProvince"
-          v-model="formData.TinhThanh"
-          :items="optionProvince"
-          label="Chọn"
-          dense
-          solo
-        ></v-select>
-      </v-col>
-
-      <v-col cols="12" sm="4">
-        <div class="titleText mb-2">Quận/huyện:</div>
-        <v-select
-          @change="hanldeChangeDistrict"
-          v-model="formData.QuanHuyen"
-          :items="optionDistrict"
-          label="Chọn"
-          dense
-          solo
-        ></v-select>
-      </v-col>
-
-      <v-col cols="12" sm="4">
-        <div class="titleText mb-2">Phường/xã:</div>
-        <v-select
-          v-model="formData.PhuongXa"
-          :items="optionWard"
-          label="Chọn"
-          dense
-          solo
-        ></v-select>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Cơ quan, đơn vị:</div>
-        <v-select
+          :rules="[rules.required]"
           v-model="formData.CoQuanDonVi"
           :items="optionAgencies"
           label="Chọn"
@@ -192,17 +255,46 @@
         ></v-select>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="showDiglogFile" persistent fullscreen>
+      <v-card>
+        <v-toolbar class="px-3">
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn icon @click="showDiglogFile = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="12">
+                <div class="d-flex justify-center">
+                  <img :src="formData.MainImageUrl" alt="" class="style-img" />
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-form>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import moment from "moment";
+import toastr from "toastr";
+import { baseUrl } from "../constant/baseURL";
+import axios from "axios";
 export default {
   props: ["dataEdit"],
   data() {
     return {
       formData: {
+        SoDienThoai: this.dataEdit.DanhBaLienLac?.SoDienThoai || "",
+        ChungMinhThu: this.dataEdit.ChungMinhThu || "",
         MaSinhVien: this.dataEdit.MaSinhVien || "",
         SoBaoDanh: this.dataEdit.SoBaoDanh || "",
         GioiTinh: this.dataEdit.GioiTinh || "",
@@ -214,16 +306,29 @@ export default {
           : "",
         EmailVNU: this.dataEdit.EmailVNU || "",
         DiaChiThuongTru: this.dataEdit.DiaChiThuongTru?.SoNhaChiTiet || "",
-        TinhThanh: this.dataEdit.TinhThanh,
+        TinhThanh: this.dataEdit.TinhThanh || "",
         QuanHuyen: this.dataEdit.QuanHuyen || "",
         PhuongXa: this.dataEdit.PhuongXa || "",
-        CoQuanDonVi: this.dataEdit.CoQuanDonVi || "",
+        CoQuanDonVi: this.dataEdit.CoQuanDonVi?.MaHanhChinh
+          ? {
+              text: this.dataEdit.CoQuanDonVi?.TenGoi,
+              value: {
+                TenGoi: this.dataEdit.CoQuanDonVi.TenGoi,
+                MaHanhChinh: this.dataEdit.CoQuanDonVi.MaHanhChinh,
+              },
+            }
+          : "",
+        MainImageUrl: this.dataEdit?.MainImage?.FileUrl || "",
       },
       validForm: false,
       optionPosition: [],
       optionDistrict: [],
       optionWard: [],
       optionGroups: [],
+      showDiglogFile: false,
+      checkFile: false,
+      idFile: "",
+      filename: null,
       rules: {
         required: (value) => !!value || "Không được để trống.",
         email: (value) => {
@@ -238,6 +343,22 @@ export default {
             pattern.test(value) || "Định dạng ngày sinh là: ngày/tháng/năm"
           );
         },
+        phone: (value) => {
+          const pattern =
+            /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+          let status;
+          if (value === "") {
+            status = true;
+          } else {
+            status = pattern.test(value) || "Sai định dạng số điện thoại";
+          }
+          return status;
+        },
+        idCard: (value) => {
+          const pattern = /^[0-9]{9,12}$/;
+          // const pattern = /^([0-9]{9})(X|V)$|^([0-9]{11})/gis;
+          return pattern.test(value) || "Định dạng sai số CCCD";
+        },
       },
     };
   },
@@ -249,9 +370,7 @@ export default {
     const vm = this;
     console.log("cretate", this.dataEdit);
 
-    if (vm.dataEdit.TinhThanh?.MaMuc)
-      vm.getDistrict(vm.dataEdit.TinhThanh.MaMuc);
-    if (vm.dataEdit.QuanHuyen?.MaMuc) vm.getWard(vm.dataEdit.QuanHuyen.MaMuc);
+    if (vm.dataEdit && vm.dataEdit.MainImage?.FileUrl) vm.checkFile = true;
   },
   computed: {
     ...mapState(["listAgencies", "listProvince", "listGender"]),
@@ -352,9 +471,67 @@ export default {
       console.log("dis", vm.optionDistrict, item);
       vm.getWard(item.MaMuc);
     },
+    handleChangeFile(value) {
+      const vm = this;
+      if (value) {
+        let formData = new FormData();
+        formData.append("files", value);
+        formData.append("id", vm.dataEdit.PrimKey);
+
+        const payload = {
+          type: "album/upload",
+          payload: formData,
+        };
+
+        vm.$store
+          .dispatch("uploadFile", payload)
+          .then(function (response) {
+            const start = response.data.fullPathUrl.lastIndexOf("/") + 1;
+            const end = response.data.fullPathUrl.lastIndexOf(".");
+            vm.formData.MainImageUrl = response.data.fullPathUrl;
+            vm.idFile = response.data.fullPathUrl.slice(start, end);
+            vm.checkFile = true;
+            console.log("res: ", response);
+          })
+          .catch(function () {});
+      }
+    },
+    handleViewFile() {
+      const vm = this;
+      vm.showDiglogFile = true;
+    },
+    async handleDeleteFile() {
+      const vm = this;
+      try {
+        const config = {
+          method: "delete",
+          url: `${baseUrl}album/${vm.dataEdit.PrimKey}/attachment/${
+            !vm.idFile ? vm.dataEdit.MainImage.Id : vm.idFile
+          }`,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: {},
+          params: {},
+        };
+        await axios(config);
+        vm.filename = null;
+        toastr.success("Xóa thành công");
+      } catch (error) {
+        console.log(error);
+      }
+      vm.checkFile = false;
+    },
   },
 };
 </script>
 
 <style>
+.style-selected .v-text-field__details {
+  display: none;
+}
+.style-img {
+  max-width: 100%;
+}
 </style>

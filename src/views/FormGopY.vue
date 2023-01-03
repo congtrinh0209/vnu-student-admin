@@ -1,7 +1,7 @@
 <template>
   <v-form
     class="dialog-body"
-    ref="formBaiVietTinTucRef"
+    ref="formGopyRef"
     lazy-validation
     v-model="validForm"
   >
@@ -17,7 +17,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" sm="6">
         <div class="titleText mb-2">Tệp đính kèm góp ý:</div>
         <v-text-field
@@ -62,9 +62,9 @@
           solo
         ></v-select>
       </v-col>
-    </v-row>
+    </v-row> -->
 
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" sm="6">
         <div class="titleText mb-2">Người trả lời:</div>
         <v-select
@@ -79,7 +79,7 @@
       </v-col>
       <v-col cols="12" sm="6">
         <div class="titleText mb-2">
-          Tình trạng: <span style="color: red">*</span>
+          Tình trạng công khai: <span style="color: red">*</span>
         </div>
         <v-select
           class="custom-height-select"
@@ -91,10 +91,10 @@
           solo
         ></v-select>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row>
-      <v-col cols="12" sm="12">
+      <v-col cols="12" sm="6">
         <div class="titleText mb-2">Tệp đính kèm câu trả lời:</div>
         <v-file-input
           prepend-icon=""
@@ -140,6 +140,20 @@
           >Xóa tệp đính kèm
         </v-btn>
       </v-col>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">
+          Tình trạng công khai: <span style="color: red">*</span>
+        </div>
+        <v-select
+          class="custom-height-select"
+          :rules="[rules.required]"
+          v-model="formData.CongKhai"
+          :items="optionStatus"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
     </v-row>
 
     <v-row>
@@ -167,16 +181,8 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="12">
-                <div>
-                  <img
-                    :src="
-                      typeFile === 'feedback'
-                        ? formData.fileFeedbackUrl
-                        : formData.fileAnswerUrl
-                    "
-                    alt=""
-                    class="style-img"
-                  />
+                <div class="d-flex justify-center">
+                  <img :src="formData.fileAnswerUrl" alt="" class="style-img" />
                 </div>
               </v-col>
             </v-row>
@@ -212,7 +218,6 @@ export default {
       optionCadres: [],
       optionStudnets: [],
       validForm: false,
-      checkFileImgFeedback: true,
       checkFileImgAnswer: true,
       typeFile: "",
       hideBtnDeleteFile: true,
@@ -229,11 +234,7 @@ export default {
   },
   created() {
     const vm = this;
-    vm.getList("canbo");
-    vm.getList("sinhvien");
-    vm.getList("dulieudanhmuc");
     const regex = /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i;
-    vm.checkFileImgFeedback = regex.test(vm.dataEdit.Attachment?.FileName);
     vm.checkFileImgAnswer = regex.test(vm.dataEdit.TraLoi.Attachment?.FileName);
     vm.hideBtnDeleteFile = vm.dataEdit.TraLoi.Attachment?.FileName
       ? true
@@ -259,13 +260,11 @@ export default {
       vm.$store.dispatch("collectionFilter", filter).then(function (response) {
         const responseData = response.content;
         if (collectionName === "canbo") {
-          //   vm.$emit("emitDataAgencies", responseData);
           vm.optionCadres = responseData.map((item) => ({
             text: item.HoVaTen,
             value: item.MaDinhDanh,
           }));
         } else {
-          //   vm.$emit("emitDataCategoryNews", responseData);
           vm.optionStudnets = responseData.map((item) => ({
             text: item.HoVaTen,
             value: item.MaDinhDanh,
@@ -275,7 +274,7 @@ export default {
     },
     validateForm() {
       let vm = this;
-      return vm.$refs.formBaiVietTinTucRef.validate();
+      return vm.$refs.formGopyRef.validate();
     },
     handleChangeFile(value) {
       const vm = this;
@@ -298,7 +297,7 @@ export default {
 
 <style>
 .style-img {
-  width: 100%;
+  max-width: 100%;
 }
 .style-tag-link {
   color: #fff !important;

@@ -11,7 +11,7 @@
           Ngày xuất bản: <span style="color: red">*</span>
         </div>
         <v-text-field
-          :rules="[rules.birthday]"
+          :rules="[rules.birthday, rules.checkDatePresent, rules.required]"
           v-model="formData.NgayXuatBan"
           solo
           label="Nhập ngày xuất bản..."
@@ -61,6 +61,14 @@ export default {
             /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
           return  pattern.test(value) || "Định dạng ngày sinh là: ngày/tháng/năm";
         },
+        checkDatePresent: (value) =>{
+          let status = true
+          const getDatePresent = moment(moment(new Date()).format('DD/MM/YYYY'), "DD/MM/YYYY").valueOf();
+          const getDateInput = moment(value, "DD/MM/YYYY").valueOf();
+          const result = getDatePresent - getDateInput
+          if (result > 0) status = false
+          return status || `Ngày xuất bản không được sau ngày ${moment(new Date(), "DD/MM/YYYY").format("DD/MM/YYYY")}`
+        }
       },
     };
   },

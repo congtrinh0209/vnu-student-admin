@@ -11,12 +11,12 @@ export default new Router({
       path: '/',
       component: () => import('@/views/Home'),
       children: [
-        {
-          path: '/',
-          name: 'QuanLyTinTuc',
-          component: () => import('@/views/QuanLyTinTuc'),
-          props: true
-        },
+        // {
+        //   path: '/',
+        //   name: 'QuanLyTinTuc',
+        //   component: () => import('@/views/QuanLyTinTuc'),
+        //   props: true
+        // },
         {
           path: '/quan-ly-tin-tuc',
           name: 'QuanLyTinTuc',
@@ -82,7 +82,7 @@ export default new Router({
           name: 'ManageFeedback',
           component: () => import('@/views/ManageFeedback'),
           props: true
-        }
+        },
       ]
     },
     {
@@ -91,9 +91,15 @@ export default new Router({
       component: () => import('@/views/Login')
     },
     {
+      path: '/home',
+      name: 'home',
+      component: () => import('@/views/HomePage'),
+      props: true
+    },
+    {
       name: 'ShowNews',
       path: '/tin-tuc/:id',
       component: () => import('@/views/ShowNews')
-    }
+    },
   ]
 })

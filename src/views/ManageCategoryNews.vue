@@ -61,7 +61,7 @@
             <td>{{ item.TinhTrang === "2" ? "Hoạt động" : "Không hoạt động" }}</td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -78,7 +78,7 @@
               <span>Sửa</span>
             </v-tooltip>
 
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="red"

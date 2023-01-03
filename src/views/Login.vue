@@ -148,7 +148,7 @@
       overlay: false,
       loading: false,
       valid: true,
-      userName: 'tuanmmm@fds.vn',
+      userName: 'suadminfds1@fds.vn',
       password: 'Fds@2022',
       client_secret: '',
       code: '',
@@ -161,6 +161,7 @@
     }),
     created () {
       let vm = this
+      console.log("create")
       if (Vue.$cookies.get('Token')) {
         vm.signed = true
       } else {
@@ -197,13 +198,14 @@
                 return item === 'site-admin'
               }) : false
               // console.log('roleUser', roleUser)
+              console.log(dataUser, roleUser)
               if (roleUser && roleUser.length) {
                 vm.$cookies.set('Token', result.access_token, result.expires_in)
                 vm.$cookies.set('RefreshToken', result.refresh_token, result.refresh_expires_in)
                 axios.defaults.headers['Authorization'] = 'Bearer ' + result.access_token
                 vm.$store.commit('SET_ISSIGNED', true)
-                // if (admin) {
-                    if (true) {
+                if (admin) {
+                    // if (true) {
                   vm.$cookies.set('admin', true, result.expires_in)
                   let dataUser1 = {
                     hoVaTen: 'Quản trị',
@@ -220,55 +222,71 @@
                     token: 'Bearer ' + result.access_token,
                     email: dataUser.email
                   }
-                  vm.$store.dispatch('getThongTinUserDangNhap', filter).then(function (result) {
-                    let chucDanh = ''
-                    let vaiTroSuDung = ''
+
+         
                     let dataUser2 = {
-                      hoVaTen: result.hoVaTen ? result.hoVaTen : '',
-                      maSoCanBo: result.maSoCanBo ? result.maSoCanBo : '',
-                      viTriChucDanh: chucDanh,
-                      vaiTroSuDung: vaiTroSuDung
+                      hoVaTen:  dataUser.HoVaTen,
+                      maSoCanBo:  '',
+                      viTriChucDanh: '',
+                      vaiTroSuDung: dataUser.VaiTroSuDung
                     }
-                    if (result.viTriChucDanh && result.viTriChucDanh.length) {
-                      vaiTroSuDung = []
-                      chucDanh = Array.from(result.viTriChucDanh, function (item) {
-                        return item.tenGoi
-                      })
-                      dataUser.viTriChucDanh = chucDanh
-                      result.viTriChucDanh.forEach(element => {
-                        if (element.vaiTroSuDung && element.vaiTroSuDung.length) {
-                          let vaiTroItem = Array.from(element.vaiTroSuDung, function (item) {
-                            return item.maMuc
-                          })
-                          vaiTroSuDung = vaiTroSuDung.concat(vaiTroItem)
-                        }
-                      })
-                      dataUser.vaiTroSuDung = vaiTroSuDung
-                      let isAdmin = vaiTroSuDung.find(function (item) {
-                        return item == 'QUANTRIHETHONG'
-                      })
-                      if (isAdmin) {
-                        vm.$cookies.set('admin', true, result.expires_in)
-                      } else {
-                        vm.$cookies.set('admin', '', result.expires_in)
-                      }
-                      vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
-                      vm.$cookies.set('Roles', vaiTroSuDung, result.expires_in)
-                    } else {
-                      vm.$cookies.set('admin', '', result.expires_in)
-                      vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
-                      vm.$cookies.set('Roles', vaiTroSuDung, result.expires_in)
-                    }
+                   
+                    vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
                     setTimeout(function () {
                       vm.goToPage()
                     }, 200)
-                  }).catch (function () {
-                    vm.loading = false
-                    toastr.error('TÀI KHOẢN CHƯA ĐƯỢC CẤP QUYỀN CÁN BỘ')
-                    setTimeout(function () {
-                      vm.submitLogout()
-                    }, 500)
-                  })
+
+
+
+                  // vm.$store.dispatch('getThongTinUserDangNhap', filter).then(function (result) {
+                  //   let chucDanh = ''
+                  //   let vaiTroSuDung = ''
+                  //   let dataUser2 = {
+                  //     hoVaTen: result.hoVaTen ? result.hoVaTen : '',
+                  //     maSoCanBo: result.maSoCanBo ? result.maSoCanBo : '',
+                  //     viTriChucDanh: chucDanh,
+                  //     vaiTroSuDung: vaiTroSuDung
+                  //   }
+                  //   if (result.viTriChucDanh && result.viTriChucDanh.length) {
+                  //     vaiTroSuDung = []
+                  //     chucDanh = Array.from(result.viTriChucDanh, function (item) {
+                  //       return item.tenGoi
+                  //     })
+                  //     dataUser.viTriChucDanh = chucDanh
+                  //     result.viTriChucDanh.forEach(element => {
+                  //       if (element.vaiTroSuDung && element.vaiTroSuDung.length) {
+                  //         let vaiTroItem = Array.from(element.vaiTroSuDung, function (item) {
+                  //           return item.maMuc
+                  //         })
+                  //         vaiTroSuDung = vaiTroSuDung.concat(vaiTroItem)
+                  //       }
+                  //     })
+                  //     dataUser.vaiTroSuDung = vaiTroSuDung
+                  //     let isAdmin = vaiTroSuDung.find(function (item) {
+                  //       return item == 'QUANTRIHETHONG'
+                  //     })
+                  //     if (isAdmin) {
+                  //       vm.$cookies.set('admin', true, result.expires_in)
+                  //     } else {
+                  //       vm.$cookies.set('admin', '', result.expires_in)
+                  //     }
+                  //     vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
+                  //     vm.$cookies.set('Roles', vaiTroSuDung, result.expires_in)
+                  //   } else {
+                  //     vm.$cookies.set('admin', '', result.expires_in)
+                  //     vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
+                  //     vm.$cookies.set('Roles', vaiTroSuDung, result.expires_in)
+                  //   }
+                  //   setTimeout(function () {
+                  //     vm.goToPage()
+                  //   }, 200)
+                  // }).catch (function () {
+                  //   vm.loading = false
+                  //   toastr.error('TÀI KHOẢN CHƯA ĐƯỢC CẤP QUYỀN CÁN BỘ')
+                  //   setTimeout(function () {
+                  //     vm.submitLogout()
+                  //   }, 500)
+                  // })
                 }                
               } else {
                 vm.loading = false
@@ -305,12 +323,13 @@
       },
       goToPage () {
         let vm = this
-        if (vm.isAdmin || vm.checkRole('THEMMOIBAOCAO')) {
-          // vm.$router.push({ path: '/' })
-          vm.$router.push({ path: '/quan-li-can-bo' })
-        } else if (vm.checkRole('XEMBAOCAODONVI') || vm.checkRole('XEMTATCABAOCAO')) {
-          vm.$router.push({ path: '/bao-cao/cho-xu-ly' })
-        }
+        vm.$router.push({ path: '/home' })
+        // if (vm.isAdmin || vm.checkRole('THEMMOIBAOCAO')) {
+        //   // vm.$router.push({ path: '/' })
+        //   vm.$router.push({ path: '/quan-li-can-bo' })
+        // } else if (vm.checkRole('XEMBAOCAODONVI') || vm.checkRole('XEMTATCABAOCAO')) {
+        //   vm.$router.push({ path: '/bao-cao/cho-xu-ly' })
+        // }
       }
     }
   }

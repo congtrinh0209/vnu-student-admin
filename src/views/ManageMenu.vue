@@ -55,10 +55,10 @@
             <td>{{ index + 1 }}</td>
           </template>
           <template v-slot:item.LoaiMenu="{ item, index }">
-            <td>{{ item === "1" ? "mobile" : "Web" }}</td>
+            <td>{{ item.LoaiMenu === "1" ? "Mobile" : "Web" }}</td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -75,7 +75,7 @@
               <span>Sửa</span>
             </v-tooltip>
 
-            <v-tooltip top v-if="isAdmin">
+            <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="red"
@@ -177,7 +177,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <div v-if="dialogMenu">
       <v-dialog v-model="dialogMenu" persistent max-width="860px">
         <v-card>
@@ -238,12 +237,14 @@ import Pagination from "./Pagination.vue";
 import toastr from "toastr";
 import FormMenu from "./FormMenu.vue";
 import FormPhanQuyenMenu from "@/views/FormPhanQuyenMenu";
+import {useAccountAuthorization} from "../mixin"
 export default {
   components: {
     Pagination,
     FormMenu,
     FormPhanQuyenMenu,
   },
+    mixins: [useAccountAuthorization],
 
   data() {
     return {
@@ -512,11 +513,18 @@ export default {
               vm.total = vm.listMenu.length;
               console.log("res post: ", response);
             })
-            .catch(function () {
+            .catch(function (err) {
               vm.loadingData = false;
-              toastr.error(
+              console.log("err: ", err)
+               if (
+                err.data.messageCode === "menu.maMenu_conflict"
+              ) {
+                toastr.error("Trùng mã menu");
+              } else {
+                toastr.error(
                   "Vui lòng kiểm tra lại dữ liệu nhập vào các trường"
                 );
+              }
             });
         } else {
           const payload = {

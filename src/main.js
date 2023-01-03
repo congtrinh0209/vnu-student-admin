@@ -50,7 +50,8 @@ axios.interceptors.response.use((response) => {
         toastr.remove()
         toastr.error('Thao tác thất bại. Vui lòng thử lại.')
       }).catch(function () {
-        router.push({ path: '/login' })
+         router.push({ path: '/login' })
+        // toastr.error('Tài khoản không có quyền để thao tác tiếp tục.')
       })
     } else {
       router.push({ path: '/login' })

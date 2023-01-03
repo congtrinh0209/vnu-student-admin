@@ -33,8 +33,7 @@
 
     <v-list dense>
 
-
-     <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyCanBo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-can-bo')">
+     <v-list-item :class="menuName === 'QuanLyCanBo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-can-bo')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -50,7 +49,7 @@
 
 
 
-       <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyNhomQuyen' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-nhom-quyen')">
+       <v-list-item :class="menuName === 'QuanLyNhomQuyen' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-nhom-quyen')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -65,7 +64,7 @@
       </v-list-item>
 
 
-          <v-list-item v-if="isAdmin" :class="menuName === 'QuanLySinhVien' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-hoc-sinh')">
+          <v-list-item :class="menuName === 'QuanLySinhVien' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-hoc-sinh')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -79,7 +78,7 @@
         </v-list-item-content>
       </v-list-item>
 
-             <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyMenu' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-menu')">
+             <v-list-item :class="menuName === 'QuanLyMenu' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-menu')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -93,7 +92,7 @@
         </v-list-item-content>
       </v-list-item>
 
-       <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyChuyenMucTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-chuyen-muc-tin-tuc')">
+       <v-list-item :class="menuName === 'QuanLyChuyenMucTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-chuyen-muc-tin-tuc')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -107,7 +106,7 @@
         </v-list-item-content>
       </v-list-item>
 
-             <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-bai-viet-tin-tuc')">
+             <v-list-item :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-bai-viet-tin-tuc')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -121,8 +120,7 @@
         </v-list-item-content>
       </v-list-item>
 
-
-        <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyGopY' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-gop-y')">
+        <v-list-item :class="menuName === 'QuanLyGopY' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-gop-y')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -193,6 +191,7 @@
       </v-list-item> -->
       <!--  -->
     </v-list>
+
     <template v-slot:append>
       <div class="pa-2">
         <v-tooltip top color="#0073C8">
@@ -209,6 +208,8 @@
 </template>
 
 <script>
+import {titlePage} from "../constant/titlePage"
+
   export default {
     name: 'Drawer',
 
@@ -223,7 +224,7 @@
       publicPath: process.env.VUE_APP_PULIC_PATH,
       mini: true,
       menuName: '',
-      userInfo: ''
+      userInfo: '',
     }),
     created () {
       let vm = this
@@ -276,6 +277,15 @@
       if (currentQuery.params.hasOwnProperty('type') && currentQuery.params.type == 'tra-cuu') {
         vm.menuName = 'TraCuu'
       }
+
+      for (const property in titlePage) {
+if(vm.menuName === property) {
+vm.$store.dispatch("getTitlePage", titlePage[property])
+break;
+}
+}
+      //  vm.$store
+      //   .dispatch("getTitlePage", titlePage.feedback)
       vm.$store.commit('SET_DRAWER', !vm.isMobile)
       vm.userInfo = vm.$cookies.get('UserInfo', '')
       console.log("infor: ", vm.userInfo)
@@ -309,6 +319,27 @@
         if (newRoute.name == 'ThongKe') {
           vm.menuName = 'ThongKe'
         }
+        if (newRoute.name === 'ManageCadres') {
+          vm.menuName = 'QuanLyCanBo'
+        }
+         if (newRoute.name === 'MangeRightsGroup') {
+        vm.menuName = 'QuanLyNhomQuyen'
+      }
+        if (newRoute.name === 'ManageStudents') {
+        vm.menuName = 'QuanLySinhVien' 
+      }
+         if (newRoute.name === 'ManageMenu') {
+        vm.menuName = 'QuanLyMenu'
+      }
+        if (newRoute.name === 'ManageCategoryNews') {
+        vm.menuName = 'QuanLyChuyenMucTinTuc'
+      }
+       if (newRoute.name === 'ManageNews') {
+        vm.menuName = 'QuanLyTinTuc'
+      }
+        if (newRoute.name === 'ManageFeedback') {
+        vm.menuName = 'QuanLyGopY'
+      }
         if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'cho-xu-ly') {
           vm.menuName = 'BaoCaoChoXuLy'
         }
@@ -324,6 +355,14 @@
         if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'tra-cuu') {
           vm.menuName = 'TraCuu'
         }
+
+for (const property in titlePage) {
+if(vm.menuName === property) {
+vm.$store.dispatch("getTitlePage", titlePage[property])
+break;
+}
+}
+
       },
       isMobile (val) {
         this.mini = val ? false : true
@@ -343,7 +382,7 @@
         vm.$cookies.set('RefreshToken', '')
         vm.$cookies.set('admin', '')
         window.location.href = window.location.origin + window.location.pathname + "#/login"
-      }
+      },
     },
   }
 </script>

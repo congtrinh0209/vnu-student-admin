@@ -74,27 +74,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Nội dung:</div>
-         <VueEditor v-model="formData.NoiDungBaiViet"  useCustomImageHandler @image-added="imageHandler"/>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Cơ quan, đơn vị:</div>
-        <v-select
-          v-model="formData.CoQuanDonVi"
-          :items="optionAgencies"
-          label="Chọn"
-          dense
-          solo
-        ></v-select>
-      </v-col>
-    </v-row>
-
-    <v-row>
+      <v-row>
       <v-col cols="12" sm="12">
         <div class="titleText mb-2">Chuyên mục:</div>
         <v-select
@@ -108,6 +88,26 @@
         ></v-select>
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="12">
+        <div class="titleText mb-2">Nội dung:</div>
+         <VueEditor v-model="formData.NoiDungBaiViet"  useCustomImageHandler @image-added="imageHandler" :height="300"/>
+      </v-col>
+    </v-row>
+<!-- 
+    <v-row>
+      <v-col cols="12" sm="12">
+        <div class="titleText mb-2">Cơ quan, đơn vị:</div>
+        <v-select
+          v-model="formData.CoQuanDonVi"
+          :items="optionAgencies"
+          label="Chọn"
+          dense
+          solo
+        ></v-select>
+      </v-col>
+    </v-row> -->
 
     <v-dialog v-model="showAvatar" persistent fullscreen>
       <v-card>
@@ -148,13 +148,13 @@ export default {
   data() {
     return {
       formData: {
-        DuongDanRutGon: this.dataEdit.DuongDanRutGon || window.location.origin + '/#/tin-tuc/',
+        DuongDanRutGon: this.dataEdit.DuongDanRutGon || "",
         TenBaiViet: this.dataEdit.TenBaiViet || "",
         AnhDaiDien: this.dataEdit.AnhDaiDien || null,
         NgayXuatBan: this.dataEdit.NgayXuatBan
           ? moment(this.dataEdit.NgayXuatBan).format("DD/MM/YYYY")
           : "",
-        CoQuanDonVi: this.dataEdit.CoQuanDonVi?.MaHanhChinh || "",
+        // CoQuanDonVi: this.dataEdit.CoQuanDonVi?.MaHanhChinh || "",
         NoiDungBaiViet: this.dataEdit.NoiDungBaiViet || "",
         MoTa: this.dataEdit.MoTa || "",
         TinhTrang: this.dataEdit.TinhTrang || "1",

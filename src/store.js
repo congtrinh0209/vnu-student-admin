@@ -31,7 +31,7 @@ export default new Vuex.Store({
   listAgencies: [],
   listPosition : [], 
   listWork: [],
-  listOffice: []
+  titlePage: "",
   // End Hien's code
   },
   getters: {
@@ -65,6 +65,10 @@ export default new Vuex.Store({
   mutations: {
     // Start Hien's code
     SET_LIST_STATE_IN_STORE: (state, {payload, nameState}) => (state[nameState] = [...payload.content]),
+    SET_TITLE_PAGE_IN_STORE: (state, payload) => {
+      return state.titlePage = payload
+      // console.log("mutation: ",state, payload )
+    },
     // End Hien's code
     SET_INDEXTAB(state, indexTab) {
       state.indexTab = indexTab
@@ -267,7 +271,26 @@ export default new Vuex.Store({
       })
     },
     uploadFile ({commit, state}, {payload, type}) {
-      console.log("res: ", payload)
+      return new Promise((resolve, reject) => {
+        let config = {
+          method: 'post',
+         url : baseUrl + type,
+          headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json'
+          },
+          data: payload,
+          params: {}
+        }
+        axios(config).then(function (response) {
+          console.log("response post: ", response)
+          resolve(response)
+        }).catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    notificationUploadFileImage ({commit, state}, {payload, type}) {
       return new Promise((resolve, reject) => {
         let config = {
           method: 'post',
@@ -329,24 +352,29 @@ export default new Vuex.Store({
         })
       })
     },
-    convertUrlNews ({commit, state}, {payload, type, id}){
+    getDetailsItemDataPublic ({commit, state}, filter) {
       return new Promise((resolve, reject) => {
         let config = {
-          method: 'post',
-         url : baseUrl + type + `/${id}`,
+          method: 'get',
+          // url: 'https://my-json-server.typicode.com/anhpt00973/vnu-student-admin/' + filter.collectionName + '/' ,
+         url : '/base/auth/vnu/tintuc/' + filter.id,
           headers: { 
             'Accept': 'application/json', 
             'Content-Type': 'application/json'
           },
-          data: payload,
-          params: {}
+          data: {},
+          params: filter.data
         }
         axios(config).then(function (response) {
-          resolve(response)
+          let serializable = response.data
+          resolve(serializable)
         }).catch(function (error) {
           reject(error)
         })
       })
+    },
+    getTitlePage ({commit, state}, name) {
+     commit('SET_TITLE_PAGE_IN_STORE', name)
     },
     // collectionDetail ({commit, state}, filter) {
     //   return new Promise((resolve, reject) => {

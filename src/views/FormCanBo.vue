@@ -132,8 +132,9 @@
 
     <v-row>
       <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Cơ quan, đơn vị:</div>
+        <div class="titleText mb-2">Cơ quan, đơn vị: <span style="color: red">*</span></div>
         <v-select
+        :rules="[rules.required]"
           v-model="formData.CoQuanDonVi"
           :items="optionAgencies"
           label="Chọn"
@@ -302,7 +303,6 @@ export default {
     },
     validateForm() {
       let vm = this;
-      console.log("form: ", vm.$refs.formCanBoRef);
       return vm.$refs.formCanBoRef.validate();
     },
     handleChangeProvince(item) {

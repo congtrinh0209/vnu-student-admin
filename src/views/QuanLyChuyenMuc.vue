@@ -44,7 +44,7 @@
                     <span>Chi Tiết</span>
                   </v-tooltip>
         
-                  <v-tooltip top v-if="isAdmin">
+                  <v-tooltip top>
                       <template v-slot:activator="{ on, attrs }">
                           <v-btn color="#2161b1" text icon class=" mr-2" v-bind="attrs" v-on="on" @click.stop="showUpdateForm(item)">
                           <v-icon size="18">mdi-pencil</v-icon>
@@ -53,7 +53,7 @@
                       <span>Sửa</span>
                   </v-tooltip>
         
-                  <v-tooltip top v-if="isAdmin">
+                  <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn color="red" text icon class="ml-2" v-bind="attrs" v-on="on" @click.stop="deleteItem(item)">
                         <v-icon size="18">mdi-delete</v-icon>

@@ -3,12 +3,12 @@
     <v-row>
       <v-col cols="12" sm="12">
         <div>
-        <div class="header-news">
-          <h1>{{data.TenBaiViet}}</h1>
-        </div>
-        <div class="content-news">
-          <div v-html="data.NoiDungBaiViet"></div>
-        </div>
+          <div class="header-news">
+            {{ data.TenBaiViet }}
+          </div>
+          <div class="content-news">
+            <div v-html="data.NoiDungBaiViet"></div>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -19,43 +19,45 @@
 export default {
   data() {
     return {
-        data: {}
+      data: {},
     };
   },
 
-   created() {
+  created() {
     const vm = this;
-    vm.getDetailsNews()
-    console.log(vm.$route.params.id)
+    vm.getDetailsNews();
+    console.log(vm.$route.params.id);
   },
 
   mounted() {},
 
   methods: {
     getDetailsNews() {
-         let vm = this;
+      let vm = this;
       const filter = {
-        collectionName: `baiviettintuc/${vm.$route.params.id}`,
-        data:  {}
+        id: vm.$route.params.id,
       };
       vm.$store
-        .dispatch("getDetailsItemData", filter)
+        .dispatch("getDetailsItemDataPublic", filter)
         .then(function (response) {
-         console.log("res: ", response)
-         vm.data = {...response.resp}
+          console.log("res: ", response);
+          vm.data = { ...response.resp };
         })
         .catch(function () {});
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.header-news h1{
-    text-align: center;
-        font-weight: bold;
-        color: #007f48;
-        padding-bottom: 10px;
-        text-align: left;
+<style>
+.header-news {
+  font-size: 28px;
+  font-weight: bold;
+  color: #007f48;
+  padding-bottom: 10px;
+  line-height: 1.25;
+}
+.content-news img {
+  max-width: 100% !important;
 }
 </style>

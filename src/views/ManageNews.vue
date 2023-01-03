@@ -44,11 +44,11 @@
           </template>
           <template v-slot:item.TinhTrang="{ item, index }">
             <td>
-              {{ item.TinhTrang === "2" ? "Hoạt động" : "Đang soạn thảo" }}
+              {{ item.TinhTrang === "2" ? "Xuất bản" : "Ngừng xuất bản" }}
             </td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top>
+            <v-tooltip top  v-if="item.TinhTrang !== '2'">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -64,7 +64,7 @@
               <span>Sửa</span>
             </v-tooltip>
 
-            <v-tooltip top>
+            <v-tooltip top v-if="item.TinhTrang !== '2'">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="red"
@@ -276,6 +276,7 @@ export default {
 
   data() {
     return {
+      switch1: true,
       textSearch: "",
       headers: [
         {
@@ -466,13 +467,14 @@ export default {
                   ...res,
                   {
                     ...cur,
-                    ...item,
+                    ...response.data.resp,
                   },
                 ];
               } else {
                 return [...res, cur];
               }
             }, []);
+            console.log(vm.listNews)
           })
           .catch(function () {
             vm.loadingData = false;
@@ -482,52 +484,55 @@ export default {
     },
     handlePublicDate() {
       const vm = this;
-      const formData = vm.$refs.formPublicDateRef.formData;
-      const dataPayload = { ...vm.dataItem, ...formData };
-      dataPayload.NgayXuatBan = !dataPayload.NgayXuatBan
-        ? ""
-        : moment.utc(dataPayload.NgayXuatBan, "DD/MM/YYYY").format();
-      dataPayload.NgayHuyXuatBan = !dataPayload.NgayHuyXuatBan
-        ? ""
-        : moment.utc(dataPayload.NgayHuyXuatBan, "DD/MM/YYYY").format();
-      console.log("dataPayload: ", dataPayload, formData);
-      const payload = {
-        payload: dataPayload,
-        type: "baiviettintuc",
-        id: vm.dataItem.PrimKey,
-      };
-
-      vm.$store
-        .dispatch("editItemData", payload)
-        .then(function (response) {
-          toastr.success("Cập nhật thành công");
-          vm.dialogPublicDate = false;
-          vm.listNews = vm.listNews.reduce(function (res, cur) {
-            if (vm.dataItem.PrimKey === cur.PrimKey) {
-              return [
-                ...res,
-                {
-                  ...cur,
-                  ...dataPayload,
-                },
-              ];
-            } else {
-              return [...res, cur];
-            }
-          }, []);
-          vm.dataEdit = {};
-          console.log(
-            "res edit: ",
-            response,
-            dataPayload,
-            vm.dataEdit.PrimKey,
-            vm.listNews
-          );
-        })
-        .catch(function () {
-          vm.loadingData = false;
-          toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
-        });
+       if (vm.$refs.formPublicDateRef.validateForm()) {
+         const formData = vm.$refs.formPublicDateRef.formData;
+         const dataPayload = { ...vm.dataItem, ...formData };
+         dataPayload.NgayXuatBan = !dataPayload.NgayXuatBan
+           ? ""
+           : moment(dataPayload.NgayXuatBan, "DD/MM/YYYY").valueOf();
+         dataPayload.NgayHuyXuatBan = !dataPayload.NgayHuyXuatBan
+           ? ""
+           : moment(dataPayload.NgayHuyXuatBan, "DD/MM/YYYY").valueOf();
+         console.log("dataPayload: ", dataPayload, formData);
+         const payload = {
+           payload: dataPayload,
+           type: "baiviettintuc",
+           id: vm.dataItem.PrimKey,
+         };
+   
+         vm.$store
+           .dispatch("editItemData", payload)
+           .then(function (response) {
+             toastr.success("Cập nhật thành công");
+             vm.dialogPublicDate = false;
+             vm.listNews = vm.listNews.reduce(function (res, cur) {
+               if (vm.dataItem.PrimKey === cur.PrimKey) {
+                 return [
+                   ...res,
+                   {
+                     ...cur,
+                     ...dataPayload,
+                   },
+                 ];
+               } else {
+                 return [...res, cur];
+               }
+             }, []);
+             vm.dataEdit = {};
+             console.log(
+               "res edit: ",
+               response,
+               dataPayload,
+               vm.dataEdit.PrimKey,
+               vm.listNews,
+               formData
+             );
+           })
+           .catch(function () {
+             vm.loadingData = false;
+             toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
+           });
+       }
     },
     handleShowNews(item) {
       window.location.href = `${item.DuongDanRutGon}`;
@@ -536,6 +541,8 @@ export default {
       const vm = this;
       if (vm.$refs.formBaiVietTinTucRef.validateForm()) {
         const formData = vm.$refs.formBaiVietTinTucRef.formData;
+        const regex =
+          /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
         const dataPayload = {
           ...formData,
           NgayXuatBan: formData.NgayXuatBan
@@ -571,31 +578,34 @@ export default {
             .dispatch("createItemData", payload)
             .then(function (response) {
               toastr.success("Thêm mới thành công");
+              if (!regex.test(formData.DuongDanRutGon)) {
+                const payload = {
+                  payload: {
+                    DuongDanRutGon: `/#/tin-tuc/${response.data.resp.PrimKey}`,
+                  },
+                  type: "baiviettintuc",
+                  id: response.data.resp.PrimKey,
+                };
 
-              const payload = {
-                payload: {
-                  DuongDanRutGon: `/#/tin-tuc/${response.data.resp.PrimKey}`,
-                },
-                type: "baiviettintuc",
-                id: response.data.resp.PrimKey,
-              };
-
-              vm.$store
-                .dispatch("editItemData", payload)
-                .then(function (response) {
-                  vm.getListNews();
-                  console.log(
-                    "res edit:... ",
-                    response,
-                    dataPayload,
-                    vm.dataEdit.PrimKey,
-                    vm.listNews
-                  );
-                })
-                .catch(function () {
-                  vm.loadingData = false;
-                  toastr.error("Lỗi cập nhật id");
-                });
+                vm.$store
+                  .dispatch("editItemData", payload)
+                  .then(function (response) {
+                    vm.getListNews();
+                    console.log(
+                      "res edit:... ",
+                      response,
+                      dataPayload,
+                      vm.dataEdit.PrimKey,
+                      vm.listNews
+                    );
+                  })
+                  .catch(function () {
+                    vm.loadingData = false;
+                    toastr.error("Lỗi cập nhật id");
+                  });
+              } else {
+                vm.getListNews();
+              }
 
               vm.dialogForm = false;
               console.log("res post: ", response);
@@ -605,6 +615,9 @@ export default {
               toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
             });
         } else {
+          if (!regex.test(dataPayload.DuongDanRutGon))
+            dataPayload.DuongDanRutGon = `/#/tin-tuc/${vm.dataEdit.PrimKey}`;
+
           const payload = {
             payload: dataPayload,
             type: "baiviettintuc",
@@ -629,6 +642,7 @@ export default {
                   return [...res, cur];
                 }
               }, []);
+
               vm.dataEdit = {};
               console.log(
                 "res edit: ",
