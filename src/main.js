@@ -54,7 +54,7 @@ axios.interceptors.response.use((response) => {
         // toastr.error('Tài khoản không có quyền để thao tác tiếp tục.')
       })
     } else {
-      router.push({ path: '/login' })
+      router.push({ path: '/login' }) 
     }
   }
   if (error.response && error.response.status === 200) {
