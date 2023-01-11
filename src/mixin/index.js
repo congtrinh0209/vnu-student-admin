@@ -1,19 +1,38 @@
+import {
+    textAuthor
+} from "../constant/textAuthorView"
+
+
 export const useAccountAuthorization = {
     name: 'useAccountAuthorization',
     data() {
-        return {
-            mixinText: "MIXIN"
-        };
+        return {};
     },
     mounted() {},
     methods: {
-        handleAuthorization(text) {
-        console.log("function mixin: ", text)
-        }
-    },
-    computed: {
-        getAuthorizationAccount() {
-            console.log("mixin auth")
+        handleCheckActionAuthor(key) {
+            const vm = this
+            const listRoleUse = vm.$cookies.get('UserInfo', '').vaiTroSuDung.split(",")
+            for (const item of listRoleUse) {
+                if (key.includes(item)) return true
+            }
+            return false
+        },
+        handleCheckAuthor(keyAll, key) {
+            const vm = this
+            let result = ""
+            const listRoleUse = vm.$cookies.get('UserInfo', '').vaiTroSuDung.split(",")
+            for (const item of listRoleUse) {
+                if (keyAll.includes(item)) {
+                    result = textAuthor.ALL
+                    break
+                }
+                if (key.includes(item)) {
+                    result = textAuthor.ALONE
+                }
+
+            }
+            return result
         }
     },
 }

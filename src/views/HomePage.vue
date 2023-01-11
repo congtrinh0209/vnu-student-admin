@@ -33,13 +33,58 @@ export default {
 
   }),
   created () {
+    const vm = this
     // let router = this.$router.history.current
     // if (router.path === '/') {
     //   this.$router.push({ path: '/login' })
     // }
+        vm.getList("listAgencies", "coquandonvi");
+    vm.getList("listPosition", "vitrichucdanh", {
+      keyword: "",
+      page: 0,
+      size: 100,
+      orderFields: "tenGoi",
+      orderTypes: "asc",
+      coQuanDonVi_maDinhDanh: "s",
+    });
+    vm.getList("listWork", "tinhtrangcongtac", {
+      keyword: "",
+      page: 0,
+      size: 100,
+      orderFields: "maMuc",
+      orderTypes: "asc",
+      tinhTrang: 1,
+      thamChieu_maMuc: "",
+    });
+    vm.getList("listProvince", "tinhthanh", { tinhTrang: "1" });
+    vm.getList("listGender", "gioitinh", { tinhTrang: "1" });
   },
   methods: {
-   
+     getList(state, collectionName, dataParam) {
+      let vm = this;
+      const dataPayload = {
+        page: 0,
+        size: 20,
+        keyword: "",
+        orderFields: "",
+        orderTypes: "",
+        tinhTrang: "",
+        thamChieu_maMuc: "",
+      };
+      let filter = {
+        collectionName,
+        state,
+        data: !dataParam ? dataPayload : { ...dataPayload, ...dataParam },
+      };
+      vm.$store
+        .dispatch("collectionFilterInstore", filter)
+        .then(function (response) {
+          console.log("res: ", response);
+        })
+        .catch(function () {
+          console.log("Error");
+        });
+    },
   },
   computed: mapState(["titlePage"]),
   

@@ -33,22 +33,38 @@
 
     <v-list dense>
 
-     <v-list-item :class="menuName === 'QuanLyCanBo' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-can-bo')">
+
+     <v-list-item :class="menuName ===menu.MaMenu ? 'item-active mb-3 list-menu' : 'mb-3 list-menu'" v-for="(menu, index) in formatListMenu" :key="index" @click.stop="goToPage(menu.DuongDan)">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-account-plus </v-icon>
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">{{menu.iconRender}}</v-icon>
             </template>
-            <span>Quản Lý Cán Bộ</span>
+            <span>{{menu.TenMenu}}</span>
           </v-tooltip>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title class="text-drawer text-list">Quản Lý Cán Bộ</v-list-item-title>
+          <v-list-item-title class="text-drawer text-list">{{menu.TenMenu}}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
+ <!-- <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyDiaDiemBDS' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-dia-diem-ban-do-so')">
+        <v-list-item-icon >
+          <v-tooltip top color="#0073C8">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on" class="icon-draw" style="font-size: 24px !important">mdi-map-marker-path</v-icon>
+            </template>
+            <span>Quản Lý Bản Đồ Số</span>
+          </v-tooltip>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="text-drawer text-list">Quản Lý Bản Đồ Số</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item> -->
+      
 
 
+<!-- 
        <v-list-item :class="menuName === 'QuanLyNhomQuyen' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-nhom-quyen')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
@@ -64,7 +80,7 @@
       </v-list-item>
 
 
-          <v-list-item :class="menuName === 'QuanLySinhVien' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-hoc-sinh')">
+          <v-list-item :class="menuName === 'QuanLySinhVien' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-sinh-vien')">
         <v-list-item-icon >
           <v-tooltip top color="#0073C8">
             <template v-slot:activator="{ on, attrs }">
@@ -89,7 +105,7 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="text-drawer text-list">Quản Lý menu</v-list-item-title>
-        </v-list-item-content>
+        </v-list-item-content>  
       </v-list-item>
 
        <v-list-item :class="menuName === 'QuanLyChuyenMucTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-li-chuyen-muc-tin-tuc')">
@@ -132,7 +148,7 @@
         <v-list-item-content>
           <v-list-item-title class="text-drawer text-list">Quản Lý Góp Ý</v-list-item-title>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
 
       <!-- <v-list-item v-if="isAdmin" :class="menuName === 'QuanLyTinTuc' ? 'item-active' : ''" class="mb-3 list-menu" @click.stop="goToPage('/quan-ly-tin-tuc')">
         <v-list-item-icon >
@@ -209,6 +225,7 @@
 
 <script>
 import {titlePage} from "../constant/titlePage"
+import {iconMenu} from "../constant/listIconMenu"
 
   export default {
     name: 'Drawer',
@@ -225,12 +242,23 @@ import {titlePage} from "../constant/titlePage"
       mini: true,
       menuName: '',
       userInfo: '',
+      listMenu: [],
     }),
     created () {
       let vm = this
       let currentQuery = vm.$router.history.current
       console.log('currentQuery', currentQuery)
       vm.menuName = currentQuery.name
+
+// test xong rồi xóa
+  //  if (currentQuery.name == 'QuanLyDiaDiemBDS') {
+  //       vm.menuName = 'QuanLyBanDo'
+  //     }
+// test xong rồi xóa
+
+
+
+
       if (currentQuery.name == 'ThongTinDonVi') {
         vm.menuName = 'CoQuanDonVi'
       }
@@ -284,11 +312,10 @@ vm.$store.dispatch("getTitlePage", titlePage[property])
 break;
 }
 }
-      //  vm.$store
-      //   .dispatch("getTitlePage", titlePage.feedback)
+      vm.getMenus()
       vm.$store.commit('SET_DRAWER', !vm.isMobile)
       vm.userInfo = vm.$cookies.get('UserInfo', '')
-      console.log("infor: ", vm.userInfo)
+      console.log("infor: ", vm.userInfo, vm.menuName)
     },
     mounted () {
       let vm = this
@@ -303,6 +330,40 @@ break;
           this.$store.commit('SET_DRAWER', val)
         },
       },
+        formatListMenu() {
+          const vm = this
+           let dataRender = []
+          if(vm.userInfo.viTriChucDanh !== "Quản trị hệ thống"){
+          
+         
+  const data = vm.listMenu.reduce((res, cur) => {
+             if( vm.userInfo.menu.includes(cur.PrimKey)) return [...res, cur]
+             else return res
+           }, [])
+
+           
+             data.forEach(item => {
+               iconMenu.forEach(el=>{
+             if(el.path === item.DuongDan) dataRender.push({...item, iconRender: el.name})
+           
+               })
+             });
+
+          }else{
+            let data = []
+            console.log("liaat ", vm.listMenu)
+              vm.listMenu.forEach(item => {
+               iconMenu.forEach(el=>{
+             if(el.path === item.DuongDan) data.push({...item, iconRender: el.name})
+           
+               })
+             });
+            dataRender = data
+          }
+
+
+          return dataRender
+        }
     },
     watch: {
       '$route': function (newRoute, oldRoute) {
@@ -310,51 +371,51 @@ break;
         let currentQuery = newRoute.query
         // console.log('currentQuery-watch', newRoute)
         vm.menuName = newRoute.name
-        if (newRoute.name == 'ThongTinDonVi') {
-          vm.menuName = 'CoQuanDonVi'
-        }
-        if (newRoute.name == 'ThongTinCanBo') {
-          vm.menuName = 'CanBo'
-        }
-        if (newRoute.name == 'ThongKe') {
-          vm.menuName = 'ThongKe'
-        }
-        if (newRoute.name === 'ManageCadres') {
-          vm.menuName = 'QuanLyCanBo'
-        }
-         if (newRoute.name === 'MangeRightsGroup') {
-        vm.menuName = 'QuanLyNhomQuyen'
-      }
-        if (newRoute.name === 'ManageStudents') {
-        vm.menuName = 'QuanLySinhVien' 
-      }
-         if (newRoute.name === 'ManageMenu') {
-        vm.menuName = 'QuanLyMenu'
-      }
-        if (newRoute.name === 'ManageCategoryNews') {
-        vm.menuName = 'QuanLyChuyenMucTinTuc'
-      }
-       if (newRoute.name === 'ManageNews') {
-        vm.menuName = 'QuanLyTinTuc'
-      }
-        if (newRoute.name === 'ManageFeedback') {
-        vm.menuName = 'QuanLyGopY'
-      }
-        if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'cho-xu-ly') {
-          vm.menuName = 'BaoCaoChoXuLy'
-        }
-        if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'cho-duyet') {
-          vm.menuName = 'BaoCaoChoDuyet'
-        }
-        if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'xu-ly-lai') {
-          vm.menuName = 'BaoCaoXuLyLai'
-        }
-        // if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'bao-cao-moi') {
-        //   vm.menuName = 'BaoCaoMoi'
-        // }
-        if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'tra-cuu') {
-          vm.menuName = 'TraCuu'
-        }
+      //   if (newRoute.name == 'ThongTinDonVi') {
+      //     vm.menuName = 'CoQuanDonVi'
+      //   }
+      //   if (newRoute.name == 'ThongTinCanBo') {
+      //     vm.menuName = 'CanBo'
+      //   }
+      //   if (newRoute.name == 'ThongKe') {
+      //     vm.menuName = 'ThongKe'
+      //   }
+      //   if (newRoute.name === 'ManageCadres') {
+      //     vm.menuName = 'QuanLyCanBo'
+      //   }
+      //    if (newRoute.name === 'MangeRightsGroup') {
+      //   vm.menuName = 'QuanLyNhomQuyen'
+      // }
+      //   if (newRoute.name === 'ManageStudents') {
+      //   vm.menuName = 'QuanLySinhVien' 
+      // }
+      //    if (newRoute.name === 'ManageMenu') {
+      //   vm.menuName = 'QuanLyMenu'
+      // }
+      //   if (newRoute.name === 'ManageCategoryNews') {
+      //   vm.menuName = 'QuanLyChuyenMucTinTuc'
+      // }
+      //  if (newRoute.name === 'ManageNews') {
+      //   vm.menuName = 'QuanLyTinTuc'
+      // }
+      //   if (newRoute.name === 'ManageFeedback') {
+      //   vm.menuName = 'QuanLyGopY'
+      // }
+      //   if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'cho-xu-ly') {
+      //     vm.menuName = 'BaoCaoChoXuLy'
+      //   }
+      //   if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'cho-duyet') {
+      //     vm.menuName = 'BaoCaoChoDuyet'
+      //   }
+      //   if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'xu-ly-lai') {
+      //     vm.menuName = 'BaoCaoXuLyLai'
+      //   }
+      //   // if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'bao-cao-moi') {
+      //   //   vm.menuName = 'BaoCaoMoi'
+      //   // }
+      //   if (newRoute.params.hasOwnProperty('type') && newRoute.params.type == 'tra-cuu') {
+      //     vm.menuName = 'TraCuu'
+      //   }
 
 for (const property in titlePage) {
 if(vm.menuName === property) {
@@ -362,6 +423,7 @@ vm.$store.dispatch("getTitlePage", titlePage[property])
 break;
 }
 }
+console.log(vm.menuName)
 
       },
       isMobile (val) {
@@ -370,6 +432,29 @@ break;
       }
     },
     methods: {
+     getMenus () {
+      const vm = this
+const dataPayload = {
+        page: 0,
+        size: 20,
+        keyword: "",
+        orderFields: "",
+        orderTypes: "",
+        tinhTrang: "",
+        thamChieu_maMuc: "",
+      };
+      const filter = {
+        collectionName: "menu",
+        data: dataPayload ,
+      };
+      vm.$store
+        .dispatch("collectionFilter", filter)
+        .then(function (response) {
+         console.log("respon: ", response)
+         vm.listMenu = response.content
+        })
+        .catch(function () {});
+      },
       goToPage (pathname) {
         let vm = this
         vm.$router.push({ path: pathname })

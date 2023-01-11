@@ -92,7 +92,7 @@
     </v-row>
 
     <v-row v-if="dataEdit.PrimKey">
-      <v-col cols="12" sm="12">
+      <v-col cols="12" sm="12" v-if="checkActionUpload">
         <div class="titleText mb-2">Tải ảnh lên:</div>
         <v-file-input
           v-model="filename"
@@ -288,8 +288,15 @@ import moment from "moment";
 import toastr from "toastr";
 import { baseUrl } from "../constant/baseURL";
 import axios from "axios";
+import { textAuthor } from "../constant/textAuthorView";
+import { actionAuthor } from "../constant/actionAuthor";
+import { useAccountAuthorization } from "../mixin";
+
 export default {
-  props: ["dataEdit"],
+  props: ["dataEdit", "unitId", "checkActionAddAndUpdate"],
+
+  mixins: [useAccountAuthorization],
+
   data() {
     return {
       formData: {
@@ -329,6 +336,7 @@ export default {
       checkFile: false,
       idFile: "",
       filename: null,
+      checkActionUpload: "",
       rules: {
         required: (value) => !!value || "Không được để trống.",
         email: (value) => {
@@ -368,9 +376,22 @@ export default {
   },
   created() {
     const vm = this;
-    console.log("cretate", this.dataEdit);
 
     if (vm.dataEdit && vm.dataEdit.MainImage?.FileUrl) vm.checkFile = true;
+
+    vm.checkActionUpload = vm.handleCheckAuthor(
+      actionAuthor.CAP_NHAT_ANH_CHO_SV_ALL,
+      actionAuthor.CAP_NHAT_ANH_CHO_SV_DV
+    );
+
+    if (
+      vm.checkActionUpload === textAuthor.ALONE &&
+      vm.unitId !== vm.dataEdit.CoQuanDonVi.MaHanhChinh
+    ) {
+      vm.checkActionUpload = "";
+    }
+
+    console.log("cretate", this.dataEdit, vm.unitId, vm.checkActionUpload);
   },
   computed: {
     ...mapState(["listAgencies", "listProvince", "listGender"]),
@@ -384,8 +405,13 @@ export default {
     },
     optionAgencies() {
       const vm = this;
+      let data = vm.listAgencies;
+      console.log("Data: ", data, vm.unitId);
 
-      const options = vm.listAgencies.map((item) => ({
+      if (vm.checkActionAddAndUpdate === textAuthor.ALONE && vm.unitId) {
+        data.filter((item) => item.maHanhChinh === vm.unitId);
+      }
+      const options = data.map((item) => ({
         text: item.tenGoi,
         value: {
           MaHanhChinh: item.maHanhChinh,

@@ -10,16 +10,15 @@
         <div class="titleText mb-2">
           Mã menu: <span style="color: red">*</span>
         </div>
-        <v-text-field
+ <v-select
           :rules="[rules.required]"
           v-model="formData.MaMenu"
           :disabled="dataEdit.MaMenu ? true : false"
-          solo
-          label="Nhập mã menu..."
+          :items="optionIdMenu"
+          label="Chọn"
           dense
-          hide-details="auto"
-          required
-        ></v-text-field>
+          solo
+        ></v-select>
       </v-col>
     </v-row>
 
@@ -242,6 +241,42 @@ export default {
 
       return option;
     },
+    optionIdMenu() {
+      const options = [{
+        text: 'Quản lý cán bộ',
+        value: 'ManageCadres'
+      },
+      {
+        text: 'Quản lý sinh viên',
+        value: 'ManageStudents'
+      },
+      {
+        text: 'Quản lý nhóm quyền',
+        value: 'MangeRightsGroup'
+      },
+      {
+        text: 'Quản lý bài viết tin tức',
+        value: 'ManageNews'
+      },
+      {
+        text: 'Quản lý menu',
+        value: 'ManageMenu'
+      },
+      {
+        text: 'Quản lý phản hồi góp ý',
+        value: 'ManageFeedback'
+      },
+        {
+        text: 'Quản lý bản đồ số',
+        value: 'ManageMap'
+      },
+      {
+        text: 'Quản lý chuyên mục tin tức',
+        value: 'ManageCategoryNews'
+      },
+      ] 
+      return options
+    }
   },
 };
 </script>

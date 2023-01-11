@@ -132,9 +132,11 @@
 
     <v-row>
       <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Cơ quan, đơn vị: <span style="color: red">*</span></div>
+        <div class="titleText mb-2">
+          Cơ quan, đơn vị: <span style="color: red">*</span>
+        </div>
         <v-select
-        :rules="[rules.required]"
+          :rules="[rules.required]"
           v-model="formData.CoQuanDonVi"
           :items="optionAgencies"
           label="Chọn"
@@ -154,7 +156,7 @@
           label="Chọn nhóm quyền"
           multiple
           solo
-          :disabled="dataEdit.MaSoCanBo ? true : false"
+          :disabled="checkActionAuthor ? false : true"
         ></v-select>
       </v-col>
 
@@ -175,8 +177,14 @@
 <script>
 import { mapState } from "vuex";
 import moment from "moment";
+import { textAuthor } from "../constant/textAuthorView";
 export default {
-  props: ["dataEdit", "getListFunctionProps"],
+  props: [
+    "dataEdit",
+    "getListFunctionProps",
+    "checkActionAuthor",
+    "unitId",
+  ],
   data() {
     return {
       formData: {
@@ -256,14 +264,19 @@ export default {
     },
     optionAgencies() {
       const vm = this;
-
-      const options = vm.listAgencies.map((item) => ({
+      console.log("computed: ", vm.listAgencies)
+      let data = vm.listAgencies;
+      if (vm.unitId) {
+        data = vm.listAgencies.filter((item) => item.maHanhChinh === vm.unitId);
+      }
+      const options = data.map((item) => ({
         text: item.tenGoi,
         value: {
-          MaHanhChinh: item.MaDinhDanh,
+          MaHanhChinh: item.maHanhChinh,
           TenGoi: item.tenGoi,
         },
       }));
+
       return options;
     },
     optionProvince() {

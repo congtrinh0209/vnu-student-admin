@@ -3,6 +3,7 @@
     <v-row no-gutters>
       <v-col cols="12" sm="5">
         <input
+          style="height: 32px; outline: none"
           v-model="textSearch"
           class="form-control"
           type="text"
@@ -15,7 +16,25 @@
           <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
         </button>
       </v-col>
-      <v-col cols="12" sm="6">
+
+      <v-col cols="12" sm="2" v-if="checkViewNews === 'ALL'">
+        <div>
+          <v-select
+            class="custom-height-select-filter"
+            :items="optionAgencies"
+            @change="handlechangeSelectedAgencies"
+            label="Cơ quan đơn vị"
+            dense
+            solo
+          ></v-select>
+        </div>
+      </v-col>
+
+      <v-col
+        cols="12"
+        :sm="checkViewNews === 'ALL' ? 4 : 6"
+        v-if="checkActionAddAndUpdate"
+      >
         <div style="float: right">
           <button @click.stop="showModalForm" class="btn btn-add primary">
             <v-icon left dark size="22">mdi-file-plus</v-icon>
@@ -48,7 +67,7 @@
             </td>
           </template>
           <template v-slot:item.thaotac="{ item }">
-            <v-tooltip top  v-if="item.TinhTrang !== '2'">
+            <v-tooltip top v-if="item.TinhTrang !== '2'">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="#2161b1"
@@ -83,6 +102,7 @@
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
+                  v-if="checkActionPublish || checkActionUnPublish"
                   color="#2161b1"
                   text
                   icon
@@ -91,11 +111,7 @@
                   v-on="on"
                   @click.stop="openDialogPublicDate(item)"
                 >
-                  <v-icon size="18">{{
-                    item.TinhTrang === "2"
-                      ? "mdi-calendar-blank"
-                      : "mdi mdi-calendar-check"
-                  }}</v-icon>
+                  <v-icon size="18">{{ viewActionPublish(item) }}</v-icon>
                 </v-btn>
               </template>
               <span>{{
@@ -267,12 +283,19 @@ import toastr from "toastr";
 import moment from "moment";
 import FormBaiVietTinTuc from "@/views/FormBaiVietTinTuc";
 import FormPublicDate from "@/views/FormPublicDate";
+import { actionAuthor } from "../constant/actionAuthor";
+import { useAccountAuthorization } from "../mixin";
+import { textAuthor } from "../constant/textAuthorView";
+import { mapState } from "vuex";
+
 export default {
   components: {
     Pagination,
     FormBaiVietTinTuc,
     FormPublicDate,
   },
+
+  mixins: [useAccountAuthorization],
 
   data() {
     return {
@@ -330,17 +353,60 @@ export default {
       emitDataCategoryNews: [],
       dialogPublicDate: false,
       dataItem: {},
+      checkViewNews: "",
+      checkActionAddAndUpdate: "",
+      checkActionPublish: "",
+      checkActionUnPublish: "",
+      inforAccount: "",
     };
   },
   created() {
     const vm = this;
-    vm.getListNews();
+
+    vm.inforAccount = vm.$cookies.get("UserInfo", "");
+
+    vm.checkActionPublish = vm.handleCheckActionAuthor(
+      actionAuthor.XUAT_BAN_TIN_BAI
+    );
+
+    vm.checkActionUnPublish = vm.handleCheckActionAuthor(
+      actionAuthor.HUY_XUAT_BAN_TIN_BAI
+    );
+
+    vm.checkViewNews = vm.handleCheckAuthor(
+      actionAuthor.XEM_TIN_BAI_ALL,
+      actionAuthor.XEM_TIN_BAI_DV
+    );
+
+    vm.checkActionAddAndUpdate = vm.handleCheckAuthor(
+      actionAuthor.CAP_NHAT_TIN_BAI_ALL,
+      actionAuthor.CAP_NHAT_TIN_BAI_DV
+    );
+
+    console.log(vm.checkViewNews, vm.checkActionAddAndUpdate);
+
+    if (vm.checkViewNews === textAuthor.ALL) {
+      vm.getListNews();
+    } else {
+      vm.getListNews({ MaHanhChinhDonViSearch: vm.inforAccount.MaDonVi });
+    }
   },
 
   mounted() {
     console.log("select: ");
   },
-
+  computed: {
+    ...mapState(["listAgencies"]),
+    optionAgencies() {
+      const vm = this;
+      const result = vm.listAgencies.map((item) => ({
+        text: item.tenGoi,
+        value: item.maHanhChinh,
+      }));
+      if (vm.listAgencies.length) return result;
+      return [];
+    },
+  },
   methods: {
     getListNewsFilter() {
       const vm = this;
@@ -474,7 +540,7 @@ export default {
                 return [...res, cur];
               }
             }, []);
-            console.log(vm.listNews)
+            console.log(vm.listNews);
           })
           .catch(function () {
             vm.loadingData = false;
@@ -484,61 +550,77 @@ export default {
     },
     handlePublicDate() {
       const vm = this;
-       if (vm.$refs.formPublicDateRef.validateForm()) {
-         const formData = vm.$refs.formPublicDateRef.formData;
-         const dataPayload = { ...vm.dataItem, ...formData };
-         dataPayload.NgayXuatBan = !dataPayload.NgayXuatBan
-           ? ""
-           : moment(dataPayload.NgayXuatBan, "DD/MM/YYYY").valueOf();
-         dataPayload.NgayHuyXuatBan = !dataPayload.NgayHuyXuatBan
-           ? ""
-           : moment(dataPayload.NgayHuyXuatBan, "DD/MM/YYYY").valueOf();
-         console.log("dataPayload: ", dataPayload, formData);
-         const payload = {
-           payload: dataPayload,
-           type: "baiviettintuc",
-           id: vm.dataItem.PrimKey,
-         };
-   
-         vm.$store
-           .dispatch("editItemData", payload)
-           .then(function (response) {
-             toastr.success("Cập nhật thành công");
-             vm.dialogPublicDate = false;
-             vm.listNews = vm.listNews.reduce(function (res, cur) {
-               if (vm.dataItem.PrimKey === cur.PrimKey) {
-                 return [
-                   ...res,
-                   {
-                     ...cur,
-                     ...dataPayload,
-                   },
-                 ];
-               } else {
-                 return [...res, cur];
-               }
-             }, []);
-             vm.dataEdit = {};
-             console.log(
-               "res edit: ",
-               response,
-               dataPayload,
-               vm.dataEdit.PrimKey,
-               vm.listNews,
-               formData
-             );
-           })
-           .catch(function () {
-             vm.loadingData = false;
-             toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
-           });
-       }
+      if (vm.$refs.formPublicDateRef.validateForm()) {
+        const formData = vm.$refs.formPublicDateRef.formData;
+        const dataPayload = { ...vm.dataItem, ...formData };
+        dataPayload.NgayXuatBan = !dataPayload.NgayXuatBan
+          ? ""
+          : moment(dataPayload.NgayXuatBan, "DD/MM/YYYY").valueOf();
+        dataPayload.NgayHuyXuatBan = !dataPayload.NgayHuyXuatBan
+          ? ""
+          : moment(dataPayload.NgayHuyXuatBan, "DD/MM/YYYY").valueOf();
+        console.log("dataPayload: ", dataPayload, formData);
+        const payload = {
+          payload: dataPayload,
+          type: "baiviettintuc",
+          id: vm.dataItem.PrimKey,
+        };
+
+        vm.$store
+          .dispatch("editItemData", payload)
+          .then(function (response) {
+            toastr.success("Cập nhật thành công");
+            vm.dialogPublicDate = false;
+            vm.listNews = vm.listNews.reduce(function (res, cur) {
+              if (vm.dataItem.PrimKey === cur.PrimKey) {
+                return [
+                  ...res,
+                  {
+                    ...cur,
+                    ...dataPayload,
+                  },
+                ];
+              } else {
+                return [...res, cur];
+              }
+            }, []);
+            vm.dataEdit = {};
+            console.log(
+              "res edit: ",
+              response,
+              dataPayload,
+              vm.dataEdit.PrimKey,
+              vm.listNews,
+              formData
+            );
+          })
+          .catch(function () {
+            vm.loadingData = false;
+            toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
+          });
+      }
     },
     handleShowNews(item) {
       window.location.href = `${item.DuongDanRutGon}`;
     },
+    handlechangeSelectedAgencies(value) {
+      const vm = this;
+      vm.getListNews({ MaHanhChinhDonViSearch: value });
+      vm.textSearch = "";
+    },
+    viewActionPublish(item) {
+      const vm = this;
+      let str = "";
+      if (item.TinhTrang === "2" && vm.checkActionPublish) {
+        str = "mdi-calendar-blank";
+      } else if (item.TinhTrang === "1" && vm.checkActionUnPublish) {
+        str = "mdi mdi-calendar-check";
+      }
+      return str;
+    },
     submitForm() {
       const vm = this;
+
       if (vm.$refs.formBaiVietTinTucRef.validateForm()) {
         const formData = vm.$refs.formBaiVietTinTucRef.formData;
         const regex =
@@ -553,13 +635,11 @@ export default {
             : "",
         };
 
-        dataPayload.CoQuanDonVi = vm.emitDataAgencies.reduce((res, cur) => {
-          if (formData.CoQuanDonVi === cur.maHanhChinh) {
-            return { ...res, MaHanhChinh: cur.maHanhChinh, TenGoi: cur.tenGoi };
-          } else {
-            return res;
-          }
-        }, {});
+        if (vm.inforAccount.hasOwnProperty("MaDonVi")) {
+          dataPayload.CoQuanDonVi = {
+            MaHanhChinh: vm.inforAccount.MaDonVi,
+          };
+        }
 
         dataPayload.ChuyenMuc = vm.emitDataCategoryNews.reduce((res, cur) => {
           if (formData.ChuyenMuc.includes(cur.MaDinhDanh)) {

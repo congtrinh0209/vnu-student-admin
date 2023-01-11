@@ -19,10 +19,10 @@ export default {
     //
   }),
   created () {
-    if (this.$cookies.get('Token')) {
-    } else {
-    this.$router.push({ path: '/login' })
-    }
+    // if (this.$cookies.get('Token')) {
+    // } else {
+    // this.$router.push({ path: '/login' })
+    // }
   },
   computed: {
   },

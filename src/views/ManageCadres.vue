@@ -3,10 +3,11 @@
     <v-row no-gutters>
       <v-col cols="12" sm="5">
         <input
+          style="height: 32px; outline: none"
           v-model="textSearch"
           class="form-control"
           type="text"
-          placeholder="Nhập tiêu đề tin tức..."
+          placeholder="Nhập tiêu đề..."
           autocomplete="off"
         />
       </v-col>
@@ -18,14 +19,32 @@
           <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
         </button>
       </v-col>
-      <v-col cols="12" sm="6">
+
+      <v-col cols="12" sm="2" v-if="checkViewCadres === 'ALL'">
+        <div>
+          <v-select
+            class="custom-height-select-filter"
+            :items="optionAgencies"
+            @change="handlechangeSelectedAgencies"
+            label="Cơ quan đơn vị"
+            dense
+            solo
+          ></v-select>
+        </div>
+      </v-col>
+
+      <v-col cols="12" :sm="checkViewCadres === 'ALL' ? 4 : 6">
         <div style="float: right">
-          <button @click.stop="showModalForm" class="btn btn-add primary">
+          <button
+            @click.stop="showModalForm"
+            class="btn btn-add primary"
+            v-if="checkActionAddAndUpdate"
+          >
             <v-icon left dark size="22">mdi-file-plus</v-icon>
             Thêm mới
           </button>
         </div>
-        <div style="float: right">
+        <div style="float: right" v-if="checkActionAuthor">
           <button
             @click.stop="openDialogDecentralization"
             class="btn btn-add primary"
@@ -121,6 +140,8 @@
           </v-toolbar>
 
           <form-can-bo
+            :unitId="unitId"
+            :checkActionAuthor="checkActionAuthor"
             ref="formCanBoRef"
             :dataEdit="dataEdit"
             :getListFunctionProps="getList"
@@ -163,7 +184,7 @@
       </v-dialog>
     </div>
 
-    <v-dialog v-model="dialogDelete" persistent max-width="286">
+    <!-- <v-dialog v-model="dialogDelete" persistent max-width="286">
       <v-card>
         <v-toolbar dark color="primary">
           <v-card-title class="text-h7 text-center">
@@ -178,7 +199,7 @@
           <v-btn color="primary" text @click="deleteCadres"> Xác nhận </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <div v-if="dialogDecentralization">
       <v-dialog v-model="dialogDecentralization" persistent max-width="860px">
@@ -241,12 +262,19 @@ import FormCanBo from "./FormCanBo.vue";
 import toastr from "toastr";
 import moment from "moment";
 import FormPhanQuyenCanBo from "./FormPhanQuyenCanBo.vue";
+import { actionAuthor } from "../constant/actionAuthor";
+import { useAccountAuthorization } from "../mixin";
+import { textAuthor } from "../constant/textAuthorView";
+import { mapState } from "vuex";
+
 export default {
   components: {
     Pagination,
     FormPhanQuyenCanBo,
     "form-can-bo": FormCanBo,
   },
+
+  mixins: [useAccountAuthorization],
 
   data() {
     return {
@@ -317,31 +345,36 @@ export default {
       dialogDecentralization: false,
       dataEditCadres: [],
       emitDataGroup: [],
+      checkActionAuthor: false,
+      unitId: "",
+      checkActionAddAndUpdate: "",
+      checkViewCadres: "",
     };
   },
   created() {
     const vm = this;
+    vm.checkViewCadres = vm.handleCheckAuthor(
+      actionAuthor.XEM_CAN_BO_ALL,
+      actionAuthor.XEM_CAN_BO_DV
+    );
+    console.log("xem cb: ", vm.checkViewCadres);
+    vm.checkActionAuthor = vm.handleCheckActionAuthor(
+      actionAuthor.PHAN_QUYEN_CAN_BO
+    );
     vm.getListCadres();
-    vm.getList("listAgencies", "coquandonvi");
-    vm.getList("listPosition", "vitrichucdanh", {
-      keyword: "",
-      page: 0,
-      size: 100,
-      orderFields: "tenGoi",
-      orderTypes: "asc",
-      coQuanDonVi_maDinhDanh: "s",
-    });
-    vm.getList("listWork", "tinhtrangcongtac", {
-      keyword: "",
-      page: 0,
-      size: 100,
-      orderFields: "maMuc",
-      orderTypes: "asc",
-      tinhTrang: 1,
-      thamChieu_maMuc: "",
-    });
-    vm.getList("listProvince", "tinhthanh", { tinhTrang: "1" });
-    vm.getList("listGender", "gioitinh", { tinhTrang: "1" });
+
+    console.log("cb create: ", vm.checkActionAuthor);
+
+    vm.checkActionAddAndUpdate = vm.handleCheckAuthor(
+      actionAuthor.THEM_MOI_CAN_BO_ALL,
+      actionAuthor.THEM_MOI_CAN_BO_DV
+    );
+
+    if (vm.checkViewCadres !== textAuthor.ALL) {
+      vm.unitId = vm.$cookies.get("UserInfo", "").MaDonVi;
+    }
+
+    console.log("user", vm.$cookies.get("UserInfo", ""));
   },
 
   mounted() {
@@ -354,31 +387,6 @@ export default {
       console.log("tim kiếm");
       vm.getListCadres({ keyword: vm.textSearch });
       vm.textSearch = "";
-    },
-    getList(state, collectionName, dataParam) {
-      let vm = this;
-      const dataPayload = {
-        page: 0,
-        size: 20,
-        keyword: "",
-        orderFields: "",
-        orderTypes: "",
-        tinhTrang: "",
-        thamChieu_maMuc: "",
-      };
-      let filter = {
-        collectionName,
-        state,
-        data: !dataParam ? dataPayload : { ...dataPayload, ...dataParam },
-      };
-      vm.$store
-        .dispatch("collectionFilterInstore", filter)
-        .then(function (response) {
-          console.log("res: ", response);
-        })
-        .catch(function () {
-          console.log("Error");
-        });
     },
     getListCadres(dataParam) {
       let vm = this;
@@ -405,6 +413,7 @@ export default {
               ", "
             ),
           }));
+
           console.log("res: ", vm.listCadres);
           vm.total = vm.listCadres.length;
           vm.pageCount = response.totalPages;
@@ -524,6 +533,11 @@ export default {
       const vm = this;
       vm.emitDataGroup = data;
     },
+    handlechangeSelectedAgencies(value) {
+      const vm = this;
+      vm.getListCadres({ coQuanDonVi_maHanhChinh: value });
+      vm.textSearch = "";
+    },
     submitForm() {
       const vm = this;
       if (vm.$refs.formCanBoRef.validateForm()) {
@@ -551,7 +565,7 @@ export default {
         delete dataPayload.TinhThanh;
         delete dataPayload.QuanHuyen;
         delete dataPayload.PhuongXa;
-        delete dataPayload.ListQuyenCanBo;
+        // delete dataPayload.ListQuyenCanBo;
         delete dataPayload.DiaChiThuongTru;
 
         dataPayload.PhanQuyenCanBo = vm.emitDataGroup.reduce((res, cur) => {
@@ -642,6 +656,19 @@ export default {
 
         console.log("submit", formData);
       }
+    },
+  },
+
+  computed: {
+    ...mapState(["listAgencies"]),
+    optionAgencies() {
+      const vm = this;
+      const result = vm.listAgencies.map((item) => ({
+        text: item.tenGoi,
+        value: item.maHanhChinh,
+      }));
+      if (vm.listAgencies.length) return result;
+      return [];
     },
   },
 };

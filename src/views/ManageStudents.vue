@@ -19,7 +19,7 @@
           </button>
         </div>
       </v-col>
-      <v-col cols="12" sm="2">
+      <v-col cols="12" :sm="!unitId ? 2 : 4">
         <div>
           <v-select
             class="custom-height-select-filter"
@@ -33,13 +33,13 @@
         </div>
       </v-col>
 
-      <v-col cols="12" sm="2">
+      <v-col cols="12" sm="2" v-if="!unitId">
         <div>
           <v-select
             class="custom-height-select-filter"
             :items="optionAgencies"
             v-model="agenciesValue"
-             @change="handlechangeSelectedAgencies"
+            @change="handlechangeSelectedAgencies"
             label="Cơ quan đơn vị"
             dense
             solo
@@ -59,7 +59,11 @@
             <v-icon left dark size="22">mdi-file-plus</v-icon>
             Yêu cầu thêm ảnh
           </button>
-          <button @click.stop="showModalForm" class="btn btn-add primary">
+          <button
+            @click.stop="showModalForm"
+            class="btn btn-add primary"
+            v-if="checkActionAddAndUpdate"
+          >
             <v-icon left dark size="22">mdi-file-plus</v-icon>
             Thêm mới
           </button>
@@ -162,7 +166,12 @@
             </v-toolbar-items>
           </v-toolbar>
 
-          <FormSinhVien :dataEdit="dataEdit" ref="formSinhVienBoRef" />
+          <FormSinhVien
+            :dataEdit="dataEdit"
+            ref="formSinhVienBoRef"
+            :unitId="unitId"
+            :checkActionAddAndUpdate="checkActionAddAndUpdate"
+          />
 
           <v-card-text class="px-2 py-2">
             <v-card-actions class="justify-center my-4">
@@ -276,6 +285,9 @@ import FormSinhVien from "@/views/FormSinhVien";
 import moment from "moment";
 import DetailStudent from "@/views/DetailStudent";
 import { mapState } from "vuex";
+import { actionAuthor } from "../constant/actionAuthor";
+import { useAccountAuthorization } from "../mixin";
+import { textAuthor } from "../constant/textAuthorView";
 
 export default {
   components: {
@@ -283,6 +295,8 @@ export default {
     FormSinhVien,
     DetailStudent,
   },
+
+  mixins: [useAccountAuthorization],
 
   data() {
     return {
@@ -357,14 +371,40 @@ export default {
         { text: "Sinh viên chưa có ảnh", value: false },
       ],
       agenciesValue: "",
+      checkAuthorViewStudent: "",
+      unitId: "",
+      checkActionAddAndUpdate: "",
     };
   },
   created() {
     const vm = this;
-    vm.getListStudent();
+    vm.unitId = vm.$cookies.get("UserInfo", "").MaDonVi;
     vm.getList("listAgencies", "coquandonvi");
     vm.getList("listProvince", "tinhthanh", { tinhTrang: "1" });
     vm.getList("listGender", "gioitinh", { tinhTrang: "1" });
+
+    vm.checkAuthorViewStudent = vm.handleCheckAuthor(
+      actionAuthor.XEM_SINH_VIEN_ALL,
+      actionAuthor.XEM_SINH_VIEN_DV
+    );
+
+    vm.checkActionAddAndUpdate = vm.handleCheckAuthor(
+      actionAuthor.THEM_MOI_SINH_VIEN_ALL,
+      actionAuthor.THEM_MOI_SINH_VIEN_DV
+    );
+
+    if (vm.checkAuthorViewStudent === textAuthor.ALL) {
+      vm.getListStudent();
+    } else {
+      vm.getListStudent({ CoQuanDonVi_MaHanhChinh: vm.unitId });
+    }
+
+    console.log(
+      "create stydent: ",
+      vm.checkAuthorViewStudent,
+      vm.unitId,
+      vm.checkActionAddAndUpdate
+    );
   },
 
   mounted() {},
@@ -598,6 +638,7 @@ export default {
                 data.push({
                   ...dataPayload,
                   PrimKey: response.data.resp.PrimKey,
+                  MainImage: response.data.resp.MainImage,
                 });
                 vm.listStudent = data;
                 vm.total = vm.listStudent.length;

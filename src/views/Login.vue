@@ -194,16 +194,24 @@
               let payload = String(result.access_token.split('.')[1]).replace(/_/g, "/")
               let dataUser = JSON.parse(atob(payload))
               let roleUser = dataUser && dataUser.hasOwnProperty('realm_access') && dataUser.realm_access['roles'] ? dataUser.realm_access.roles : ''
-              let admin = roleUser ? roleUser.find(function (item) {
-                return item === 'site-admin'
-              }) : false
-              // console.log('roleUser', roleUser)
-              console.log(dataUser, roleUser)
+              // let admin = dataUser ? dataUser.find(function (item) {
+              //   return item.MaDonVi === 'FDS'
+              // }) : false
+let admin
+
+if (dataUser.hasOwnProperty('MaDonVi')) {
+    if (dataUser.MaDonVi === "FDS") admin = true
+}
+
+
+              console.log('roleUser', roleUser)
+              console.log("pq:",dataUser, roleUser)
               if (roleUser && roleUser.length) {
                 vm.$cookies.set('Token', result.access_token, result.expires_in)
                 vm.$cookies.set('RefreshToken', result.refresh_token, result.refresh_expires_in)
                 axios.defaults.headers['Authorization'] = 'Bearer ' + result.access_token
                 vm.$store.commit('SET_ISSIGNED', true)
+
                 if (admin) {
                     // if (true) {
                   vm.$cookies.set('admin', true, result.expires_in)
@@ -211,7 +219,8 @@
                     hoVaTen: 'Quản trị',
                     maSoCanBo: '',
                     viTriChucDanh: 'Quản trị hệ thống',
-                    vaiTroSuDung: ''
+                    vaiTroSuDung: dataUser.VaiTroSuDung,
+                    isAdmin: true
                   }
                   vm.$cookies.set('UserInfo', dataUser1, result.expires_in)
                   vm.$cookies.set('Roles', '', result.expires_in)
@@ -228,7 +237,9 @@
                       hoVaTen:  dataUser.HoVaTen,
                       maSoCanBo:  '',
                       viTriChucDanh: '',
-                      vaiTroSuDung: dataUser.VaiTroSuDung
+                      vaiTroSuDung: dataUser.VaiTroSuDung,
+                      menu: dataUser?.Menus.split(","),
+                      MaDonVi: dataUser?.MaDonVi
                     }
                    
                     vm.$cookies.set('UserInfo', dataUser2, result.expires_in)
@@ -298,7 +309,7 @@
               }
             } catch (error) {
               vm.loading = false
-              toastr.error('TÀI KHOẢN KHÔNG CÓ TRÊN HỆ THỐNG')
+               toastr.error('TÀI KHOẢN KHÔNG CÓ TRÊN HỆ THỐNG')
               setTimeout(function () {
                 vm.submitLogout()
               }, 500)

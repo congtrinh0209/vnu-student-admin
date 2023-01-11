@@ -237,14 +237,13 @@ import Pagination from "./Pagination.vue";
 import toastr from "toastr";
 import FormMenu from "./FormMenu.vue";
 import FormPhanQuyenMenu from "@/views/FormPhanQuyenMenu";
-import {useAccountAuthorization} from "../mixin"
+
 export default {
   components: {
     Pagination,
     FormMenu,
     FormPhanQuyenMenu,
   },
-    mixins: [useAccountAuthorization],
 
   data() {
     return {

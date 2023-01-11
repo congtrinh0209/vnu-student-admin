@@ -54,7 +54,7 @@ export default new Router({
           props: true
         },
         {
-          path: '/quan-li-hoc-sinh',
+          path: '/quan-li-sinh-vien',
           name: 'ManageStudents',
           component: () => import('@/views/ManageStudents'),
           props: true
@@ -81,6 +81,12 @@ export default new Router({
           path: '/quan-li-gop-y',
           name: 'ManageFeedback',
           component: () => import('@/views/ManageFeedback'),
+          props: true
+        },
+        {
+          path: '/quan-li-ban-do',
+          name: 'ManageMap',
+          component: () => import('@/views/ManageMap'),
           props: true
         },
       ]

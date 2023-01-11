@@ -124,13 +124,13 @@
             <v-col cols="12" sm="6">
                 <v-row no-gutters style="float: right;">
                     <div>
-                        <button class="btn btn-add" @click="showAddForm">
+                        <button class="btn btn-add primary" @click="showAddForm">
                             <v-icon left dark size="22">mdi-file-plus</v-icon>
                             Thêm mới
                         </button>
                     </div>
                     <div>
-                        <button class="btn btn-add" @click="getDanhSachDiaDiemBds">
+                        <button class="btn btn-add primary" @click="getDanhSachDiaDiemBds">
                             <v-icon left dark size="22">mdi mdi-magnify-minus-outline</v-icon>
                             Tìm kiếm
                         </button>
@@ -262,7 +262,7 @@ export default {
                 sortable: true,
                 text: 'Loại bản đồ',
                 align: 'center',
-                value: 'loaiBanDo.name',
+                value: 'loaiBanDo',
                 width: 160
             },
             {
@@ -277,26 +277,26 @@ export default {
                 sortable: false,
                 text: 'Khu vực' ,
                 align: 'left',
-                value: 'khuVuc.name',
+                value: 'khuVuc',
                 class: 'th-center',
                 width: 80
             },
-            {
-                sortable: false,
-                text: 'Focus' ,
-                align: 'center',
-                value: 'focusName',
-                class: 'th-center',
-                width: 80
-            },
-            {
-                sortable: false,
-                text: 'Trạng thái' ,
-                align: 'center',
-                value: 'trangThaiName',
-                class: 'th-center',
-                width: 100
-            },
+            // {
+            //     sortable: false,
+            //     text: 'Focus' ,
+            //     align: 'center',
+            //     value: 'focusName',
+            //     class: 'th-center',
+            //     width: 80
+            // },
+            // {
+            //     sortable: false,
+            //     text: 'Trạng thái' ,
+            //     align: 'center',
+            //     value: 'trangThaiName',
+            //     class: 'th-center',
+            //     width: 100
+            // },
             {
                 sortable: false,
                 text: 'Thao tác' ,
@@ -321,7 +321,12 @@ export default {
             { value: 5, name: "Ăn uống" },
             { value: 6, name: "Hiệu thuốc" }
           ],
-          danhSachDiaDiemBds: [],
+          danhSachDiaDiemBds: [{
+loaiBanDo: "Tòa nhà",
+tenDiaDiem: "quán cà phê",
+khuVuc: "Hòa Lạc" 
+          }
+          ],
           itemsPerPage: 10,
           loadingData: false,
           pageCount: 1,
