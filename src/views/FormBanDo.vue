@@ -23,12 +23,23 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" sm="12">
-        <div class="titleText mb-2">Tọa độ:</div>
+      <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Kinh độ:</div>
         <v-text-field
           solo
           v-model="formData.ToaDo"
-          label="Nhập tọa độ..."
+          label="Nhập kinh độ..."
+          dense
+          hide-details="auto"
+          required
+        ></v-text-field>
+      </v-col>
+       <v-col cols="12" sm="6">
+        <div class="titleText mb-2">Vĩ độ:</div>
+        <v-text-field
+          solo
+          v-model="formData.ToaDo"
+          label="Nhập vĩ độ..."
           dense
           hide-details="auto"
           required
@@ -67,7 +78,7 @@ import { actionAuthor } from "../constant/actionAuthor";
 import { useAccountAuthorization } from "../mixin";
 
 export default {
-  props: ["dataEdit", "unitId", "emitDataArea"],
+  props: ["dataEdit", "unitId"],
 
   mixins: [useAccountAuthorization],
 
@@ -197,6 +208,8 @@ export default {
         .dispatch("collectionFilter", filter)
         .then(function (response) {
          
+          vm.$emit("emitDataTypeMap", response.content);
+
          vm.listTypeMap = response.content.map(item=>({
           text: item.TenLoaiBanDo,
           value: item.PrimKey

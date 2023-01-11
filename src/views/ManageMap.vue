@@ -126,6 +126,7 @@
             ref="formBanDoRef"
             :dataEdit="dataEdit"
             @emitDataArea="handleEmitDataArea"
+            @emitDataTypeMap="handleEmitDataTypwMap"
           />
 
           <v-card-text class="px-2 py-2">
@@ -258,9 +259,10 @@ export default {
       dialogDecentralization: false,
       dataEditCadres: [],
       emitDataArea: [],
+      emitDataTypeMap: "",
       checkActionAuthor: false,
       unitId: "",
-      checkActionAddAndUpdate: ""
+      checkActionAddAndUpdate: "",
     };
   },
   created() {
@@ -373,12 +375,17 @@ export default {
       const vm = this;
       vm.emitDataArea = data;
     },
+     handleEmitDataTypwMap(data) {
+      const vm = this;
+      vm.emitDataTypeMap = data;
+    },
     submitForm() {
       const vm = this;
       if (vm.$refs.formBanDoRef.validateForm()) {
         const formData = vm.$refs.formBanDoRef.formData;
         const dataPayload = {
           ...formData,
+
         };
        
 
@@ -460,7 +467,7 @@ export default {
         //     });
         // }
 
-        console.log("submit", formData, vm.emitDataArea);
+        console.log("submit", formData, vm.emitDataArea,  vm.emitDataTypeMap);
       }
     },
   },
