@@ -1,10 +1,11 @@
 export const titlePage = {
-    QuanLyCanBo: "Quản Lý Cán Bộ",
-    QuanLyNhomQuyen: "Quản Lý Nhóm Quyền",
-    QuanLyMenu: "Quản Lý Menu",
-    QuanLySinhVien: "Quản Lý Sinh Viên",
-    QuanLyTinTuc: "Quản Lý Tin Tức",
-    QuanLyChuyenMucTinTuc: "Quản Lý Chuyên Mục Tin Tức",
-    QuanLyGopY: "Quản Lý Trả Lời Góp Ý",
-    QuanLyBanDo: "Quản Lý Bản Đồ Số"
+    ManageCadres: "Quản Lý Cán Bộ",
+    MangeRightsGroup: "Quản Lý Nhóm Quyền",
+    ManageMenu: "Quản Lý Menu",
+    ManageStudents: "Quản Lý Sinh Viên",
+    ManageNews: "Quản Lý Tin Tức",
+    ManageCategoryNews: "Quản Lý Chuyên Mục Tin Tức",
+    ManageFeedback: "Quản Lý Trả Lời Góp Ý",
+    ManageMap: "Quản Lý Bản Đồ Số",
+    ManageTypeMap: "Quản Lý Loại Bản Đồ"
 }

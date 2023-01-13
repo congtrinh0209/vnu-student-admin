@@ -11,6 +11,7 @@
           Chuyên mục tin tức: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           :items="listCategoryNews"
           label="Chọn chuyên mục"
           v-model="formData.chuyenMuc"
@@ -27,6 +28,7 @@
           Nhóm quyền: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           v-model="formData.TenNhomQuyen"
           :items="listGroup"
           chips
@@ -45,8 +47,8 @@ export default {
   data() {
     return {
       formData: {
-        chuyenMuc: this.dataSelectEditCategoryNews || [],
-        TenNhomQuyen: [],
+        chuyenMuc: this.dataSelectEditCategoryNews || null,
+        TenNhomQuyen: null,
       },
       listGroup: [],
       listCategoryNews: [],

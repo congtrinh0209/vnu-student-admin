@@ -3,15 +3,16 @@
     <Drawer></Drawer>
     <AppBar></AppBar>
     <v-main>
-      <div class="container wrap-content-page">
-        <v-card
-          class="mx-auto pa-5" style="padding-bottom: 40px !important;"
+      <div class="container wrap-content-page"> 
+        <div
+          class="mx-auto pa-5" style="padding-bottom: 40px !important"
           flat
         >
-        </v-card>
+        
+        </div>
       </div>
       <Footer></Footer>
-    </v-main>
+    </v-main>   
     
   </v-app>
 </template>

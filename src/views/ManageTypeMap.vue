@@ -30,7 +30,7 @@
       <v-col cols="12" class="pt-0">
         <v-data-table
           :headers="headers"
-          :items="listMap"
+          :items="listTypeMap"
           :items-per-page="itemsPerPage"
           item-key="PrimKey"
           hide-default-footer
@@ -55,7 +55,7 @@
                   class="mr-2"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="editMap(item)"
+                  @click.stop="editTypeMap(item)"
                 >
                   <v-icon size="18">mdi-pencil</v-icon>
                 </v-btn>
@@ -72,7 +72,7 @@
                   class="ml-2"
                   v-bind="attrs"
                   v-on="on"
-                  @click.stop="deleteMap(item)"
+                  @click.stop="deleteTypeMap(item)"
                 >
                   <v-icon size="18">mdi-delete</v-icon>
                 </v-btn>
@@ -95,10 +95,10 @@
         <v-card>
           <v-toolbar dark color="primary" class="px-3">
             <v-toolbar-title v-if="edittingForm"
-              >Cập nhật bản đồ</v-toolbar-title
+              >Cập nhật loại bản đồ</v-toolbar-title
             >
             <v-toolbar-title v-if="!edittingForm"
-              >Thêm mới bản đồ</v-toolbar-title
+              >Thêm mới loại bản đồ</v-toolbar-title
             >
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -108,12 +108,7 @@
             </v-toolbar-items>
           </v-toolbar>
 
-          <FormBanDo
-            ref="formBanDoRef"
-            :dataEdit="dataEdit"
-            @emitDataArea="handleEmitDataArea"
-            @emitDataTypeMap="handleEmitDataTypeMap"
-          />
+          <FormLoaiBanDoSo ref="formLoaiBanDoRef" :dataEdit="dataEdit" />
 
           <v-card-text class="px-2 py-2">
             <v-card-actions class="justify-center my-4">
@@ -163,7 +158,7 @@
           <v-btn color="primary" text @click="dialogDelete = false">
             Từ chối
           </v-btn>
-          <v-btn color="primary" text @click="deleteMap"> Xác nhận </v-btn>
+          <v-btn color="primary" text @click="deleteTypeMap"> Xác nhận </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog> -->
@@ -171,8 +166,9 @@
 </template>
 
 <script>
+
 import Pagination from "./Pagination.vue";
-import FormBanDo from "./FormBanDo.vue";
+import FormLoaiBanDoSo from "./FormLoaiBanDoSo.vue";
 import toastr from "toastr";
 import { actionAuthor } from "../constant/actionAuthor";
 import { useAccountAuthorization } from "../mixin";
@@ -180,7 +176,7 @@ import { useAccountAuthorization } from "../mixin";
 export default {
   components: {
     Pagination,
-    FormBanDo,
+    FormLoaiBanDoSo,
   },
 
   mixins: [useAccountAuthorization],
@@ -199,28 +195,20 @@ export default {
         },
         {
           sortable: false,
-          text: "Tên địa điểm",
+          text: "Tên loại bản đồ",
           align: "left",
-          value: "TenDiaDiem",
+          value: "TenLoaiBanDo",
           class: "th-center",
           width: 120,
         },
         {
           sortable: false,
-          text: "Khu vực",
+          text: "Tình trạng",
           align: "left",
-          value: "KhuVuc.TenKhuVuc",
+          value: "TinhTrang.MaMuc",
           class: "th-center",
           width: 120,
         },
-        // {
-        //   sortable: false,
-        //   text: "Số điện thoại/ email",
-        //   align: "left",
-        //   value: "EmailVNU",
-        //   class: "th-center",
-        //   width: 120,
-        // },
         {
           sortable: false,
           text: "Thao tác",
@@ -230,7 +218,7 @@ export default {
           width: 68,
         },
       ],
-      listMap: [],
+      listTypeMap: [],
       itemsPerPage: 20,
       loadingData: false,
       pageCount: 1,
@@ -242,10 +230,7 @@ export default {
       total: 1,
       dataEdit: {},
       dialogDelete: false,
-      idMap: "",
-      emitDataArea: [],
-      emitDataTypeMap: "",
-      checkActionAuthor: false,
+      idTypeMap: "",
       checkActionAddAndUpdate: "",
       checkActionDelete: "",
     };
@@ -254,12 +239,14 @@ export default {
     const vm = this;
 
     vm.checkActionAddAndUpdate = vm.handleCheckActionAuthor(
-      actionAuthor.CAP_NHAT_VA_THEM_BAN_DO
+      actionAuthor.CAP_NHAT_VA_THEM_LOAI_BAN_DO
     );
 
-    vm.checkActionDelete = vm.handleCheckActionAuthor(actionAuthor.XOA_BAN_DO);
+    vm.checkActionDelete = vm.handleCheckActionAuthor(
+      actionAuthor.XOA_LOAI_BAN_DO
+    );
 
-    vm.getListMap();
+    vm.getListTypeMap();
   },
 
   mounted() {
@@ -270,10 +257,10 @@ export default {
     getListMapFilter() {
       const vm = this;
       console.log("tim kiếm");
-      vm.getListMap({ TenBanDoSo: vm.textSearch });
+      vm.getListTypeMap({ TenLoaiBanDo: vm.textSearch });
       vm.textSearch = "";
     },
-    getListMap(dataParam) {
+    getListTypeMap(dataParam) {
       let vm = this;
       vm.loadingData = true;
       const dataPayload = {
@@ -286,18 +273,16 @@ export default {
         thamChieu_maMuc: "",
       };
       const filter = {
-        collectionName: "bandoso",
+        collectionName: "loaibando",
         data: !dataParam ? dataPayload : { ...dataPayload, ...dataParam },
       };
       vm.$store
         .dispatch("collectionFilter", filter)
         .then(function (response) {
-          vm.listMap = response.content.map((item) => ({
-            ...item,
-          }));
+          vm.listTypeMap = response.content;
 
-          console.log("res: ", vm.listMap);
-          vm.total = vm.listMap.length;
+          console.log("res: ", vm.listTypeMap);
+          vm.total = vm.listTypeMap.length;
           vm.pageCount = response.totalPages;
           vm.loadingData = false;
         })
@@ -305,18 +290,18 @@ export default {
           vm.loadingData = false;
         });
     },
-    // openDialogDeleteItem(item) {
+    // deleteTypeMap(item) {
     //   const vm = this;
     //   console.log("id delete: ", item.PrimKey);
     //   vm.dialogDelete = true;
-    //   vm.idMap = item.PrimKey;
+    //   vm.idTypeMap = item.PrimKey;
     // },
-    deleteMap(item) {
+    deleteTypeMap(item) {
       const vm = this;
       vm.dialogDelete = false;
       const payload = {
         payload: item.PrimKey,
-        type: "bandoso",
+        type: "loaibando",
       };
 
       vm.$store.commit("SET_SHOWCONFIRM", true);
@@ -333,11 +318,11 @@ export default {
             .dispatch("deleteItemData", payload)
             .then(function (response) {
               toastr.success("Xóa thành công");
-              vm.listMap = vm.listMap.reduce(function (res, cur) {
+              vm.listTypeMap = vm.listTypeMap.reduce(function (res, cur) {
                 if (item.PrimKey !== cur.PrimKey) res.push(cur);
                 return res;
               }, []);
-              vm.total = vm.listMap.length;
+              vm.total = vm.listTypeMap.length;
 
               console.log("res dele: ", response);
             })
@@ -348,7 +333,7 @@ export default {
       };
       vm.$store.commit("SET_CONFIG_CONFIRM_DIALOG", confirm);
     },
-    editMap(item) {
+    editTypeMap(item) {
       const vm = this;
       vm.edittingForm = true;
       console.log("item edit: ", item);
@@ -357,7 +342,7 @@ export default {
     },
     handlechangePage(pageCurent) {
       const vm = this;
-      vm.getListMap(pageCurent);
+      vm.getListTypeMap(pageCurent);
     },
     showModalForm() {
       const vm = this;
@@ -369,73 +354,37 @@ export default {
       vm.dialogForm = false;
       vm.dataEdit = {};
     },
-    handleEmitDataArea(data) {
-      const vm = this;
-      vm.emitDataArea = data;
-    },
-    handleEmitDataTypeMap(data) {
-      const vm = this;
-      vm.emitDataTypeMap = data;
-    },
     submitForm() {
       const vm = this;
-      if (vm.$refs.formBanDoRef.validateForm()) {
-        const formData = vm.$refs.formBanDoRef.formData;
+      if (vm.$refs.formLoaiBanDoRef.validateForm()) {
+        const formData = vm.$refs.formLoaiBanDoRef.formData;
         const dataPayload = {
           ...formData,
-          ToaDo: {
-            Latitude: formData.viDo,
-            Longitude: formData.kinhDo,
-          },
         };
 
-        dataPayload.LoaiBanDo = vm.emitDataTypeMap.reduce((res, cur) => {
-          if (formData.LoaiBanDo === cur.MaDinhDanh) {
-            return {
-              ...res,
-              MddLoaiBanDo: cur.MaDinhDanh,
-              TenLoaiBanDo: cur.TenLoaiBanDo,
-              MaIcon: cur.MaIcon,
-            };
-          } else {
-            return res;
-          }
-        }, {});
-
-        dataPayload.KhuVuc = vm.emitDataArea.reduce((res, cur) => {
-          if (formData.KhuVuc === cur.MaDinhDanh) {
-            return {
-              ...res,
-              TenKhuVuc: cur.TenKhuVuc,
-              ToaDo: cur.ToaDo,
-              MddKhuVuc: cur.MaDinhDanh,
-            };
-          } else {
-            return res;
-          }
-        }, {});
-
-        delete dataPayload.kinhDo;
-        delete dataPayload.viDo;
+        dataPayload.TinhTrang = {
+          TenMuc: formData.TinhTrang,
+          MaMuc: "Hoạt Động",
+        };
 
         if (!vm.edittingForm) {
           const payload = {
             payload: dataPayload,
-            type: "bandoso",
+            type: "loaibando",
           };
           vm.$store
             .dispatch("createItemData", payload)
             .then(function (response) {
               toastr.success("Thêm mới thành công");
-              if (vm.listMap.length < vm.itemsPerPage) {
-                const data = [...vm.listMap];
+              if (vm.listTypeMap.length < vm.itemsPerPage) {
+                const data = [...vm.listTypeMap];
                 data.push({
                   ...response.data.resp,
                 });
-                vm.listMap = data;
+                vm.listTypeMap = data;
               }
               vm.dialogForm = false;
-              vm.total = vm.listMap.length;
+              vm.total = vm.listTypeMap.length;
               console.log("res post: ", response);
             })
             .catch(function (err) {
@@ -444,7 +393,7 @@ export default {
         } else {
           const payload = {
             payload: dataPayload,
-            type: "bandoso",
+            type: "loaibando",
             id: vm.dataEdit.PrimKey,
           };
 
@@ -454,7 +403,7 @@ export default {
               toastr.success("Cập nhật thành công");
               vm.dialogForm = false;
 
-              vm.listMap = vm.listMap.reduce((res, cur) => {
+              vm.listTypeMap = vm.listTypeMap.reduce((res, cur) => {
                 if (vm.dataEdit.PrimKey === cur.PrimKey)
                   return [...res, { ...cur, ...response.data.resp }];
                 else return [...res, cur];
@@ -465,7 +414,7 @@ export default {
                 response,
                 dataPayload,
                 vm.dataEdit.PrimKey,
-                vm.listMap
+                vm.listTypeMap
               );
               vm.dataEdit = {};
             })
@@ -475,13 +424,7 @@ export default {
             });
         }
 
-        console.log(
-          "submit",
-          formData,
-          vm.emitDataArea,
-          vm.emitDataTypeMap,
-          dataPayload
-        );
+        console.log("submit", formData, dataPayload);
       }
     },
   },

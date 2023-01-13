@@ -312,7 +312,7 @@ export default {
       dialogDelete: false,
       idMenu: "",
       dialogMenu: false,
-      dataSelectEditMenu: [],
+      dataSelectEditMenu: null,
       emitDataGroup: [],
     };
   },
@@ -423,7 +423,8 @@ export default {
     openDialogDecentralization() {
       const vm = this;
       vm.dialogMenu = true;
-      vm.dataSelectEditMenu = vm.selected.map((item) => item.MaDinhDanh);
+      if (vm.selected.length)
+        vm.dataSelectEditMenu = vm.selected.map((item) => item.MaDinhDanh);
     },
     handleDecentralization() {
       const vm = this;
@@ -432,7 +433,7 @@ export default {
       if (vm.$refs.formPhanQuyenMenuRef.validateForm()) {
         const formData = vm.$refs.formPhanQuyenMenuRef.formData;
 
-                const payloadData = vm.listMenu.reduce((res, cur) => {
+        const payloadData = vm.listMenu.reduce((res, cur) => {
           if (formData.menu.includes(cur.MaDinhDanh)) {
             return [
               ...res,
@@ -514,10 +515,8 @@ export default {
             })
             .catch(function (err) {
               vm.loadingData = false;
-              console.log("err: ", err)
-               if (
-                err.data.messageCode === "menu.maMenu_conflict"
-              ) {
+              console.log("err: ", err);
+              if (err.data.messageCode === "menu.maMenu_conflict") {
                 toastr.error("Trùng mã menu");
               } else {
                 toastr.error(
@@ -560,13 +559,11 @@ export default {
                 vm.dataEdit.PrimKey,
                 vm.listMenu
               );
-               vm.dataEdit = {}
+              vm.dataEdit = {};
             })
             .catch(function () {
               vm.loadingData = false;
-              toastr.error(
-                  "Vui lòng kiểm tra lại dữ liệu nhập vào các trường"
-                );
+              toastr.error("Vui lòng kiểm tra lại dữ liệu nhập vào các trường");
             });
         }
 

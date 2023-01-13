@@ -234,7 +234,7 @@ if (dataUser.hasOwnProperty('MaDonVi')) {
 
          
                     let dataUser2 = {
-                      hoVaTen:  dataUser.HoVaTen,
+                      hoVaTen: decodeURIComponent(escape(dataUser.HoVaTen)).toUpperCase(),
                       maSoCanBo:  '',
                       viTriChucDanh: '',
                       vaiTroSuDung: dataUser.VaiTroSuDung,

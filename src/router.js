@@ -89,6 +89,12 @@ export default new Router({
           component: () => import('@/views/ManageMap'),
           props: true
         },
+        {
+          path: '/quan-li-loai-ban-do',
+          name: 'ManageTypeMap',
+          component: () => import('@/views/ManageTypeMap'),
+          props: true
+        },
       ]
     },
     {

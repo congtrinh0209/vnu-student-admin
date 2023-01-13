@@ -4,13 +4,13 @@
     <AppBar></AppBar>
     <v-main>
       <div class="container wrap-content-page">
-        <v-card
+        <div
           class="mx-auto pa-5" style="padding-bottom: 40px !important;"
           flat
         >
         <h1 class="title-page">{{titlePage}}</h1>
           <router-view></router-view>
-        </v-card>
+        </div>
       </div>
       <Footer></Footer>
     </v-main>

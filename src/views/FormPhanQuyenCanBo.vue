@@ -11,6 +11,7 @@
           Cán bộ: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           :items="listCadres"
           label="Chọn cán bộ"
           v-model="formData.canbo"
@@ -27,6 +28,7 @@
           Nhóm quyền: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           v-model="formData.TenNhomQuyen"
           :items="listGroup"
           chips
@@ -46,8 +48,8 @@ export default {
   data() {
     return {
       formData: {
-        canbo: this.dataEditCadres || [],
-        TenNhomQuyen: [],
+        canbo: this.dataEditCadres || null,
+        TenNhomQuyen: null,
       },
       listGroup: [],
       listCadres: [],

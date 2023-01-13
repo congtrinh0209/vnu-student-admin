@@ -319,7 +319,7 @@ export default {
       dialogDelete: false,
       idCategoryNews: "",
       dialogMenu: false,
-      dataSelectEditCategoryNews: [],
+      dataSelectEditCategoryNews: null,
       emitDataGroup: [],
     };
   },
@@ -430,9 +430,12 @@ export default {
     openDialogDecentralization() {
       const vm = this;
       vm.dialogMenu = true;
+    if(vm.selected.length){
       vm.dataSelectEditCategoryNews = vm.selected.map(
         (item) => item.MaDinhDanh
       );
+    }
+   
     },
     handleDecentralization() {
       const vm = this;

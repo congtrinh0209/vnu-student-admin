@@ -343,7 +343,7 @@ export default {
       dialogDelete: false,
       idCadres: "",
       dialogDecentralization: false,
-      dataEditCadres: [],
+      dataEditCadres: null,
       emitDataGroup: [],
       checkActionAuthor: false,
       unitId: "",
@@ -483,7 +483,7 @@ export default {
     openDialogDecentralization() {
       const vm = this;
       vm.dialogDecentralization = true;
-      vm.dataEditCadres = vm.selected.map((item) => item.MaDinhDanh);
+      if(vm.selected.length) vm.dataEditCadres = vm.selected.map((item) => item.MaDinhDanh);
     },
     handleDecentralization() {
       const vm = this;

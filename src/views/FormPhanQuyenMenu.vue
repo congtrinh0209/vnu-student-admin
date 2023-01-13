@@ -11,6 +11,7 @@
           Menu: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           :items="listMenu"
           label="Chọn Menu"
           v-model="formData.menu"
@@ -27,6 +28,7 @@
           Nhóm quyền: <span style="color: red">*</span>
         </div>
         <v-select
+         :rules="[rules.required]"
           v-model="formData.TenNhomQuyen"
           :items="listGroup"
           chips
@@ -45,8 +47,8 @@ export default {
   data() {
     return {
       formData: {
-        menu: this.dataSelectEditMenu || [],
-        TenNhomQuyen: [],
+        menu: this.dataSelectEditMenu || null,
+        TenNhomQuyen: null,
       },
       listGroup: [],
       listMenu: [],

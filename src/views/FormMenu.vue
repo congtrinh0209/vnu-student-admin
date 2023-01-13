@@ -10,7 +10,7 @@
         <div class="titleText mb-2">
           Mã menu: <span style="color: red">*</span>
         </div>
- <v-select
+        <v-select
           :rules="[rules.required]"
           v-model="formData.MaMenu"
           :disabled="dataEdit.MaMenu ? true : false"
@@ -78,7 +78,9 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12" sm="6">
-        <div class="titleText mb-2">Số thứ tự: <span style="color: red">*</span></div>
+        <div class="titleText mb-2">
+          Số thứ tự: <span style="color: red">*</span>
+        </div>
         <v-text-field
           :rules="[rules.number]"
           v-model="formData.SoThuTu"
@@ -112,7 +114,7 @@
         ></v-select>
       </v-col>
     </v-row>
- <v-row>
+    <v-row>
       <v-col cols="12" sm="6">
         <div class="titleText mb-2">Nhóm quyền:</div>
         <v-select
@@ -122,7 +124,6 @@
           label="Chọn"
           dense
           solo
-          multiple
         ></v-select>
       </v-col>
       <v-col cols="12" sm="6">
@@ -137,7 +138,6 @@
         ></v-select>
       </v-col>
     </v-row>
-
   </v-form>
 </template>
 
@@ -161,9 +161,15 @@ export default {
           : [],
       },
       validForm: false,
-      optionStatus: [{text: 'Hoạt động', value: "2"}, {text: 'Không hoạt động', value: "1"}],
+      optionStatus: [
+        { text: "Hoạt động", value: "2" },
+        { text: "Không hoạt động", value: "1" },
+      ],
       optionGroups: [],
-      optionType: [{text: 'Web', value: '0'}, {text: 'Mobile', value: '1'}],
+      optionType: [
+        { text: "Web", value: "0" },
+        { text: "Mobile", value: "1" },
+      ],
       rules: {
         required: (value) => !!value || "Không được để trống.",
         birthday: (value) => {
@@ -242,41 +248,46 @@ export default {
       return option;
     },
     optionIdMenu() {
-      const options = [{
-        text: 'Quản lý cán bộ',
-        value: 'ManageCadres'
-      },
-      {
-        text: 'Quản lý sinh viên',
-        value: 'ManageStudents'
-      },
-      {
-        text: 'Quản lý nhóm quyền',
-        value: 'MangeRightsGroup'
-      },
-      {
-        text: 'Quản lý bài viết tin tức',
-        value: 'ManageNews'
-      },
-      {
-        text: 'Quản lý menu',
-        value: 'ManageMenu'
-      },
-      {
-        text: 'Quản lý phản hồi góp ý',
-        value: 'ManageFeedback'
-      },
+      const options = [
         {
-        text: 'Quản lý bản đồ số',
-        value: 'ManageMap'
-      },
-      {
-        text: 'Quản lý chuyên mục tin tức',
-        value: 'ManageCategoryNews'
-      },
-      ] 
-      return options
-    }
+          text: "Quản lý cán bộ",
+          value: "ManageCadres",
+        },
+        {
+          text: "Quản lý sinh viên",
+          value: "ManageStudents",
+        },
+        {
+          text: "Quản lý nhóm quyền",
+          value: "MangeRightsGroup",
+        },
+        {
+          text: "Quản lý bài viết tin tức",
+          value: "ManageNews",
+        },
+        {
+          text: "Quản lý menu",
+          value: "ManageMenu",
+        },
+        {
+          text: "Quản lý phản hồi góp ý",
+          value: "ManageFeedback",
+        },
+        {
+          text: "Quản lý bản đồ số",
+          value: "ManageMap",
+        },
+        {
+          text: "Quản lý loại bản đồ số",
+          value: "ManageTypeMap",
+        },
+        {
+          text: "Quản lý chuyên mục tin tức",
+          value: "ManageCategoryNews",
+        },
+      ];
+      return options;
+    },
   },
 };
 </script>
